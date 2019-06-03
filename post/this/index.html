@@ -1,0 +1,203 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> this到底指向哪里？ | Gridea</title>
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1559555640880">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://hubingliang.github.io">
+  <img class="avatar" src="https://hubingliang.github.io/images/avatar.png?v=1559555640880" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               this到底指向哪里？
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2018-02-25 ·
+              </time>
+              
+                <a href="https://hubingliang.github.io/tag/JavaScript" class="post-tag">
+                  # JavaScript
+                </a>
+              
+                <a href="https://hubingliang.github.io/tag/Front-end" class="post-tag">
+                  # Front-end
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://hubingliang.github.io/post-images/this.jpeg')">
+              </div>
+            
+            <div class="post-content">
+              <p>老生常谈的问题了，之前一直有些模糊，这次争取一次写清楚。</p>
+<h2 id="指向只与调用有关">指向只与调用有关</h2>
+<p>不论代码多么复杂我们只关心到底是谁最后调用的this就可以了。</p>
+<p>来看一个例子：</p>
+<pre><code class="language-js">var obj = {
+    foo: function(){
+      console.log(this)
+    }
+  }
+  
+var bar = obj.foo
+obj.foo() // obj
+bar() //  window
+</code></pre>
+<p>为什么最后两行所打印出的this不同？还是那句话 <strong>“谁最后调用的this，this就指向谁。”</strong></p>
+<ul>
+<li>先看第一行调用foo()函数的对象是obj，所以this指向obj。</li>
+<li>前面没有调用的对象那么就是全局对象 window，所以调用bar()函数的对象是全局window，相当于window.bar()，所以this指向window（严格模式下全局为undifined）</li>
+</ul>
+<h2 id="改变this指向的方法">改变this指向的方法</h2>
+<h3 id="箭头函数下的this">箭头函数下的this</h3>
+<p>箭头函数下的this有些特殊，函数体内的this对象就是定义时的所在的对象，而不是使用时所在的对象。</p>
+<p>例子：</p>
+<pre><code class="language-js">function Timer(){
+    this.s1 = 0
+    this.s2 = 0
+
+    setInterval(()=&gt; this.s1++,1000)
+    setInterval(function(){
+        this.s2 ++
+    },1000)
+
+}
+
+let timer = new Timer()
+
+setTimeout(() =&gt; console.log(timer.s1),3100) //  3
+setTimeout(() =&gt; console.log(timer.s2),3100) //  0
+</code></pre>
+<p>上面的例子，Timer函数内部设置了两个定时器，分别使用了箭头函数和普通函数，箭头函数的this指向函数定义时所在的作用于（即Timer函数），普通函数的this指向调用时所在的作用于（即全局对象window）。所以，3100ms之后，timer.s1加到了3，而timer.s2一次都没有更新。</p>
+<h3 id="apply-call">apply &amp; call</h3>
+<p>apply call bind 都可以改变this的指向，这里先说apply 和 call 的区别。 <strong>apply 和 call 的区别是 call 方法接受的是若干个参数列表，而 apply 接收的是一个包含多个参数的数组。</strong></p>
+<ul>
+<li>apply</li>
+</ul>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.apply(a,[1,2])     // 3
+</code></pre>
+<p>call</p>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.call(a,1,2)       // 3
+</code></pre>
+<h3 id="bind-和-call-apply">bind 和 call apply</h3>
+<p>直接看MDN上面的介绍：</p>
+<blockquote>
+<p>bind()方法创建一个新的函数, 当被调用时，将其this关键字设置为提供的值，在调用新函数时，在任何提供之前提供一个给定的参数序列。</p>
+</blockquote>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.bind(a,1,2)()           // 3
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://hubingliang.github.io/post/status-code">
+              <h3 class="post-title">
+                认识HTTP----状态码
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

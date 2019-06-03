@@ -1,0 +1,433 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>学会了ES6，就不会写出那样的代码 | Gridea</title>
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1559555640880">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://hubingliang.github.io">
+  <img class="avatar" src="https://hubingliang.github.io/images/avatar.png?v=1559555640880" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              学会了ES6，就不会写出那样的代码
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2018-04-09 ·
+              </time>
+              
+                <a href="https://hubingliang.github.io/tag/JavaScript" class="post-tag">
+                  # JavaScript
+                </a>
+              
+                <a href="https://hubingliang.github.io/tag/Front-end" class="post-tag">
+                  # Front-end
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://hubingliang.github.io/post-images/es6.jpeg')">
+              </div>
+            
+            <div class="post-content">
+              <h2 id="声明变量的新姿势">声明变量的新姿势</h2>
+<h3 id="用let不用var">用let不用var</h3>
+<p>ES6之前我们用var声明一个变量，但是它有很多弊病：</p>
+<ul>
+<li>因为没有块级作用域，很容易声明全局变量</li>
+<li>变量提升</li>
+<li>可以重复声明 还记得这道面试题吗？</li>
+</ul>
+<pre><code class="language-js">var a = [];
+for (var i = 0; i &lt; 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[6](); // 10
+a[7](); // 10
+a[8](); // 10
+a[9](); // 10
+</code></pre>
+<p>所以，你现在还有什么理由不用let?</p>
+<h3 id="有时候const比let更好">有时候const比let更好</h3>
+<p>const和let的唯一区别就是，const不可以被更改，所以当声明变量的时候，尤其是在声明容易被更改的全局变量的时候，尽量使用const。</p>
+<ul>
+<li>更好的代码语义化，一眼看到就是常量。</li>
+<li>另一个原因是因为JavaScript 编译器对const的优化要比let好，多使用const，有利于提高程序的运行效率。</li>
+<li>所有的函数都应该设置为常量。</li>
+</ul>
+<h2 id="动态字符串">动态字符串</h2>
+<p>不要使用“双引号”，一律用单引号或反引号</p>
+<pre><code class="language-js">// low
+const a = &quot;foobar&quot;;
+const b = 'foo' + a + 'bar';
+
+// best
+const a = 'foobar';
+const b = `foo${a}bar`;
+const c = 'foobar';
+</code></pre>
+<h2 id="解构赋值的骚操作">解构赋值的骚操作</h2>
+<h3 id="变量赋值">变量赋值</h3>
+<p>在用到数组成员对变量赋值时，尽量使用解构赋值。</p>
+<pre><code class="language-js">const arr = [1, 2, 3, 4];
+
+// low
+const first = arr[0];
+const second = arr[1];
+
+// good
+const [first, second] = arr;
+</code></pre>
+<h3 id="函数传对象">函数传对象</h3>
+<p>函数的参数如果是对象的成员，优先使用解构赋值。</p>
+<pre><code class="language-js">// low
+function getFullName(user) {
+  const firstName = user.firstName;
+  const lastName = user.lastName;
+}
+
+// good
+function getFullName({ firstName, lastName }) {
+}
+</code></pre>
+<p>如果函数返回多个值，优先使用对象的解构赋值，而不是数组的解构赋值。这样便于以后添加返回值，以及更改返回值的顺序。</p>
+<pre><code class="language-js">// low
+function processInput(input) {
+  return [left, right, top, bottom];
+}
+
+// good
+function processInput(input) {
+  return { left, right, top, bottom };
+}
+
+const { left, right } = processInput(input);
+</code></pre>
+<h2 id="关于对象的细节">关于对象的细节</h2>
+<h3 id="逗号">逗号</h3>
+<p>单行定义的对象结尾不要逗号：</p>
+<pre><code class="language-js">// low
+const a = { k1: v1, k2: v2, };
+
+// good
+const a = { k1: v1, k2: v2 };
+
+</code></pre>
+<p>多行定义的对象要保留逗号：</p>
+<pre><code class="language-js">// low
+const b = {
+  k1: v1,
+  k2: v2
+};
+
+// good
+const b = {
+  k1: v1,
+  k2: v2,
+};
+</code></pre>
+<h3 id="一次性初始化完全">一次性初始化完全</h3>
+<p>不要声明之后又给对象添加新属性：</p>
+<pre><code class="language-js">// low
+const a = {};
+a.x = 3;
+
+// good
+const a = { x: null };
+a.x = 3;
+</code></pre>
+<p>如果一定非要加请使用<code>Object.assign</code>：</p>
+<pre><code class="language-js">const a = {};
+Object.assign(a, { x: 3 });
+</code></pre>
+<p>如果对象的属性名是动态的，可以在创造对象的时候，使用属性表达式定义：</p>
+<pre><code class="language-js">// low
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+};
+obj[getKey('enabled')] = true;
+
+// good
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+  [getKey('enabled')]: true,
+};
+</code></pre>
+<h3 id="在简洁一点">在简洁一点</h3>
+<p>在定义对象时，能简洁表达尽量简洁表达：</p>
+<pre><code class="language-js">var ref = 'some value';
+
+// low
+const atom = {
+  ref: ref,
+
+  value: 1,
+
+  addValue: function (value) {
+    return atom.value + value;
+  },
+};
+
+// good
+const atom = {
+  ref,
+
+  value: 1,
+
+  addValue(value) {
+    return atom.value + value;
+  },
+};
+</code></pre>
+<h2 id="数组">数组</h2>
+<h3 id="">...</h3>
+<p>使用扩展运算符<code>...</code>拷贝数组：</p>
+<pre><code class="language-js">// 还在用for i 你就太low了
+const len = items.length;
+const itemsCopy = [];
+let i;
+
+for (i = 0; i &lt; len; i++) {
+  itemsCopy[i] = items[i];
+}
+
+// cool !
+const itemsCopy = [...items];
+</code></pre>
+<h3 id="不要跟我提类数组">不要跟我提类数组</h3>
+<p>用<code>Array.from</code>方法，将类似数组的对象转为数组：</p>
+<pre><code class="language-js">const foo = document.querySelectorAll('.foo');
+const nodes = Array.from(foo);
+</code></pre>
+<h2 id="函数">函数</h2>
+<h3 id="箭头函数">箭头函数<code>=&gt;</code></h3>
+<p>立即执行函数可以写成箭头函数的形式：</p>
+<pre><code class="language-js">(() =&gt; {
+  console.log('Welcome to the Internet.');
+})();
+</code></pre>
+<p>尽量写箭头函数使你的代码看起来简洁优雅：</p>
+<pre><code class="language-js">// low
+[1, 2, 3].map(function (x) {
+  return x * x;
+});
+
+// cool !
+[1, 2, 3].map(x =&gt; x * x);
+</code></pre>
+<h3 id="不要把布尔值直接传入函数">不要把布尔值直接传入函数</h3>
+<pre><code class="language-js">// low
+function divide(a, b, option = false ) {
+}
+
+// good
+function divide(a, b, { option = false } = {}) {
+}
+</code></pre>
+<h3 id="别再用arguments类数组了">别再用arguments（类数组）了！</h3>
+<p>使用 rest 运算符（...）代替，rest 运算符可以提供一个真正的数组。</p>
+<pre><code class="language-js">// low
+function concatenateAll() {
+  const args = Array.prototype.slice.call(arguments);
+  return args.join('');
+}
+
+// good
+function concatenateAll(...args) {
+  return args.join('');
+}
+</code></pre>
+<h3 id="传参时试试设置默认值">传参时试试设置默认值？</h3>
+<pre><code class="language-js">// low
+function handleThings(opts) {
+  opts = opts || {};
+}
+
+// good
+function handleThings(opts = {}) {
+  // ...
+}
+</code></pre>
+<h2 id="objectmap">Object？Map！</h2>
+<h3 id="简单的键值对优先map">简单的键值对优先Map</h3>
+<p>如果只是简单的key: value结构，建议优先使用Map，因为Map提供方便的遍历机制。</p>
+<pre><code class="language-js">let map = new Map(arr);
+// 遍历key值
+for (let key of map.keys()) {
+  console.log(key);
+}
+// 遍历value值
+for (let value of map.values()) {
+  console.log(value);
+}
+// 遍历key和value值
+for (let item of map.entries()) {
+  console.log(item[0], item[1]);
+}
+</code></pre>
+<h2 id="更加简洁直观class语法">更加简洁直观class语法</h2>
+<pre><code class="language-js">// low
+function Queue(contents = []) {
+  this._queue = [...contents];
+}
+Queue.prototype.pop = function() {
+  const value = this._queue[0];
+  this._queue.splice(0, 1);
+  return value;
+}
+
+// good
+class Queue {
+  constructor(contents = []) {
+    this._queue = [...contents];
+  }
+  pop() {
+    const value = this._queue[0];
+    this._queue.splice(0, 1);
+    return value;
+  }
+}
+</code></pre>
+<h2 id="模块化">模块化</h2>
+<h3 id="引入模块">引入模块</h3>
+<p>使用<code>import</code>取代<code>require</code>，因为Module是Javascript模块的标准写法。</p>
+<pre><code class="language-js">// bad
+const moduleA = require('moduleA');
+const func1 = moduleA.func1;
+const func2 = moduleA.func2;
+
+// good
+import { func1, func2 } from 'moduleA';
+</code></pre>
+<h3 id="输出模块">输出模块</h3>
+<p>使用<code>export</code>输出变量，拒绝<code>module.exports</code>:</p>
+<pre><code class="language-js">import React from 'react';
+
+class Breadcrumbs extends React.Component {
+  render() {
+    return &lt;nav /&gt;;
+  }
+};
+
+export default Breadcrumbs;
+</code></pre>
+<ul>
+<li>输出单个值，使用<code>export default</code></li>
+<li>输出多个值，使用<code>export</code></li>
+<li><code>export default</code>与普通的<code>export</code>不要同时使用</li>
+</ul>
+<h2 id="编码规范">编码规范</h2>
+<p>模块输出一个函数，首字母应该小写：</p>
+<pre><code class="language-js">function getData() {
+}
+
+export default getData;
+</code></pre>
+<p>模块输出一个对象，首字母应该大写:</p>
+<pre><code class="language-js">const Person = {
+  someCode: {
+  }
+};
+
+export default Person ;
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://hubingliang.github.io/post/colorfulimg">
+              <h3 class="post-title">
+                使用ColorfulImg获取图片主题色！
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

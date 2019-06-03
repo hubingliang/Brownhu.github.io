@@ -1,0 +1,204 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>吃透ES6----简洁优雅的箭头函数 | Gridea</title>
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1559555640880">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://hubingliang.github.io">
+  <img class="avatar" src="https://hubingliang.github.io/images/avatar.png?v=1559555640880" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              吃透ES6----简洁优雅的箭头函数
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2018-03-18 ·
+              </time>
+              
+                <a href="https://hubingliang.github.io/tag/JavaScript" class="post-tag">
+                  # JavaScript
+                </a>
+              
+                <a href="https://hubingliang.github.io/tag/Front-end" class="post-tag">
+                  # Front-end
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://hubingliang.github.io/post-images/=&gt;.jpeg')">
+              </div>
+            
+            <div class="post-content">
+              <h2 id="基本用法">基本用法</h2>
+<p>箭头函数可能是ES6最有特点的新特性了，它不仅可以让代码变得优美，而且更直观利于理解。</p>
+<pre><code class="language-js">let f = v =&gt; v
+//等同于
+let f = function(){
+  return v
+}
+</code></pre>
+<p>如果箭头函数不需要参数或者需要多个参数的的情况下，就使用圆括号代表参数部分：</p>
+<pre><code class="language-js">let f = () =&gt; 5
+
+//等同于
+let f = function(){
+  return 5
+}
+</code></pre>
+<p>多个参数：</p>
+<pre><code class="language-js">let f = (a,b) =&gt; a + b
+//等同于
+let f = function(a,b){
+  return a + b
+}
+</code></pre>
+<p>如果函数要执行的操作很多就需要用代码块括起来：</p>
+<pre><code class="language-js">let f = function (a,b) =&gt;{
+  //somecode
+}
+</code></pre>
+<p>但是当你要使用箭头函数返回一个对象时，要用大括号把对象括起来：</p>
+<p><code>let f = () =&gt; ({ id : '1' , name : '小明 '})</code></p>
+<h2 id="注意事项">注意事项</h2>
+<h3 id="this的确定">this的确定?</h3>
+<p>和普通函数不同，箭头函数的this就是定义时的所在的对象，而不是使用时所在的对象。 也就是说一旦定义箭头函数，那么他的this对象就是定义时所在的对象，并不会因为bind(),call()而改变。</p>
+<h3 id="不可以当作构造函数">不可以当作构造函数</h3>
+<p>也就是说不可以new一个箭头函数，否则会抛出一个错误：</p>
+<pre><code class="language-js">let f = () =&gt;{
+    this.a =1
+}
+let x = new f() //报错
+</code></pre>
+<h3 id="arguments对象">arguments对象</h3>
+<p>对于箭头函数来讲，不可以使用arguments对象，该对象在函数体内不存在：</p>
+<pre><code class="language-js">let f = (a,b) =&gt;{
+    console.log(arguments)
+}
+f(1,2) // arguments is not defined
+</code></pre>
+<p>作为代替ES6新加入了rest参数：</p>
+<pre><code class="language-js">let f = (...numbers) =&gt;{
+    for(let a of numbers){
+        console.log(a)
+    }
+}
+f(1,2) 
+//1 
+//2
+</code></pre>
+<h3 id="yield命令">yield命令</h3>
+<p>不可以使用yield命令，因此箭头函数不能用作Generator</p>
+<h2 id="箭头函数绑定this">箭头函数绑定this</h2>
+<p>ES7提出了“函数绑定”运算符，用来取代call、bind、apply。虽然只是提案但是Babel转码器已经支持。 函数绑定运算符是并排的双冒号（::）,双冒号左边是一个对象，右边是一个函数。该运算符会自动将左边的对象作为上下文环境（this对象）绑定到右边的函数上。</p>
+<pre><code class="language-js">foo::bar
+//等同于
+bar.bind(foo)
+有参数的情况下
+
+foo::bar(...arguments)
+//等同于
+bar.apply(foo,arguments)
+</code></pre>
+<p>如果双冒号的左边为空，右边是一个对象的方法，那么该方法的this就是该对象。</p>
+<pre><code class="language-js">let method = obj::obj,foo
+//等同于
+let method = ::obj.foo
+</code></pre>
+<p>由于双冒号运算符返回的还是原对象，因此可以采用链式写法。</p>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://hubingliang.github.io/post/es6-let-const">
+              <h3 class="post-title">
+                吃透ES6----let和const
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
