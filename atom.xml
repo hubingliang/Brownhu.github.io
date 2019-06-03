@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hubingliang.github.io</id>
     <title>Gridea</title>
-    <updated>2019-06-03T09:54:03.064Z</updated>
+    <updated>2019-06-03T09:56:18.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hubingliang.github.io"/>
     <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
@@ -10,141 +10,6 @@
     <logo>https://hubingliang.github.io/images/avatar.png</logo>
     <icon>https://hubingliang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
-    <entry>
-        <title type="html"><![CDATA[如何在你的项目中引入emoji😀]]></title>
-        <id>https://hubingliang.github.io/post/emoji</id>
-        <link href="https://hubingliang.github.io/post/emoji">
-        </link>
-        <updated>2019-09-17T06:48:20.000Z</updated>
-        <content type="html"><![CDATA[<p>最近在做我们学校的<a href="https://hubingliang.github.io/Confession-wall/dist/">表白墙网站</a>，在做到评论功能的时候自然而然就想到了emoji-😏。
-于是就去搜了一些这方面的资料，发现了比较好的三个emoji库：</p>
-<ul>
-<li><a href="https://github.com/emojione/emojione">emojione</a>（第一个开源且完整的emoji网站，编码方面100%免费，且与项目有非常好的整合性）</li>
-<li><a href="https://github.com/twitter/twemoji">Twemoji</a> (完全免费，简单小巧，API相比emojione较少。)</li>
-<li><a href="http://ellekasai.github.io/twemoji-awesome/">Twemoji Awesome</a> (Twemoji社区的项目，纯css显示emoji)</li>
-</ul>
-<p>综合考虑最后选择了emojione来实现，因为API比较多而且文档十分友好。</p>
-<h2 id="引入emojione">引入emojione</h2>
-<ul>
-<li>通过外链</li>
-</ul>
-<pre><code class="language-html">&lt;script src=&quot;https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js&quot;&gt;&lt;/script&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css&quot;/&gt;
-</code></pre>
-<ul>
-<li>NPM</li>
-</ul>
-<pre><code>&gt; npm install emojione
-</code></pre>
-<h2 id="生成emoji选择界面">生成emoji选择界面</h2>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ef3ae78893a558c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>首先我们需要这些emoji的图片，随即我就去<a href="https://www.emojione.com/developers/download">emojione</a>官网下载了32×32px的PNG图片，可是之后我发现图片太多不可能让我一个一个引入吧！</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-21d1a6f7e13a2288.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>转变思路，去看emojione的<a href="https://github.com/emojione/emojione">文档</a>，发现了一个提供API演示功能的[emojione实验室](https://demos.emojione.com/latest/index.html## extras)。</p>
-<p>实验室中有一个API可以把HTML中的unicode 转换为图片：<a href="https://demos.emojione.com/latest/jsunicodetoimage.html">.unicodeToImage(str)</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-baca09028eec4ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>于是我用JS Bin 做了一个小<a href="http://js.jirengu.com/vupel/2/edit">demo</a>测试了一下,发现没有什么问题。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2650383b4132fa9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>OK，那么我们就可以通过这个API批量生成emoji的图片了，可是emoji的Unicode码去哪找呢？
-官方提供了一个Unicode复制粘贴的网站：<a href="https://www.emojicopy.com/">emojiCOPY</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-a391a9796b5010fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>选中想要的emoji，之后点击COPY就可以复制下来，然后再粘贴到刚才的JS Bin之中就可以批量生成图片了：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-9f47be5f280a88f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>之后把这些图片的HTML直接复制到我们的项目之中：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-45fb81e4f83df1d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>让人惊喜的是这些生成的img的alt是Unicode，这让input显示和用户点击同步也变得简单了。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-19fd42f9cf8aa49b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>接下来只需要写很简单的JS就可以实现了：</p>
-<pre><code class="language-js">$('.emoji').children().click((emoji)=&gt; {
-    comment = comment + ' ' + emoji.target.alt　+　' '
-})
-</code></pre>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-c0ae294af0d711b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-64fbd4090a322e38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[跨域方法整理]]></title>
-        <id>https://hubingliang.github.io/post/cors</id>
-        <link href="https://hubingliang.github.io/post/cors">
-        </link>
-        <updated>2019-06-03T11:14:47.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt=""></p>
-<h2 id="什么是同源">什么是同源</h2>
-<p>为了防止网站被 XSS、CSRF 攻击，Netscape 公司在 1995 年引入同源策略/SOP(Same origin policy),它是指“协议+域名+端口”三者相同。</p>
-<h2 id="什么是跨域">什么是跨域</h2>
-<p>其实就是在违反了同源策略的情况下请求到资源的行为就是跨域，也就是说当协议、域名、端口号有一个或者多个不同时获取数据就是跨域。</p>
-<p>在同源限制下 cookie localStorage dom ajax IndexDB 都不支持跨域。</p>
-<p>另外，所谓同源策略并不是说在非同源的情况下服务器不返回数据，而是返回的数据被浏览器拦截了。</p>
-<h2 id="跨域的几种实现">跨域的几种实现</h2>
-<h3 id="jsonp">jsonp</h3>
-<pre><code class="language-js">// 封装 jsonp 跨域请求的方法
-function jsonp({ url, params, callBack }) {
-    return new Promise((resolve, reject) =&gt; {
-        // 创建一个 script 标签帮助我们发送请求
-        let script = document.createElement('script')
-        let arr = []
-        params = { ...params, callBack }
-
-        // 循环构建键值对形式的参数
-        for (let key in params) {
-            arr.push(`${key}=${params[key]}`)
-        }
-
-        // 创建全局函数
-        window[callBack] = function(data) {
-            resolve(data)
-            // 在跨域拿到数据以后将 script 标签销毁
-            document.body.removeChild(script)
-        }
-
-        // 拼接发送请求的参数并赋值到 src 属性
-        script.src = `${url}?${arr.join('&amp;')}`
-        document.body.appendChild(script)
-    })
-}
-
-// 调用方法跨域请求百度搜索的接口
-json({
-    url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
-    params: {
-        wd: 'jsonp',
-    },
-    callBack: 'show',
-}).then((data) =&gt; {
-    // 打印请求回的数据
-    console.log(data)
-})
-</code></pre>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>只支持 get</li>
-<li>不安全，容易引发 xss 攻击，别人有可能在返回的结果中返回恶意代码</li>
-</ul>
-<h3 id="cors">CORS</h3>
-<p>跨源资源共享/CORS（Cross-Origin Resource Sharing）是 W3C 的一个工作草案，定义了在必须访问跨源资源时，浏览器与服务器应该如何沟通。CORS 背后的基本思想，就是使用自定义的 HTTP 头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功，还是应该失败。</p>
-<p>浏览器将 CORS 请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）。</p>
-<p>简单请求必须要满足两个条件：</p>
-<ol>
-<li>请求方法：</li>
-</ol>
-<ul>
-<li>HEAD</li>
-<li>GET</li>
-<li>POST</li>
-</ul>
-<ol start="2">
-<li>HTTP 头信息不超出以下字段</li>
-</ol>
-<ul>
-<li>Accept</li>
-<li>Accept-Language</li>
-<li>Content-Language</li>
-<li>Last-Event-ID</li>
-<li>Content-Type：只限于三个值 application/x-www-form-urlencoded、multipart/form-data、text/plain</li>
-</ul>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[如何打造一款自己的 VSCode 主题？]]></title>
         <id>https://hubingliang.github.io/post/vscode-theme</id>
@@ -514,6 +379,88 @@ const obj2 = shallowClone(obj1);
 obj2 //{a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), f: &quot;f&quot;}
 </code></pre>
 <p>基本上完美实现了对所有类型属性的拷贝，可以看见即使是浅拷贝，要踩得坑还是很多的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[跨域方法整理]]></title>
+        <id>https://hubingliang.github.io/post/cors</id>
+        <link href="https://hubingliang.github.io/post/cors">
+        </link>
+        <updated>2018-06-03T09:55:34.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt=""></p>
+<h2 id="什么是同源">什么是同源</h2>
+<p>为了防止网站被 XSS、CSRF 攻击，Netscape 公司在 1995 年引入同源策略/SOP(Same origin policy),它是指“协议+域名+端口”三者相同。</p>
+<h2 id="什么是跨域">什么是跨域</h2>
+<p>其实就是在违反了同源策略的情况下请求到资源的行为就是跨域，也就是说当协议、域名、端口号有一个或者多个不同时获取数据就是跨域。</p>
+<p>在同源限制下 cookie localStorage dom ajax IndexDB 都不支持跨域。</p>
+<p>另外，所谓同源策略并不是说在非同源的情况下服务器不返回数据，而是返回的数据被浏览器拦截了。</p>
+<h2 id="跨域的几种实现">跨域的几种实现</h2>
+<h3 id="jsonp">jsonp</h3>
+<pre><code class="language-js">// 封装 jsonp 跨域请求的方法
+function jsonp({ url, params, callBack }) {
+    return new Promise((resolve, reject) =&gt; {
+        // 创建一个 script 标签帮助我们发送请求
+        let script = document.createElement('script')
+        let arr = []
+        params = { ...params, callBack }
+
+        // 循环构建键值对形式的参数
+        for (let key in params) {
+            arr.push(`${key}=${params[key]}`)
+        }
+
+        // 创建全局函数
+        window[callBack] = function(data) {
+            resolve(data)
+            // 在跨域拿到数据以后将 script 标签销毁
+            document.body.removeChild(script)
+        }
+
+        // 拼接发送请求的参数并赋值到 src 属性
+        script.src = `${url}?${arr.join('&amp;')}`
+        document.body.appendChild(script)
+    })
+}
+
+// 调用方法跨域请求百度搜索的接口
+json({
+    url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+    params: {
+        wd: 'jsonp',
+    },
+    callBack: 'show',
+}).then((data) =&gt; {
+    // 打印请求回的数据
+    console.log(data)
+})
+</code></pre>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>只支持 get</li>
+<li>不安全，容易引发 xss 攻击，别人有可能在返回的结果中返回恶意代码</li>
+</ul>
+<h3 id="cors">CORS</h3>
+<p>跨源资源共享/CORS（Cross-Origin Resource Sharing）是 W3C 的一个工作草案，定义了在必须访问跨源资源时，浏览器与服务器应该如何沟通。CORS 背后的基本思想，就是使用自定义的 HTTP 头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功，还是应该失败。</p>
+<p>浏览器将 CORS 请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）。</p>
+<p>简单请求必须要满足两个条件：</p>
+<ol>
+<li>请求方法：</li>
+</ol>
+<ul>
+<li>HEAD</li>
+<li>GET</li>
+<li>POST</li>
+</ul>
+<ol start="2">
+<li>HTTP 头信息不超出以下字段</li>
+</ol>
+<ul>
+<li>Accept</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+<li>Last-Event-ID</li>
+<li>Content-Type：只限于三个值 application/x-www-form-urlencoded、multipart/form-data、text/plain</li>
+</ul>
 ]]></content>
     </entry>
     <entry>
@@ -1383,6 +1330,108 @@ export default getData;
 };
 
 export default Person ;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用ColorfulImg获取图片主题色！]]></title>
+        <id>https://hubingliang.github.io/post/colorfulimg</id>
+        <link href="https://hubingliang.github.io/post/colorfulimg">
+        </link>
+        <updated>2018-03-29T13:23:02.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="取色网站">取色网站</h2>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72a38dae?w=1240&amp;h=739&amp;f=png&amp;s=555321" alt="">
+前几天遇到了获取图片主题色的需求，于是去找了一些相关的博客，发现实现起来相当简单，于是自己开发了一个获取图片主题色的网站---<a href="https://hubingliang.github.io/colorfulImg/dist/">ColorfulImg</a>
+大家可以通过上传/拖拽图片的方式获取图片主题色。</p>
+<p>欢迎Star~</p>
+<h2 id="colorfulimg">ColorfulImg</h2>
+<p>Colorfulimg是一个能够通过canvas获取图片主题色的js工具库。</p>
+<p>安装：</p>
+<p><code>npm i colorfulimg</code></p>
+<p>使用方法：</p>
+<pre><code class="language-js">let colorfulimg = require('colorfulimg') 
+let myImg = document.getElementById('myImg')
+let rgb = colorfulImg(myImg);
+</code></pre>
+<p><a href="https://github.com/hubingliang/colorfulImg">这是项目地址</a></p>
+<p>欢迎star~</p>
+<h2 id="colorfulimg实现思路">ColorfulImg实现思路</h2>
+<p>下面说一下实现思路，主要是通过<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial">canvas</a>的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ImageData">getImageData()</a>方法获取图片每个像素点的rgba数据。通过取得平均值的方法来算出图片主题色。
+所以要想实现此效果有两个限制：</p>
+<ul>
+<li>网站和图片必须是相同的域名（getImageData()限制图片必须同源）</li>
+<li>浏览器必须支持canvas</li>
+</ul>
+<h3 id="在canvas中绘制img图像">在canvas中绘制img图像</h3>
+<ol>
+<li>首先我们要新建一个canvas标签并且访问它的绘画上下文：</li>
+</ol>
+<pre><code class="language-js">let canvas = document.createElement('canvas')
+let context = canvas.getContext &amp;&amp; canvas.getContext('2d')
+</code></pre>
+<ol start="2">
+<li>绘制img图像，X轴与Y轴的起始点都设置为0：</li>
+</ol>
+<pre><code class="language-js">let myImg = document.getElementById('myImg')
+context.drawImage(myImg , 0, 0)
+</code></pre>
+<h3 id="获取图片颜色数据getimagedata">获取图片颜色数据getImageData()</h3>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ImageData">getImageData()</a>这个API需要四个参数，前两个是获取图片数据的起点，后两个是提取的图像数据矩形区域的宽度和高度，我们要得到图片全部的数据所以后两个参数就是图片的宽高，于此同时我们也要把canvas的宽高设置为图片的宽高能完全装下图片。</p>
+<pre><code class="language-js">let height = canvas.height = imgEl.height
+let width = canvas.width = imgEl.width
+let data = context.getImageData(0, 0, width, height).data
+</code></pre>
+<p>在我第一次测试的时候遇到了跨域的问题：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt=""></p>
+<p>图片如果不同源的话必须要加<code>crossorigin=&quot;anonymous&quot;</code>的属性，并且服务器存储那边也要开放相应的权限才行。
+<code>&lt;img id=&quot;img&quot; crossorigin=&quot;anonymous&quot;&gt;</code></p>
+<h3 id="处理获取的颜色数据">处理获取的颜色数据</h3>
+<p>我们先log一下拿到的数据是什么吧：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt=""></p>
+<p>是一个有着一堆数据的数组，这些数据是什么呢？我们先看一下MDN：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt=""></p>
+<p>也就是说按顺序来看前四位组成一个以RGBA顺序的数据：
+<strong>rgba(red, green, blue, alpha)</strong></p>
+<p>对于获取的图片数据透明度（alpha）都是255也就是不透明的所以我们不对透明度做处理，之后我们只需要把rgb的其他三个值分别求和再取均值就可以得到图片的主题色了！</p>
+<pre><code class="language-js">let count = 0
+let i = 0
+let blockSize = 1
+while ( (i += blockSize * 4) &lt; length ) {
+  ++count
+  rgb.r = data[i] + rgb.r 
+  rgb.g = data[i+1] + rgb.g
+  rgb.b = data[i+2] + rgb.b
+}
+rgb.r = ~~(rgb.r/count)
+rgb.g = ~~(rgb.g/count)
+rgb.b = ~~(rgb.b/count)
+</code></pre>
+<h3 id="最终代码">最终代码</h3>
+<pre><code class="language-js">function colorfulImg(img){
+    let canvas = document.createElement('canvas'),
+        context = canvas.getContext &amp;&amp; canvas.getContext('2d'),
+        height,width,length,data, 
+        i = -4,
+        blockSize = 5,
+        count = 0,
+        rgb = {r:0,g:0,b:0}
+            
+    height = canvas.height = imgEl.height
+    width = canvas.width = imgEl.width
+    context.drawImage(imgEl, 0, 0);
+    data = context.getImageData(0, 0, width, height).data
+    length = data.length
+    while ( (i += blockSize * 4) &lt; length ) {
+    ++count;
+    rgb.r += data[i];
+    rgb.g += data[i+1];
+    rgb.b += data[i+2];
+    }
+    rgb.r = ~~(rgb.r/count);
+    rgb.g = ~~(rgb.g/count);
+    rgb.b = ~~(rgb.b/count);
+    return rgb;
+}
 </code></pre>
 ]]></content>
     </entry>
