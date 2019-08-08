@@ -1,0 +1,590 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F%E7%9A%84%E6%96%B0%E5%A7%BF%E5%8A%BF">声明变量的新姿势</a>
+<ul>
+<li><a href="#%E7%94%A8let%E4%B8%8D%E7%94%A8var">用let不用var</a></li>
+<li><a href="#%E6%9C%89%E6%97%B6%E5%80%99const%E6%AF%94let%E6%9B%B4%E5%A5%BD">有时候const比let更好</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2">动态字符串</a></li>
+<li><a href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E7%9A%84%E9%AA%9A%E6%93%8D%E4%BD%9C">解构赋值的骚操作</a>
+<ul>
+<li><a href="#%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC">变量赋值</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E4%BC%A0%E5%AF%B9%E8%B1%A1">函数传对象</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BB%86%E8%8A%82">关于对象的细节</a>
+<ul>
+<li><a href="#%E9%80%97%E5%8F%B7">逗号</a></li>
+<li><a href="#%E4%B8%80%E6%AC%A1%E6%80%A7%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%8C%E5%85%A8">一次性初始化完全</a></li>
+<li><a href="#%E5%9C%A8%E7%AE%80%E6%B4%81%E4%B8%80%E7%82%B9">在简洁一点</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%B0%E7%BB%84">数组</a>
+<ul>
+<li><a href="#">...</a></li>
+<li><a href="#%E4%B8%8D%E8%A6%81%E8%B7%9F%E6%88%91%E6%8F%90%E7%B1%BB%E6%95%B0%E7%BB%84">不要跟我提类数组</a></li>
+</ul>
+</li>
+<li><a href="#%E5%87%BD%E6%95%B0">函数</a>
+<ul>
+<li><a href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0">箭头函数<code>=&gt;</code></a></li>
+<li><a href="#%E4%B8%8D%E8%A6%81%E6%8A%8A%E5%B8%83%E5%B0%94%E5%80%BC%E7%9B%B4%E6%8E%A5%E4%BC%A0%E5%85%A5%E5%87%BD%E6%95%B0">不要把布尔值直接传入函数</a></li>
+<li><a href="#%E5%88%AB%E5%86%8D%E7%94%A8arguments%E7%B1%BB%E6%95%B0%E7%BB%84%E4%BA%86">别再用arguments（类数组）了！</a></li>
+<li><a href="#%E4%BC%A0%E5%8F%82%E6%97%B6%E8%AF%95%E8%AF%95%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4%E5%80%BC">传参时试试设置默认值？</a></li>
+</ul>
+</li>
+<li><a href="#objectmap">Object？Map！</a>
+<ul>
+<li><a href="#%E7%AE%80%E5%8D%95%E7%9A%84%E9%94%AE%E5%80%BC%E5%AF%B9%E4%BC%98%E5%85%88map">简单的键值对优先Map</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9B%B4%E5%8A%A0%E7%AE%80%E6%B4%81%E7%9B%B4%E8%A7%82class%E8%AF%AD%E6%B3%95">更加简洁直观class语法</a></li>
+<li><a href="#%E6%A8%A1%E5%9D%97%E5%8C%96">模块化</a>
+<ul>
+<li><a href="#%E5%BC%95%E5%85%A5%E6%A8%A1%E5%9D%97">引入模块</a></li>
+<li><a href="#%E8%BE%93%E5%87%BA%E6%A8%A1%E5%9D%97">输出模块</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83">编码规范</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">学会了ES6，就不会写出那样的代码</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2018-04-09 / 4 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/es6.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="声明变量的新姿势">声明变量的新姿势</h2>
+<h3 id="用let不用var">用let不用var</h3>
+<p>ES6之前我们用var声明一个变量，但是它有很多弊病：</p>
+<ul>
+<li>因为没有块级作用域，很容易声明全局变量</li>
+<li>变量提升</li>
+<li>可以重复声明 还记得这道面试题吗？</li>
+</ul>
+<pre><code class="language-js">var a = [];
+for (var i = 0; i &lt; 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[6](); // 10
+a[7](); // 10
+a[8](); // 10
+a[9](); // 10
+</code></pre>
+<p>所以，你现在还有什么理由不用let?</p>
+<h3 id="有时候const比let更好">有时候const比let更好</h3>
+<p>const和let的唯一区别就是，const不可以被更改，所以当声明变量的时候，尤其是在声明容易被更改的全局变量的时候，尽量使用const。</p>
+<ul>
+<li>更好的代码语义化，一眼看到就是常量。</li>
+<li>另一个原因是因为JavaScript 编译器对const的优化要比let好，多使用const，有利于提高程序的运行效率。</li>
+<li>所有的函数都应该设置为常量。</li>
+</ul>
+<h2 id="动态字符串">动态字符串</h2>
+<p>不要使用“双引号”，一律用单引号或反引号</p>
+<pre><code class="language-js">// low
+const a = &quot;foobar&quot;;
+const b = 'foo' + a + 'bar';
+
+// best
+const a = 'foobar';
+const b = `foo${a}bar`;
+const c = 'foobar';
+</code></pre>
+<h2 id="解构赋值的骚操作">解构赋值的骚操作</h2>
+<h3 id="变量赋值">变量赋值</h3>
+<p>在用到数组成员对变量赋值时，尽量使用解构赋值。</p>
+<pre><code class="language-js">const arr = [1, 2, 3, 4];
+
+// low
+const first = arr[0];
+const second = arr[1];
+
+// good
+const [first, second] = arr;
+</code></pre>
+<h3 id="函数传对象">函数传对象</h3>
+<p>函数的参数如果是对象的成员，优先使用解构赋值。</p>
+<pre><code class="language-js">// low
+function getFullName(user) {
+  const firstName = user.firstName;
+  const lastName = user.lastName;
+}
+
+// good
+function getFullName({ firstName, lastName }) {
+}
+</code></pre>
+<p>如果函数返回多个值，优先使用对象的解构赋值，而不是数组的解构赋值。这样便于以后添加返回值，以及更改返回值的顺序。</p>
+<pre><code class="language-js">// low
+function processInput(input) {
+  return [left, right, top, bottom];
+}
+
+// good
+function processInput(input) {
+  return { left, right, top, bottom };
+}
+
+const { left, right } = processInput(input);
+</code></pre>
+<h2 id="关于对象的细节">关于对象的细节</h2>
+<h3 id="逗号">逗号</h3>
+<p>单行定义的对象结尾不要逗号：</p>
+<pre><code class="language-js">// low
+const a = { k1: v1, k2: v2, };
+
+// good
+const a = { k1: v1, k2: v2 };
+
+</code></pre>
+<p>多行定义的对象要保留逗号：</p>
+<pre><code class="language-js">// low
+const b = {
+  k1: v1,
+  k2: v2
+};
+
+// good
+const b = {
+  k1: v1,
+  k2: v2,
+};
+</code></pre>
+<h3 id="一次性初始化完全">一次性初始化完全</h3>
+<p>不要声明之后又给对象添加新属性：</p>
+<pre><code class="language-js">// low
+const a = {};
+a.x = 3;
+
+// good
+const a = { x: null };
+a.x = 3;
+</code></pre>
+<p>如果一定非要加请使用<code>Object.assign</code>：</p>
+<pre><code class="language-js">const a = {};
+Object.assign(a, { x: 3 });
+</code></pre>
+<p>如果对象的属性名是动态的，可以在创造对象的时候，使用属性表达式定义：</p>
+<pre><code class="language-js">// low
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+};
+obj[getKey('enabled')] = true;
+
+// good
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+  [getKey('enabled')]: true,
+};
+</code></pre>
+<h3 id="在简洁一点">在简洁一点</h3>
+<p>在定义对象时，能简洁表达尽量简洁表达：</p>
+<pre><code class="language-js">var ref = 'some value';
+
+// low
+const atom = {
+  ref: ref,
+
+  value: 1,
+
+  addValue: function (value) {
+    return atom.value + value;
+  },
+};
+
+// good
+const atom = {
+  ref,
+
+  value: 1,
+
+  addValue(value) {
+    return atom.value + value;
+  },
+};
+</code></pre>
+<h2 id="数组">数组</h2>
+<h3 id="">...</h3>
+<p>使用扩展运算符<code>...</code>拷贝数组：</p>
+<pre><code class="language-js">// 还在用for i 你就太low了
+const len = items.length;
+const itemsCopy = [];
+let i;
+
+for (i = 0; i &lt; len; i++) {
+  itemsCopy[i] = items[i];
+}
+
+// cool !
+const itemsCopy = [...items];
+</code></pre>
+<h3 id="不要跟我提类数组">不要跟我提类数组</h3>
+<p>用<code>Array.from</code>方法，将类似数组的对象转为数组：</p>
+<pre><code class="language-js">const foo = document.querySelectorAll('.foo');
+const nodes = Array.from(foo);
+</code></pre>
+<h2 id="函数">函数</h2>
+<h3 id="箭头函数">箭头函数<code>=&gt;</code></h3>
+<p>立即执行函数可以写成箭头函数的形式：</p>
+<pre><code class="language-js">(() =&gt; {
+  console.log('Welcome to the Internet.');
+})();
+</code></pre>
+<p>尽量写箭头函数使你的代码看起来简洁优雅：</p>
+<pre><code class="language-js">// low
+[1, 2, 3].map(function (x) {
+  return x * x;
+});
+
+// cool !
+[1, 2, 3].map(x =&gt; x * x);
+</code></pre>
+<h3 id="不要把布尔值直接传入函数">不要把布尔值直接传入函数</h3>
+<pre><code class="language-js">// low
+function divide(a, b, option = false ) {
+}
+
+// good
+function divide(a, b, { option = false } = {}) {
+}
+</code></pre>
+<h3 id="别再用arguments类数组了">别再用arguments（类数组）了！</h3>
+<p>使用 rest 运算符（...）代替，rest 运算符可以提供一个真正的数组。</p>
+<pre><code class="language-js">// low
+function concatenateAll() {
+  const args = Array.prototype.slice.call(arguments);
+  return args.join('');
+}
+
+// good
+function concatenateAll(...args) {
+  return args.join('');
+}
+</code></pre>
+<h3 id="传参时试试设置默认值">传参时试试设置默认值？</h3>
+<pre><code class="language-js">// low
+function handleThings(opts) {
+  opts = opts || {};
+}
+
+// good
+function handleThings(opts = {}) {
+  // ...
+}
+</code></pre>
+<h2 id="objectmap">Object？Map！</h2>
+<h3 id="简单的键值对优先map">简单的键值对优先Map</h3>
+<p>如果只是简单的key: value结构，建议优先使用Map，因为Map提供方便的遍历机制。</p>
+<pre><code class="language-js">let map = new Map(arr);
+// 遍历key值
+for (let key of map.keys()) {
+  console.log(key);
+}
+// 遍历value值
+for (let value of map.values()) {
+  console.log(value);
+}
+// 遍历key和value值
+for (let item of map.entries()) {
+  console.log(item[0], item[1]);
+}
+</code></pre>
+<h2 id="更加简洁直观class语法">更加简洁直观class语法</h2>
+<pre><code class="language-js">// low
+function Queue(contents = []) {
+  this._queue = [...contents];
+}
+Queue.prototype.pop = function() {
+  const value = this._queue[0];
+  this._queue.splice(0, 1);
+  return value;
+}
+
+// good
+class Queue {
+  constructor(contents = []) {
+    this._queue = [...contents];
+  }
+  pop() {
+    const value = this._queue[0];
+    this._queue.splice(0, 1);
+    return value;
+  }
+}
+</code></pre>
+<h2 id="模块化">模块化</h2>
+<h3 id="引入模块">引入模块</h3>
+<p>使用<code>import</code>取代<code>require</code>，因为Module是Javascript模块的标准写法。</p>
+<pre><code class="language-js">// bad
+const moduleA = require('moduleA');
+const func1 = moduleA.func1;
+const func2 = moduleA.func2;
+
+// good
+import { func1, func2 } from 'moduleA';
+</code></pre>
+<h3 id="输出模块">输出模块</h3>
+<p>使用<code>export</code>输出变量，拒绝<code>module.exports</code>:</p>
+<pre><code class="language-js">import React from 'react';
+
+class Breadcrumbs extends React.Component {
+  render() {
+    return &lt;nav /&gt;;
+  }
+};
+
+export default Breadcrumbs;
+</code></pre>
+<ul>
+<li>输出单个值，使用<code>export default</code></li>
+<li>输出多个值，使用<code>export</code></li>
+<li><code>export default</code>与普通的<code>export</code>不要同时使用</li>
+</ul>
+<h2 id="编码规范">编码规范</h2>
+<p>模块输出一个函数，首字母应该小写：</p>
+<pre><code class="language-js">function getData() {
+}
+
+export default getData;
+</code></pre>
+<p>模块输出一个对象，首字母应该大写:</p>
+<pre><code class="language-js">const Person = {
+  someCode: {
+  }
+};
+
+export default Person ;
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript">
+            <span class="flex-auto">JavaScript</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+            <span class="flex-auto">Front-end</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/vuepress">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  Hexo已经看腻了，来试试VuePress搭建个人博客
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/colorfulimg">
+                <h3 class="post-title">
+                  使用ColorfulImg获取图片主题色！
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

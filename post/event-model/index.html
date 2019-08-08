@@ -1,0 +1,296 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#dom0%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B%E5%8E%9F%E5%A7%8B%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B">DOM0事件模型（原始事件模型）</a></li>
+<li><a href="#dom2%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B">DOM2事件模型</a>
+<ul>
+<li><a href="#%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7%E5%92%8C%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1capturebubble">事件捕获和事件冒泡（capture,bubble )</a></li>
+<li><a href="#addeventlistener">addEventListener</a></li>
+</ul>
+</li>
+<li><a href="#ie%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B">IE事件模型</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">JavaScript的三种事件模型</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2017-06-15 / 1 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/event-model.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <p>面试中有时候会提到事件模型的概念，平时云里雾里的，所以找个机会总结一下，并不是很复杂的东西。</p>
+<h2 id="dom0事件模型原始事件模型">DOM0事件模型（原始事件模型）</h2>
+<p>有两种实现方式:</p>
+<p>通过元素属性来绑定事件</p>
+<pre><code class="language-html">&lt;button onclick=&quot;click()&quot;&gt;点我&lt;/button&gt;
+</code></pre>
+<p>先获取页面元素，然后以赋值的形式来绑定事件</p>
+<pre><code class="language-js">const btn = document.getElementById('btn')
+btn.onclick = function(){
+    //do something
+}
+//解除事件
+btn.onclick = null
+</code></pre>
+<p>DOM0缺点</p>
+<p><strong>一个dom节点只能绑定一个事件，再次绑定将会覆盖之前的事件。</strong></p>
+<h2 id="dom2事件模型">DOM2事件模型</h2>
+<p>dom2新增冒泡和捕获的概念，并且支持一个元素节点绑定多个事件。</p>
+<h3 id="事件捕获和事件冒泡capturebubble">事件捕获和事件冒泡（capture,bubble )</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-1137f57e72c25ba1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如图所示1,2,3为捕获，4,5,6,7为冒泡，也就是说事件流分为三个阶段： DOM2 级事件模型共有三个阶段：</p>
+<ol>
+<li>事件捕获阶段：事件从 document 向下传播到目标元素，依次检查所有节点是否绑定了监听事件，如果有则执行。</li>
+<li>事件处理阶段：事件在达到目标元素时，触发监听事件。</li>
+<li>事件冒泡阶段：事件从目标元素冒泡到 document，并且一次检查各个节点是否绑定了监听函数，如果有则执行。</li>
+</ol>
+<h3 id="addeventlistener">addEventListener</h3>
+<p>这应该是大家用的最熟悉的事件绑定方法了。 addEventListener有三个参数 事件名称、事件回调、捕获/冒泡</p>
+<pre><code class="language-js">btn.addEventListener('click',function(){
+    console.log('btn')
+},true)
+box.addEventListener('click',function(){
+    console.log('box')
+},false)
+</code></pre>
+<p>设置为true，则事件在捕获阶段执行，为false则在冒泡阶段执行。</p>
+<h2 id="ie事件模型">IE事件模型</h2>
+<p>IE事件只支持冒泡，所以事件流有两个阶段：</p>
+<ul>
+<li>事件处理阶段：事件在达到目标元素时，触发监听事件。</li>
+<li>事件冒泡阶段：事件从目标元素冒泡到 document，并且一次检查各个节点是否绑定了监听函数，如果有则执行。<br>
+实现方法：</li>
+</ul>
+<pre><code class="language-js">// 绑定事件
+el.attachEvent(eventType, handler)
+
+// 移除事件
+el.detachEvent(eventType, handler)
+</code></pre>
+<p>改事件模型只在IE中有效，不兼容其他浏览器，所以大家了解一下就行。</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript">
+            <span class="flex-auto">JavaScript</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+            <span class="flex-auto">Front-end</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/caching">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  认识HTTP----缓存篇
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/clear-float">
+                <h3 class="post-title">
+                  CSS清除浮动的三种方法
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

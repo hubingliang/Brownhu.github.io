@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hubingliang.github.io</id>
     <title>Brown Hu</title>
-    <updated>2019-08-08T02:21:55.113Z</updated>
+    <updated>2019-08-08T02:43:39.993Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hubingliang.github.io"/>
     <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
@@ -151,7 +151,7 @@ typeof undefined // undefined
 let s = Symbol()
 typeof s // symbol
 </code></pre>
-<p>可以看到 null 的判断出了错误，这个大家看面试题也或多或少知道这个坑。
+<p>可以看到 null 的判断出了错误，这个大家看面试题也或多或少知道这个坑。<br>
 然后我们再来看看引用类型：</p>
 <pre><code class="language-js">const obj = Object.create(null) // 之所以这样创建是因为编程习惯...
 function foo() {}
@@ -231,7 +231,7 @@ Object.prototype.toString.call(new WeakSet()) // &quot;[object WeakSet]&quot;
 Object.prototype.toString.call(new Map()) // &quot;[object Map]&quot;
 Object.prototype.toString.call(new WeakMap()) // &quot;[object WeakMap]&quot;,/'.lk
 </code></pre>
-<p>可以说<code>Object.prototype.toString.call()</code>在大部分类型的考验下都不落下风，可以说是比较完美的类型检查了。
+<p>可以说<code>Object.prototype.toString.call()</code>在大部分类型的考验下都不落下风，可以说是比较完美的类型检查了。<br>
 至于原理大家可以移步至<a href="https://segmentfault.com/a/1190000009407558">谈谈 Object.prototype.toString</a></p>
 ]]></content>
     </entry>
@@ -462,7 +462,7 @@ json({
 </li>
 </ul>
 <h2 id="用法">用法</h2>
-<p>你可以直接调用<code>requestAnimationFrame()</code>，也可以通过window来调用<code>window.requestAnimationFrame()</code>。
+<p>你可以直接调用<code>requestAnimationFrame()</code>，也可以通过window来调用<code>window.requestAnimationFrame()</code>。<br>
 requestAnimationFrame()接收一个函数作为回调，返回一个ID值，通过把这个ID值传给<code>window.cancelAnimationFrame()</code>可以取消该次动画。</p>
 <p>MDN上给的例子：</p>
 <pre><code class="language-js">var start = null;
@@ -479,7 +479,7 @@ function step(timestamp) {
 }
 </code></pre>
 <h2 id="例子">例子</h2>
-<p>我们来试试生成一个旋转并逐渐变窄的方块，当窄到一定程度又会复原循环往复。
+<p>我们来试试生成一个旋转并逐渐变窄的方块，当窄到一定程度又会复原循环往复。<br>
 <a href="http://jsbin.com/xeferik/3/edit?js,output">jsbin看看效果</a></p>
 <pre><code class="language-js">var rotate = 0;
 var width = 400;
@@ -514,8 +514,8 @@ window.requestAnimationFrame(step);
 window.requestAnimationFrame(small);
 </code></pre>
 <h2 id="浏览器兼容情况">浏览器兼容情况</h2>
-<p>我们来看一下[Can I Use](https://caniuse.com/## search=requestAnimationFrame)上的兼容情况：
-<img src="https://user-gold-cdn.xitu.io/2018/5/20/1637d6be4df448ce?w=1718&amp;h=781&amp;f=png&amp;s=80112" alt="">
+<p>我们来看一下[Can I Use](https://caniuse.com/## search=requestAnimationFrame)上的兼容情况：<br>
+<img src="https://user-gold-cdn.xitu.io/2018/5/20/1637d6be4df448ce?w=1718&amp;h=781&amp;f=png&amp;s=80112" alt=""><br>
 requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
 <p>如果非要兼容IE的话可以用定时器来做一下兼容：</p>
 <pre><code class="language-js">(function () {
@@ -568,9 +568,9 @@ requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
 <p><strong>如果想详细研究算法推荐《数据结构与算法分析》</strong></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析"></p>
 <h2 id="定义问题">定义问题</h2>
-<p>数组array含有N个正整数
-输入量为array
-请将array中的数字从小到大排列
+<p>数组array含有N个正整数<br>
+输入量为array<br>
+请将array中的数字从小到大排列<br>
 输出量为排好序的数组</p>
 <p>代码例子</p>
 <pre><code class="language-js">var array = [5,2,4,6,8]
@@ -590,17 +590,17 @@ sort(array) === [2,4,5,6,8]
 <p>重复地比较要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。比较数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。每比较一整轮,最大的都会出现在最后故名---<strong>冒泡排序</strong></p>
 <p>流程如下:</p>
 <ol>
-<li>我们拿到一个数组
+<li>我们拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-51788201338ecebb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>开始从前两个开始比较,发现44&gt;3,所以不用交换
+<li>开始从前两个开始比较,发现44&gt;3,所以不用交换<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-27cf4ee44274aebd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
-<li>接着往后比较,发现38&lt;44,所以交换他们两个的位置
+<li>接着往后比较,发现38&lt;44,所以交换他们两个的位置<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b106c8ea4d1e64a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
-<li>以此类推直到第一轮结束,我们得到了最大的那一个----<strong>50</strong>(冒的第一个泡)
+<li>以此类推直到第一轮结束,我们得到了最大的那一个----<strong>50</strong>(冒的第一个泡)<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-05228b4f061ec01b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第一轮结束"></li>
-<li>接着下一轮,又从头开始两个两个地比较,重复第一轮,我们就得到了第二个最大的------<strong>48</strong>
+<li>接着下一轮,又从头开始两个两个地比较,重复第一轮,我们就得到了第二个最大的------<strong>48</strong><br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b3a220becd934a11.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮结束"></li>
-<li>如此进行多轮比较我们会得到一个从小到大的数组
+<li>如此进行多轮比较我们会得到一个从小到大的数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-f60c295026eac0f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
 <li>代码实现：</li>
 </ol>
@@ -617,20 +617,20 @@ sort(array) === [2,4,5,6,8]
 }
 </code></pre>
 <h3 id="2-选择排序select">2. 选择排序(SELECT)</h3>
-<p>每一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，直到全部待排序的数据元素排完。
+<p>每一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，直到全部待排序的数据元素排完。<br>
 流程如下:</p>
 <ol>
-<li>拿到一个数组
+<li>拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-62f83dc193f1978c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>我们要选出这个数组中最小的元素然后把它和第一个数交换(放到最前面),所以我们先认为3为最小,然后和后面的数依次进行比较.
+<li>我们要选出这个数组中最小的元素然后把它和第一个数交换(放到最前面),所以我们先认为3为最小,然后和后面的数依次进行比较.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b44dc333bdadd03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="和最小值比较"></li>
-<li>当比到2的时候,我们发现3&gt;2,所以我们就认为2为最小值,后面的数应该都和2进行比较.
+<li>当比到2的时候,我们发现3&gt;2,所以我们就认为2为最小值,后面的数应该都和2进行比较.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-47bda740993e028c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="改变最小值的元素"></li>
-<li>当比较完所有的元素,确定2为最小值的时候,把最小值也就是2与第一个元素的位置互换.
+<li>当比较完所有的元素,确定2为最小值的时候,把最小值也就是2与第一个元素的位置互换.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-549ba8d1e5375edd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换位置"></li>
-<li>然后从第二个元素开始新一轮的比较,过程和第一轮一样.把44看做最小值和后面的元素进行比较.
+<li>然后从第二个元素开始新一轮的比较,过程和第一轮一样.把44看做最小值和后面的元素进行比较.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-93ae5c6008503d42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮"></li>
-<li>经过多轮比较得到从小到大的数组.
+<li>经过多轮比较得到从小到大的数组.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-10b714a8ceceb65f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
 <li>代码实现</li>
 </ol>
@@ -651,18 +651,18 @@ sort(array) === [2,4,5,6,8]
 }
 </code></pre>
 <h3 id="3-插入排序insert">3, 插入排序(INSERT)</h3>
-<p>将一个数据插入到已经排好序的有序数据中，从而得到一个新的、个数加一的有序数据，算法适用于少量数据的排序。是稳定的排序方法。
+<p>将一个数据插入到已经排好序的有序数据中，从而得到一个新的、个数加一的有序数据，算法适用于少量数据的排序。是稳定的排序方法。<br>
 流程如下:</p>
 <ol>
-<li>拿到一个数组
+<li>拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-0fe1ff7bc8912789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>把第一个元素看做一个新数组,然后把第二个元素依次和新数组的元素进行比较(虽然只有一个...),然后插入到适当的位置.
-<img src="http://upload-images.jianshu.io/upload_images/4337988-0b049542a383e8dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="与新数组的元素进行比较">
+<li>把第一个元素看做一个新数组,然后把第二个元素依次和新数组的元素进行比较(虽然只有一个...),然后插入到适当的位置.<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-0b049542a383e8dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="与新数组的元素进行比较"><br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b08f38982e74bf87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入到适当的位置"></li>
-<li>然后以此类推,把前两个元素看做是一个新数组,然后把第三个元素依次与新数组进行比较,然后插入到适当的位置.
-<img src="http://upload-images.jianshu.io/upload_images/4337988-25293f6061257350.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较">
+<li>然后以此类推,把前两个元素看做是一个新数组,然后把第三个元素依次与新数组进行比较,然后插入到适当的位置.<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-25293f6061257350.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"><br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-435373ab53226a01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入适当的位置"></li>
-<li>把剩下的元素依次插入,最后得到从小到大排列的数组.
+<li>把剩下的元素依次插入,最后得到从小到大排列的数组.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-eb5c7cdc2dbe51e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
 <li>代码实现</li>
 </ol>
@@ -680,24 +680,24 @@ sort(array) === [2,4,5,6,8]
 }
 </code></pre>
 <h3 id="4-归并排序merge">4. 归并排序(MERGE)</h3>
-<p>将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。
+<p>将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。<br>
 流程如下:</p>
 <ol>
-<li>拿到一个数组
+<li>拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>我们把数组平均分成左右两部分,得到两个新数组,然后再把每个数组平均分成两部分,一直分到每个数组只有两个元素,然后比较第一组
+<li>我们把数组平均分成左右两部分,得到两个新数组,然后再把每个数组平均分成两部分,一直分到每个数组只有两个元素,然后比较第一组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-f1f922e5fdac37ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较第一组"></li>
-<li>因为3&lt;44所以位置不变然后比较第二组,因为38&gt;5所以调换位置.
+<li>因为3&lt;44所以位置不变然后比较第二组,因为38&gt;5所以调换位置.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-82e45b17bd304d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
-<li>重点来了,这个时候先不着急比较第三组而是把排好序的一二两组放在一起排序.
+<li>重点来了,这个时候先不着急比较第三组而是把排好序的一二两组放在一起排序.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-a45b23e96799adbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
-<li>之后就是比较第三组和第四组,然后同样把他们放在一起排好序.
+<li>之后就是比较第三组和第四组,然后同样把他们放在一起排好序.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-ada3c8eb5b769b9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
-<li>然后并不是比较第五组和第六组,而是把第一组和第二组产生的新数组和,第三组和第四组产生的新数组放在一起排序成为新数组.
+<li>然后并不是比较第五组和第六组,而是把第一组和第二组产生的新数组和,第三组和第四组产生的新数组放在一起排序成为新数组.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-7df965288165ac01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
-<li>同样把剩下的按以上步骤重来一遍.我们得到两个排好序的数组.然后给这两个数组排序就完成了.
-<img src="http://upload-images.jianshu.io/upload_images/4337988-3e92a52343a0d8c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png">
-排序后:
+<li>同样把剩下的按以上步骤重来一遍.我们得到两个排好序的数组.然后给这两个数组排序就完成了.<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-3e92a52343a0d8c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"><br>
+排序后:<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-78eebc9c38d1ba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
 <li>代码实现</li>
 </ol>
@@ -732,21 +732,21 @@ function merge(left, right) {
 }
 </code></pre>
 <h3 id="5-快速排序">5. 快速排序</h3>
-<p>每个元素找到自己对应的位置(前面的都比我小,后面的都比我大)
+<p>每个元素找到自己对应的位置(前面的都比我小,后面的都比我大)<br>
 流程如下:</p>
 <ol>
-<li>拿到一个数组
+<li>拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>拿第一个元素和后面的元素进行比较,找出所有比第一个元素小的元素,放在第一个元素的右边然后把第一个元素与这些比他小的元素的最后一个互换.
-<img src="http://upload-images.jianshu.io/upload_images/4337988-ce0718ea693d000a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有2比3小">
+<li>拿第一个元素和后面的元素进行比较,找出所有比第一个元素小的元素,放在第一个元素的右边然后把第一个元素与这些比他小的元素的最后一个互换.<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-ce0718ea693d000a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有2比3小"><br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-e7742e9a14f46e1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换"></li>
-<li>前两个元素的位置已经没错了,然后以第三个元素为标准,和后面的元素进行比较.
+<li>前两个元素的位置已经没错了,然后以第三个元素为标准,和后面的元素进行比较.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-e51bf6b6f28eccf0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较之后"></li>
-<li>把比他小的元素放在他的右边(绿色),然后让它和绿色的最后一个交换位置.
+<li>把比他小的元素放在他的右边(绿色),然后让它和绿色的最后一个交换位置.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-9635a1d9604436b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
-<li>然后从左边没有确定位置的元素(非橙色)开始以上步骤----也就是19
+<li>然后从左边没有确定位置的元素(非橙色)开始以上步骤----也就是19<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b3888a1ab15ac163.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从19开始"></li>
-<li>一直到所有元素的位置都正确.
+<li>一直到所有元素的位置都正确.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-782962d8fbda2a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="都有了正确的位置"></li>
 <li>代码实现</li>
 </ol>
@@ -788,19 +788,19 @@ function merge(left, right) {
 };
 </code></pre>
 <h3 id="6-随机快速排序">6. 随机快速排序</h3>
-<p>顾名思义,就是在快速排序的基础上,加入随机的机制.
-在快速排序的时候我们是从左到右来选取比较对象,在随机快速排序中我们是随机来选取对象.
+<p>顾名思义,就是在快速排序的基础上,加入随机的机制.<br>
+在快速排序的时候我们是从左到右来选取比较对象,在随机快速排序中我们是随机来选取对象.<br>
 流程如下:</p>
 <ol>
-<li>拿到一个数组
+<li>拿到一个数组<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
-<li>随机选择一个元素.
+<li>随机选择一个元素.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-068de5de14fbba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="随机选择到了44"></li>
-<li>并且把比他小的放在他的右边
+<li>并且把比他小的放在他的右边<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-903e43f47d9288a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="把比他小的先放在他的右边"></li>
-<li>然后把他和比他小的最右边的元素交换位置
+<li>然后把他和比他小的最右边的元素交换位置<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-9716186d31f495f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
-<li>然后在随机选一个元素,重复步骤,知道所有元素都是在正确的位置上.
+<li>然后在随机选一个元素,重复步骤,知道所有元素都是在正确的位置上.<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-5eed2e2fa3aaf364.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="所有元素都在正确的位置上"></li>
 <li>代码实现</li>
 </ol>
@@ -854,7 +854,7 @@ function merge(left, right) {
 <p>先简单介绍一下VuePress，这是尤大在2018年4月份发布的一个新轮子。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21add3603e86?w=751&amp;h=418&amp;f=png&amp;s=63447" alt=""></p>
 <p>一个基于 Vue SSR 的静态站生成器，本来的目的是爽爽的写文档，但是我发现用来撸一个人博客也非常不错。</p>
-<p><strong><a href="https://vuepress.vuejs.org/">这是VuePress的官方文档</a></strong>
+<p><strong><a href="https://vuepress.vuejs.org/">这是VuePress的官方文档</a></strong><br>
 <strong><a href="https://vuepress.docschina.org/">这是VuePress的中文文档</a></strong></p>
 <h2 id="上手搭建">上手搭建</h2>
 <p>你可以跟着文档上的例子自己玩一玩，不过由于VuePress的文档也是用VuePress来实现的，所以我取巧直接拿<a href="https://github.com/vuejs/vuepress">VuePress仓库</a>中的<strong>docs</strong>目录拿来玩耍。</p>
@@ -878,8 +878,8 @@ vuepress dev
 <p>当你看到这一行就说明已经成功了：</p>
 <pre><code> VuePress dev server listening at http://localhost:8080/
 </code></pre>
-<p>下面我们打开<a href="http://localhost:8080/">http://localhost:8080/</a>
-发现真的打开了vuepress文档：
+<p>下面我们打开<a href="http://localhost:8080/">http://localhost:8080/</a><br>
+发现真的打开了vuepress文档：<br>
 <img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e0944215?w=1240&amp;h=520&amp;f=png&amp;s=69295" alt=""></p>
 <p>下面的工作就是数据的替换了，但我们应该先看一下docs的目录结构：</p>
 <pre><code>├─.vuepress
@@ -935,17 +935,17 @@ footer: MIT Licensed | Copyright © 2018-present Evan You // 页尾
 </code></pre>
 <p>剩下的默认主题配置官方文档都有很详细的文档说明这里就不在啰嗦了。</p>
 <h2 id="更改默认主题色">更改默认主题色</h2>
-<p>你可以在<code>.vuepress/</code>目录下创建一个<code>override.styl</code>文件。
+<p>你可以在<code>.vuepress/</code>目录下创建一个<code>override.styl</code>文件。<br>
 vuepress提供四个可更改的颜色：</p>
 <pre><code>$accentColor = #3eaf7c // 主题色
 $textColor = #2c3e50 // 文字颜色
 $borderColor = #eaecef // 边框颜色
 $codeBgColor = #282c34 // 代码背景颜色
 </code></pre>
-<p>我把它改成了这样：
+<p>我把它改成了这样：<br>
 <img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e07ec947?w=1240&amp;h=698&amp;f=png&amp;s=138334" alt=""></p>
 <h2 id="侧边栏的实现">侧边栏的实现</h2>
-<p>由于评论区里问的人较多，所以在这里更新一下，其实我就算在这里写的再详细也不如大家去看官方文档。
+<p>由于评论区里问的人较多，所以在这里更新一下，其实我就算在这里写的再详细也不如大家去看官方文档。<br>
 侧边栏的配置也在<code>.vuepress/config.js</code>中：</p>
 <pre><code>sidebar: [
   {
@@ -1308,8 +1308,8 @@ export default Person ;
         </link>
         <updated>2018-03-29T13:23:02.000Z</updated>
         <content type="html"><![CDATA[<h2 id="取色网站">取色网站</h2>
-<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72a38dae?w=1240&amp;h=739&amp;f=png&amp;s=555321" alt="">
-前几天遇到了获取图片主题色的需求，于是去找了一些相关的博客，发现实现起来相当简单，于是自己开发了一个获取图片主题色的网站---<a href="https://hubingliang.github.io/colorfulImg/dist/">ColorfulImg</a>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72a38dae?w=1240&amp;h=739&amp;f=png&amp;s=555321" alt=""><br>
+前几天遇到了获取图片主题色的需求，于是去找了一些相关的博客，发现实现起来相当简单，于是自己开发了一个获取图片主题色的网站---<a href="https://hubingliang.github.io/colorfulImg/dist/">ColorfulImg</a><br>
 大家可以通过上传/拖拽图片的方式获取图片主题色。</p>
 <p>欢迎Star~</p>
 <h2 id="colorfulimg">ColorfulImg</h2>
@@ -1324,7 +1324,7 @@ let rgb = colorfulImg(myImg);
 <p><a href="https://github.com/hubingliang/colorfulImg">这是项目地址</a></p>
 <p>欢迎star~</p>
 <h2 id="colorfulimg实现思路">ColorfulImg实现思路</h2>
-<p>下面说一下实现思路，主要是通过<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial">canvas</a>的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ImageData">getImageData()</a>方法获取图片每个像素点的rgba数据。通过取得平均值的方法来算出图片主题色。
+<p>下面说一下实现思路，主要是通过<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial">canvas</a>的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ImageData">getImageData()</a>方法获取图片每个像素点的rgba数据。通过取得平均值的方法来算出图片主题色。<br>
 所以要想实现此效果有两个限制：</p>
 <ul>
 <li>网站和图片必须是相同的域名（getImageData()限制图片必须同源）</li>
@@ -1351,14 +1351,14 @@ let data = context.getImageData(0, 0, width, height).data
 </code></pre>
 <p>在我第一次测试的时候遇到了跨域的问题：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt=""></p>
-<p>图片如果不同源的话必须要加<code>crossorigin=&quot;anonymous&quot;</code>的属性，并且服务器存储那边也要开放相应的权限才行。
+<p>图片如果不同源的话必须要加<code>crossorigin=&quot;anonymous&quot;</code>的属性，并且服务器存储那边也要开放相应的权限才行。<br>
 <code>&lt;img id=&quot;img&quot; crossorigin=&quot;anonymous&quot;&gt;</code></p>
 <h3 id="处理获取的颜色数据">处理获取的颜色数据</h3>
 <p>我们先log一下拿到的数据是什么吧：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt=""></p>
 <p>是一个有着一堆数据的数组，这些数据是什么呢？我们先看一下MDN：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt=""></p>
-<p>也就是说按顺序来看前四位组成一个以RGBA顺序的数据：
+<p>也就是说按顺序来看前四位组成一个以RGBA顺序的数据：<br>
 <strong>rgba(red, green, blue, alpha)</strong></p>
 <p>对于获取的图片数据透明度（alpha）都是255也就是不透明的所以我们不对透明度做处理，之后我们只需要把rgb的其他三个值分别求和再取均值就可以得到图片的主题色了！</p>
 <pre><code class="language-js">let count = 0

@@ -1,0 +1,273 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#z-index-%E5%9C%A8%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E6%89%8D%E7%94%9F%E6%95%88">z-index 在什么情况下才生效？</a></li>
+<li><a href="#z-index%E5%80%BC%E8%B6%8A%E5%A4%A7%E5%85%83%E7%B4%A0%E8%B6%8A%E9%9D%A0%E5%89%8D%E5%AF%B9%E5%90%97">z-index值越大元素越靠前，对吗？</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结:</a></li>
+<li><a href="#z-index-%E4%B8%8D%E8%AE%BE%E7%BD%AE%E5%92%8C%E8%AE%BE%E7%BD%AE%E4%B8%BA0%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB">z-index 不设置和设置为0有什么区别?</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16"> 搞懂Z-index的所有细节</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2017-04-29 / 1 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/z-index.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <p><img src="http://upload-images.jianshu.io/upload_images/4337988-72fc3279283f3d96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="用Z-index来改变堆叠顺序"></p>
+<p><a href="http://www.cssmojo.com/extras/everything_you_always_wanted_to_know_about_z-index_but_were_afraid_to_ask/">Z-index测试网站</a></p>
+<h2 id="z-index-在什么情况下才生效">z-index 在什么情况下才生效？</h2>
+<p>Z-index的运用是需要条件的,与其相关的属性就是position属性。我们以三个div来举例子。</p>
+<ul>
+<li>position: static;</li>
+</ul>
+<p>当三个div的position都为static时,我们把div(A)的Z-index设置为15, 把div(B)的Z-index设置为10,把div(C)的Z-index设置为5。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-dc45d7a26386344b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>发现div(B)依然把div(A)的一部分挡住了,所以当position为static时,Z-index起不到任何改变堆叠的作用。</strong></p>
+<ul>
+<li>position: relative/absolute/fixed;</li>
+</ul>
+<p>当三个div的position都为relative/absolute/fixed时,发现Z-index生效。<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b3b78915180bd5e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>总结: 只有position的值为relative/absolute/fixed中的一个,Z-index才会生效。</strong></p>
+<h2 id="z-index值越大元素越靠前对吗">z-index值越大元素越靠前，对吗？</h2>
+<p>我们现在div(A)和div(B)中再分别创建一个小的div(c)和div(d)</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-8330fa3e640fe19e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这一张图就是一个特例"></p>
+<p>我们观察到,div(a)的Z-index为20 可是为什么还会被Z-index仅仅为10的div(B)遮挡住呢?<br>
+难道是因为Z-index继承给他的子元素了吗?不Z-index可是不继承给它的子元素的。<br>
+我们试试把biv(A)的Z-index设置成auto</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e92ccbadb3ad1561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>div(a)成功的遮挡住了Z-index比他小的元素。</p>
+<p>再试试只把div(a)设置为auto</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e4724db7e354c034.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
+<h2 id="总结">总结:</h2>
+<ol>
+<li>当Z-index的值设置为auto时,不建立新的堆叠上下文,当前堆叠上下文中生成的div的堆叠级别与其父项的框相同。</li>
+<li>当Z-index的值设置为一个整数时,该整数是当前堆叠上下文中生成的div的堆栈级别。该框还建立了其堆栈级别的本地堆叠上下文。这意味着后代的z-index不与此元素之外的元素的z-index进行比较。</li>
+</ol>
+<p>ps: 通俗讲就是,当一个div的Z-index为整数时,它的子元素和外界元素进行比较时,采用父元素的Z-index进行比较, 和兄弟元素比较采用自身的Z-index。当一个div的Z-index为auto时,如果它和它的兄弟进行比较,采用它父元素的Z-index。</p>
+<h2 id="z-index-不设置和设置为0有什么区别">z-index 不设置和设置为0有什么区别?</h2>
+<p>如果不设置Z-index那么默认值为auto,则不建立层叠上下文。设置为0则会脱离文档流,建立层叠上下文。<br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-da32ea3f63d9b3c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="文档流Z轴"></p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/CSS">
+            <span class="flex-auto">CSS</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/clear-float">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  CSS清除浮动的三种方法
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/event-commision">
+                <h3 class="post-title">
+                  使用原生 JS 实现事件委托
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

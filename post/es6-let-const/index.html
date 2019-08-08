@@ -1,0 +1,394 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#let">let</a>
+<ul>
+<li><a href="#%E5%86%8D%E4%B9%9F%E6%B2%A1%E6%9C%89%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87">再也没有变量提升</a></li>
+<li><a href="#%E6%9A%82%E6%97%B6%E6%80%A7%E6%AD%BB%E5%8C%BAtemporal-dead-zone">暂时性死区（temporal dead zone）</a></li>
+<li><a href="#%E4%B8%8D%E5%85%81%E8%AE%B8%E9%87%8D%E5%A4%8D%E5%A3%B0%E6%98%8E">不允许重复声明</a></li>
+<li><a href="#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F">块级作用域</a></li>
+</ul>
+</li>
+<li><a href="#const">const</a>
+<ul>
+<li><a href="#const%E5%A3%B0%E6%98%8E%E7%9A%84%E5%8F%98%E9%87%8F%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E6%94%B9%E5%8F%98%E5%90%97">const声明的变量真的不能改变吗？</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">吃透ES6----let和const</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2018-03-11 / 2 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/es6-let-const.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <p>ES6 在原有两种声明变量命令（var和function）的基础上，又加入了一共四种声明变量的命令let const import class，本文先对let和const的用法进行说明。</p>
+<h2 id="let">let</h2>
+<p>先说说let，同样是变量声明let相对于var引入了块级作用域的概念。</p>
+<pre><code class="language-js">{
+  var a = 1
+  let b = 2
+}
+console.log(a) //  1
+console.log(b) //  ReferenceError: b is not defined
+</code></pre>
+<p>这个例子说明了同样是在外部调用代码块内部声明的变量，结果用let声明的报错，用var声明的返回值。 这说明用let声明的变量只在声明时的代码块可用。 最典型的例子就是这道面试题了：</p>
+<pre><code class="language-js">var a = [];
+for (var i = 0; i &lt; 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[6](); // 10
+a[7](); // 10
+a[8](); // 10
+a[9](); // 10
+</code></pre>
+<p>之所以每次输出的值都是10，是因为用var声明的变量没有块级作用域的特性，会进行变量提升，所以i就是全局变量，每一次遍历都会把之前的i覆盖掉。 如果用let就不会发生这样的情况：</p>
+<pre><code class="language-js">var a = [];
+for (let i = 0; i &lt; 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[6](); // 6
+</code></pre>
+<p>因为let声明的变量只在当前代码块内有效，所以每次遍历的i都是独立的，互不影响。 另外对于for循环的代码块还有一个特殊的地方，就是循环变量的地方是一个作用域，循环体内部有又是一个单独的作用域：</p>
+<pre><code class="language-js">for(let i = 0 ; i &lt; 3 ; i++){
+  let i = 'inside'
+  console.log(i)
+}
+
+//&quot;inside&quot;
+//&quot;inside&quot;
+//&quot;inside&quot;
+</code></pre>
+<p>输出三次‘inside’，表明函数内部的i和循环变量i分别在不同的作用域。</p>
+<h3 id="再也没有变量提升">再也没有变量提升</h3>
+<p>用var声明的变量会有变量提升的情况，大家应该都很熟悉，但是这其实并不符合正常的逻辑，变量应该在声明语句之后才可以使用。</p>
+<pre><code class="language-js">console.log(a)  // undefined
+var a = 1  
+console.log(a) // ReferenceError: a is not defined
+let a = 1  
+</code></pre>
+<h3 id="暂时性死区temporal-dead-zone">暂时性死区（temporal dead zone）</h3>
+<p>在用let声明变量的同时会绑定（binding）这个区域，使变量不受外部影响</p>
+<pre><code class="language-js">var a = 'outside'
+if(true){
+  console.log(a) // ReferenceError
+  let a
+}
+</code></pre>
+<p>可以看出在代码块中使用let声明变量之前，该变量都是不可用的，这在语法上称为“暂时性死区”（temporal dead zone）</p>
+<h3 id="不允许重复声明">不允许重复声明</h3>
+<p>let 不允许在相同的代码块中重复声明相同的变量</p>
+<pre><code class="language-js">//报错
+function foo() {
+  let a = 10
+  var a = 1
+}
+foo()
+// 报错
+function foo() {
+  let a = 10
+  let a = 1
+}
+foo()
+</code></pre>
+<p>即使像这样也不行：</p>
+<pre><code class="language-js">//报错
+function foo(a) {
+  let a = 10
+}
+foo()
+</code></pre>
+<h3 id="块级作用域">块级作用域</h3>
+<p>ES6 之前只有全局作用域和函数作用域，这样带来了很多棘手的问题。 比如：</p>
+<pre><code class="language-js">var a = 10
+function f () {
+  console.log(a)
+  if(true){
+      var a
+  }
+}
+f()
+// undefined
+</code></pre>
+<p>上面代码本来是if代码块使用自己内部的a，函数内使用外部的a，但是因为变量提升的问题，导致if代码块内的a影响到了外部的a，所以函数执行后输出undefined。 在ES6引入了let之后事情就变得简单许多，let的作用实际上就是给JavaScript引入了块级作用域。</p>
+<pre><code class="language-js">function foo(){
+  let i = 10
+  if(true){
+    let i = 20
+  }
+  console.log(i) // 10
+}
+foo()
+</code></pre>
+<p>上面代码说明用let内部的代码不会影响外部的代码。</p>
+<h2 id="const">const</h2>
+<p>const和let的区别是，声明的是一个只读常量，一旦声明，值就不能改变。</p>
+<pre><code class="language-js">const a = 1
+a = 2
+// 报错
+</code></pre>
+<p>const所声明的常量不能改变，所以声明和赋值的过程必须同时进行。</p>
+<pre><code class="language-js">const a
+// 报错
+</code></pre>
+<p>const的作用域与let相同，都具有块级作用域的概念。</p>
+<pre><code class="language-js">if(true){
+  const a = 10
+}
+console.log(a) // a is not defined
+</code></pre>
+<p>const也不会有变量提升的操作，所以同样存在暂时性死区，只能在声明后使用。</p>
+<pre><code class="language-js">if(true){
+  console.log(a)
+  const a = 10
+}
+// ReferenceError: a is not defined
+</code></pre>
+<p>同样不可重复声明</p>
+<pre><code class="language-js">const a = 1
+const a = 2
+// SyntaxError: Identifier 'a' has already been declared
+</code></pre>
+<h3 id="const声明的变量真的不能改变吗">const声明的变量真的不能改变吗？</h3>
+<p>对于简单类型的数据（数值、字符串、布尔值）而言，值确实是不能改变，但对于复杂类型（对象和数组），变量保存的只是指向内存地址的指针，const只能保证这个指针不会被改变，至于指针所指的内容则完全不受控制。 数组：</p>
+<pre><code class="language-js">const arr = []
+arr[0] = 1
+console.log(arr) // [1]
+arr = [2]  // 报错
+</code></pre>
+<p>对象：</p>
+<pre><code class="language-js">const obj = {}
+obj.a = 123
+obj.a // 123
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript">
+            <span class="flex-auto">JavaScript</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+            <span class="flex-auto">Front-end</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/=&gt;">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  吃透ES6----简洁优雅的箭头函数
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/this">
+                <h3 class="post-title">
+                   this到底指向哪里？
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

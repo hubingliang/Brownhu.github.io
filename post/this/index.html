@@ -1,0 +1,321 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E6%8C%87%E5%90%91%E5%8F%AA%E4%B8%8E%E8%B0%83%E7%94%A8%E6%9C%89%E5%85%B3">指向只与调用有关</a></li>
+<li><a href="#%E6%94%B9%E5%8F%98this%E6%8C%87%E5%90%91%E7%9A%84%E6%96%B9%E6%B3%95">改变this指向的方法</a>
+<ul>
+<li><a href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E4%B8%8B%E7%9A%84this">箭头函数下的this</a></li>
+<li><a href="#apply-call">apply &amp; call</a></li>
+<li><a href="#bind-%E5%92%8C-call-apply">bind 和 call apply</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16"> this到底指向哪里？</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2018-02-25 / 1 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/this.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <p>老生常谈的问题了，之前一直有些模糊，这次争取一次写清楚。</p>
+<h2 id="指向只与调用有关">指向只与调用有关</h2>
+<p>不论代码多么复杂我们只关心到底是谁最后调用的this就可以了。</p>
+<p>来看一个例子：</p>
+<pre><code class="language-js">var obj = {
+    foo: function(){
+      console.log(this)
+    }
+  }
+  
+var bar = obj.foo
+obj.foo() // obj
+bar() //  window
+</code></pre>
+<p>为什么最后两行所打印出的this不同？还是那句话 <strong>“谁最后调用的this，this就指向谁。”</strong></p>
+<ul>
+<li>先看第一行调用foo()函数的对象是obj，所以this指向obj。</li>
+<li>前面没有调用的对象那么就是全局对象 window，所以调用bar()函数的对象是全局window，相当于window.bar()，所以this指向window（严格模式下全局为undifined）</li>
+</ul>
+<h2 id="改变this指向的方法">改变this指向的方法</h2>
+<h3 id="箭头函数下的this">箭头函数下的this</h3>
+<p>箭头函数下的this有些特殊，函数体内的this对象就是定义时的所在的对象，而不是使用时所在的对象。</p>
+<p>例子：</p>
+<pre><code class="language-js">function Timer(){
+    this.s1 = 0
+    this.s2 = 0
+
+    setInterval(()=&gt; this.s1++,1000)
+    setInterval(function(){
+        this.s2 ++
+    },1000)
+
+}
+
+let timer = new Timer()
+
+setTimeout(() =&gt; console.log(timer.s1),3100) //  3
+setTimeout(() =&gt; console.log(timer.s2),3100) //  0
+</code></pre>
+<p>上面的例子，Timer函数内部设置了两个定时器，分别使用了箭头函数和普通函数，箭头函数的this指向函数定义时所在的作用于（即Timer函数），普通函数的this指向调用时所在的作用于（即全局对象window）。所以，3100ms之后，timer.s1加到了3，而timer.s2一次都没有更新。</p>
+<h3 id="apply-call">apply &amp; call</h3>
+<p>apply call bind 都可以改变this的指向，这里先说apply 和 call 的区别。 <strong>apply 和 call 的区别是 call 方法接受的是若干个参数列表，而 apply 接收的是一个包含多个参数的数组。</strong></p>
+<ul>
+<li>apply</li>
+</ul>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.apply(a,[1,2])     // 3
+</code></pre>
+<p>call</p>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.call(a,1,2)       // 3
+</code></pre>
+<h3 id="bind-和-call-apply">bind 和 call apply</h3>
+<p>直接看MDN上面的介绍：</p>
+<blockquote>
+<p>bind()方法创建一个新的函数, 当被调用时，将其this关键字设置为提供的值，在调用新函数时，在任何提供之前提供一个给定的参数序列。</p>
+</blockquote>
+<pre><code class="language-js">var a ={
+    fn : function (a,b) {
+        console.log( a + b)
+    }
+}
+var b = a.fn;
+b.bind(a,1,2)()           // 3
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript">
+            <span class="flex-auto">JavaScript</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+            <span class="flex-auto">Front-end</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/es6-let-const">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  吃透ES6----let和const
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/status-code">
+                <h3 class="post-title">
+                  认识HTTP----状态码
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

