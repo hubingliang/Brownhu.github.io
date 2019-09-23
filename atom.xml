@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://hubingliang.github.io</id>
     <title>Brown Hu</title>
-    <updated>2019-08-08T02:43:39.993Z</updated>
+    <updated>2019-09-23T16:51:19.789Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hubingliang.github.io"/>
     <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
@@ -10,6 +10,62 @@
     <logo>https://hubingliang.github.io/images/avatar.png</logo>
     <icon>https://hubingliang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Brown Hu</rights>
+    <entry>
+        <title type="html"><![CDATA[缓存淘汰策略的三个代表]]></title>
+        <id>https://hubingliang.github.io/post/cache-strategy</id>
+        <link href="https://hubingliang.github.io/post/cache-strategy">
+        </link>
+        <updated>2019-09-23T16:16:29.000Z</updated>
+        <content type="html"><![CDATA[<p>缓存是有空间的限制的，不同的情况下会采取不同的<strong>缓存淘汰策略</strong>应对缓存满载。常见的<strong>缓存淘汰策略</strong>有三种：</p>
+<ul>
+<li>先进先出策略 FIFO（First In，First Out）</li>
+<li>最少使用策略 LFU（Least Frequently Used）</li>
+<li>最近最少使用策略 LRU（Least Recently Used）</li>
+</ul>
+<h1 id="fifo">FIFO</h1>
+<blockquote>
+<p>先进先出，如果缓存容量满，则优先移出最早加入缓存的数据；其内部可以使用队列实现。</p>
+</blockquote>
+<p>简单理解其实就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。</p>
+<h1 id="lfu">LFU</h1>
+<blockquote>
+<p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
+</blockquote>
+<p>所以 LFU 的淘汰策略其实就是：如果一个数据在最近一段时间内使用次数很少，那么在将来一段时间内被使用的可能性也很小，所以优先淘汰。</p>
+<h1 id="lru">LRU</h1>
+<blockquote>
+<p>least recently used，是目前最常用的缓存算法和设计方案之一，其移除策略为“当缓存（页）满时，优先移除最近最久未使用的数据”，优点是易于设计和使用，适用场景广泛。</p>
+</blockquote>
+<p>乍一看好像和 LFU 的区别不是很大，其实 LFU 和 LRU 的区别主要是判断的依据不一样，LFU 依据的是访问次数、LRU 依据的是多少时间没被访问。</p>
+<p>举个例子：</p>
+<ol>
+<li>
+<p>比如有数据：1，2，3，4</p>
+</li>
+<li>
+<p>缓存大小为2：[]</p>
+</li>
+<li>
+<p>我依次访问了1，2，1</p>
+</li>
+<li>
+<p>缓存现在应该是 [1(2), 2(1)] (括号里面是访问的次数)</p>
+</li>
+<li>
+<p>我现在又要访问3，这个时候就需要缓存淘汰策略了</p>
+</li>
+<li>
+<p>对于 FIFO 应该很好理解，先进先出，我先访问的1，后访问的2，所以缓存变为[3(1).2(1)]</p>
+</li>
+<li>
+<p>对于 LFU 淘汰访问次数最少的就可以了，缓存变成[3(1),1(2)]</p>
+</li>
+<li>
+<p>LRU 我们要看哪个数据没被访问的时间最长，因为我最新一次访问的是1，所以淘汰2，缓存变成[3(1),1(2)]</p>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[如何打造一款自己的 VSCode 主题？]]></title>
         <id>https://hubingliang.github.io/post/vscode-theme</id>
@@ -1401,90 +1457,6 @@ rgb.b = ~~(rgb.b/count)
     return rgb;
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[吃透ES6----简洁优雅的箭头函数]]></title>
-        <id>https://hubingliang.github.io/post/=&gt;</id>
-        <link href="https://hubingliang.github.io/post/=&gt;">
-        </link>
-        <updated>2018-03-18T14:55:25.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="基本用法">基本用法</h2>
-<p>箭头函数可能是ES6最有特点的新特性了，它不仅可以让代码变得优美，而且更直观利于理解。</p>
-<pre><code class="language-js">let f = v =&gt; v
-//等同于
-let f = function(){
-  return v
-}
-</code></pre>
-<p>如果箭头函数不需要参数或者需要多个参数的的情况下，就使用圆括号代表参数部分：</p>
-<pre><code class="language-js">let f = () =&gt; 5
-
-//等同于
-let f = function(){
-  return 5
-}
-</code></pre>
-<p>多个参数：</p>
-<pre><code class="language-js">let f = (a,b) =&gt; a + b
-//等同于
-let f = function(a,b){
-  return a + b
-}
-</code></pre>
-<p>如果函数要执行的操作很多就需要用代码块括起来：</p>
-<pre><code class="language-js">let f = function (a,b) =&gt;{
-  //somecode
-}
-</code></pre>
-<p>但是当你要使用箭头函数返回一个对象时，要用大括号把对象括起来：</p>
-<p><code>let f = () =&gt; ({ id : '1' , name : '小明 '})</code></p>
-<h2 id="注意事项">注意事项</h2>
-<h3 id="this的确定">this的确定?</h3>
-<p>和普通函数不同，箭头函数的this就是定义时的所在的对象，而不是使用时所在的对象。 也就是说一旦定义箭头函数，那么他的this对象就是定义时所在的对象，并不会因为bind(),call()而改变。</p>
-<h3 id="不可以当作构造函数">不可以当作构造函数</h3>
-<p>也就是说不可以new一个箭头函数，否则会抛出一个错误：</p>
-<pre><code class="language-js">let f = () =&gt;{
-    this.a =1
-}
-let x = new f() //报错
-</code></pre>
-<h3 id="arguments对象">arguments对象</h3>
-<p>对于箭头函数来讲，不可以使用arguments对象，该对象在函数体内不存在：</p>
-<pre><code class="language-js">let f = (a,b) =&gt;{
-    console.log(arguments)
-}
-f(1,2) // arguments is not defined
-</code></pre>
-<p>作为代替ES6新加入了rest参数：</p>
-<pre><code class="language-js">let f = (...numbers) =&gt;{
-    for(let a of numbers){
-        console.log(a)
-    }
-}
-f(1,2) 
-//1 
-//2
-</code></pre>
-<h3 id="yield命令">yield命令</h3>
-<p>不可以使用yield命令，因此箭头函数不能用作Generator</p>
-<h2 id="箭头函数绑定this">箭头函数绑定this</h2>
-<p>ES7提出了“函数绑定”运算符，用来取代call、bind、apply。虽然只是提案但是Babel转码器已经支持。 函数绑定运算符是并排的双冒号（::）,双冒号左边是一个对象，右边是一个函数。该运算符会自动将左边的对象作为上下文环境（this对象）绑定到右边的函数上。</p>
-<pre><code class="language-js">foo::bar
-//等同于
-bar.bind(foo)
-有参数的情况下
-
-foo::bar(...arguments)
-//等同于
-bar.apply(foo,arguments)
-</code></pre>
-<p>如果双冒号的左边为空，右边是一个对象的方法，那么该方法的this就是该对象。</p>
-<pre><code class="language-js">let method = obj::obj,foo
-//等同于
-let method = ::obj.foo
-</code></pre>
-<p>由于双冒号运算符返回的还是原对象，因此可以采用链式写法。</p>
 ]]></content>
     </entry>
 </feed>

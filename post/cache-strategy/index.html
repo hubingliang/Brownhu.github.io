@@ -30,30 +30,15 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            Better late then never
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li><a href="#fifo">FIFO</a></li>
+<li><a href="#lfu">LFU</a></li>
+<li><a href="#lru">LRU</a></li>
+</ul>
+
           </div>
         </div>
       
@@ -97,35 +82,89 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="text-lg text-gray-700 mb-8">
-          <i class="remixicon-bookmark-line"></i> JavaScript
-        </h2>
-        
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-    
-      <a href="https://hubingliang.github.io/post/event-commision" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://hubingliang.github.io/post-images/event-commision.jpeg'">
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">缓存淘汰策略的三个代表</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2019-09-24 / 1 min read
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://hubingliang.github.io/post/event-commision">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">使用原生 JS 实现事件委托</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
         
-      </div>
-      <div class="text-gray-400 text-sm font-light">2017-04-17 / 1 min read</div>
-    </div>
-  </section>
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://images.unsplash.com/photo-1566996029776-5d0aec5e88f1?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=600&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1200" alt="">
+        
+        <div class="post-content yue">
+          <p>缓存是有空间的限制的，不同的情况下会采取不同的<strong>缓存淘汰策略</strong>应对缓存满载。常见的<strong>缓存淘汰策略</strong>有三种：</p>
+<ul>
+<li>先进先出策略 FIFO（First In，First Out）</li>
+<li>最少使用策略 LFU（Least Frequently Used）</li>
+<li>最近最少使用策略 LRU（Least Recently Used）</li>
+</ul>
+<h1 id="fifo">FIFO</h1>
+<blockquote>
+<p>先进先出，如果缓存容量满，则优先移出最早加入缓存的数据；其内部可以使用队列实现。</p>
+</blockquote>
+<p>简单理解其实就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。</p>
+<h1 id="lfu">LFU</h1>
+<blockquote>
+<p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
+</blockquote>
+<p>所以 LFU 的淘汰策略其实就是：如果一个数据在最近一段时间内使用次数很少，那么在将来一段时间内被使用的可能性也很小，所以优先淘汰。</p>
+<h1 id="lru">LRU</h1>
+<blockquote>
+<p>least recently used，是目前最常用的缓存算法和设计方案之一，其移除策略为“当缓存（页）满时，优先移除最近最久未使用的数据”，优点是易于设计和使用，适用场景广泛。</p>
+</blockquote>
+<p>乍一看好像和 LFU 的区别不是很大，其实 LFU 和 LRU 的区别主要是判断的依据不一样，LFU 依据的是访问次数、LRU 依据的是多少时间没被访问。</p>
+<p>举个例子：</p>
+<ol>
+<li>
+<p>比如有数据：1，2，3，4</p>
+</li>
+<li>
+<p>缓存大小为2：[]</p>
+</li>
+<li>
+<p>我依次访问了1，2，1</p>
+</li>
+<li>
+<p>缓存现在应该是 [1(2), 2(1)] (括号里面是访问的次数)</p>
+</li>
+<li>
+<p>我现在又要访问3，这个时候就需要缓存淘汰策略了</p>
+</li>
+<li>
+<p>对于 FIFO 应该很好理解，先进先出，我先访问的1，后访问的2，所以缓存变为[3(1).2(1)]</p>
+</li>
+<li>
+<p>对于 LFU 淘汰访问次数最少的就可以了，缓存变成[3(1),1(2)]</p>
+</li>
+<li>
+<p>LRU 我们要看哪个数据没被访问的时间最长，因为我最新一次访问的是1，所以淘汰2，缓存变成[3(1),1(2)]</p>
+</li>
+</ol>
 
-        <div class="pagination-container animated fadeIn">
-  
-    <a href="https://hubingliang.github.io/tag/JavaScript/" class="page-btn"><i class="remixicon-arrow-left-line"></i> 上一页</a>
-  
-  
-</div>
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/HTTP">
+            <span class="flex-auto">HTTP</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/vscode-theme">
+                <h3 class="post-title">
+                  如何打造一款自己的 VSCode 主题？
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
 
       </div>
     </div>
