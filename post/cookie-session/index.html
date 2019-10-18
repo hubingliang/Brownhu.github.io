@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -100,7 +100,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -108,17 +108,17 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">认识HTTP----Cookie和Session篇</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-06-19 / 2 min read
+          2017-06-19 / 9 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/cookie-session.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/cookie-session.jpeg" alt="">
         
         <div class="post-content yue">
           <p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
 <h2 id="使用cookie来管理状态">使用Cookie来管理状态</h2>
 <p>HTTP是无状态协议，说明它不能以状态来区分和管理请求和响应。也就是说，无法根据之前的状态进行本次的请求处理。<br>
 不可否认，无状态协议当然也有它的优点。由于不必保存状态，自然可减少服务器的CPU 及内存资源的消耗。从另一侧面来说，也正是因为HTTP 协议本身是非常简单的，所以才会被应用在各种场景里。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-87d0773cc92023ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="如果让服务器管理全部客户端状态则会成为负担"></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-87d0773cc92023ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="如果让服务器管理全部客户端状态则会成为负担"></figure>
 <p>我们登录淘宝的时候首先要登录，我们看到了一个商品点进去，进行了页面跳转/刷新，按照HTTP的无状态协议岂不是又要登录一次？</p>
 <p>所以为了解决这个问题，Cookie诞生了，在保留无状态协议这个特征的同时又要解决类似记录状态的矛盾问题。Cookie 技术通过在请求和响应报文中写入Cookie 信息来控制客户端的状态。<br>
 Cookie 会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie 值后发送出去。<br>
@@ -126,11 +126,11 @@ Cookie 会根据从服务器端发送的响应报文内的一个叫做Set-Cookie
 <ul>
 <li>没有Cookie信息状态下的请求</li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-59439fc716939f4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-59439fc716939f4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <ul>
 <li>第2次以后（存有Cookie信息状态）的请求</li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-27afc1005246361a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-27afc1005246361a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>上图很清晰地展示了发生Cookie 交互的情景。<br>
 HTTP 请求报文和响应报文的内容如下（数字和图中对应）。</p>
 <ol>
@@ -178,7 +178,7 @@ Cookie: sid=1342077140226724
 </tr>
 </tbody>
 </table>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-6f7ad5a2b69e3d8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-6f7ad5a2b69e3d8a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <h3 id="set-cookie">Set-Cookie</h3>
 <pre><code>Set-Cookie: status=enable; expires=Tue, 05 Jul 2011 07:26:31 GMT; ⇒
 path=/; domain=.hackr.jp;
@@ -238,7 +238,7 @@ path=/; domain=.hackr.jp;
 <p>基于表单认证的标准规范尚未有定论，一般会使用Cookie 来管理Session（会话）。<br>
 基于表单认证本身是通过服务器端的Web 应用，将客户端发送过来的用户ID 和密码与之前登录过的信息做匹配来进行认证的。<br>
 但鉴于HTTP 是无状态协议，之前已认证成功的用户状态无法通过协议层面保存下来。即，无法实现状态管理，因此即使当该用户下一次继续访问，也无法区分他与其他的用户。于是我们会使用Cookie 来管理Session，以弥补HTTP 协议中不存在的状态管理功能。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d8045757420dd652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Session 管理及Cookie 状态管理"></p>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-d8045757420dd652.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Session 管理及Cookie 状态管理"></figure>
 <ul>
 <li><strong>步骤一</strong>：客户端把用户ID 和密码等登录信息放入报文的实体部分，通常是以POST 方法把请求发送给服务器。而这时，会使用HTTPS 通信来进行HTML 表单画面的显示和用户输入数据的发送。</li>
 <li><strong>步骤二</strong>：服务器会发放用以识别用户的Session ID。通过验证从客户端发送过来的登录信息进行身份认证，然后把用户的认证状态与Session ID 绑定后记录在服务器端。</li>
@@ -256,7 +256,7 @@ path=/; domain=.hackr.jp;
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/HTTP">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/HTTP">
             <span class="flex-auto">HTTP</span>
           </a>
         
@@ -265,7 +265,7 @@ path=/; domain=.hackr.jp;
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/inherit">
+              <a href="https://brownhu.site/post/inherit">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                   JavaScript继承新旧方法汇总
@@ -276,7 +276,7 @@ path=/; domain=.hackr.jp;
 
           
             <div class="next-post">
-              <a href="https://hubingliang.github.io/post/caching">
+              <a href="https://brownhu.site/post/caching">
                 <h3 class="post-title">
                   认识HTTP----缓存篇
                   <i class="remixicon-arrow-right-line"></i>

@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -82,7 +82,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -90,13 +90,13 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16"> 搞懂Z-index的所有细节</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-04-29 / 1 min read
+          2017-04-29 / 3 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/z-index.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/z-index.jpeg" alt="">
         
         <div class="post-content yue">
-          <p><img src="http://upload-images.jianshu.io/upload_images/4337988-72fc3279283f3d96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="用Z-index来改变堆叠顺序"></p>
+          <figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-72fc3279283f3d96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="用Z-index来改变堆叠顺序"></figure>
 <p><a href="http://www.cssmojo.com/extras/everything_you_always_wanted_to_know_about_z-index_but_were_afraid_to_ask/">Z-index测试网站</a></p>
 <h2 id="z-index-在什么情况下才生效">z-index 在什么情况下才生效？</h2>
 <p>Z-index的运用是需要条件的,与其相关的属性就是position属性。我们以三个div来举例子。</p>
@@ -104,7 +104,7 @@
 <li>position: static;</li>
 </ul>
 <p>当三个div的position都为static时,我们把div(A)的Z-index设置为15, 把div(B)的Z-index设置为10,把div(C)的Z-index设置为5。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-dc45d7a26386344b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-dc45d7a26386344b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><strong>发现div(B)依然把div(A)的一部分挡住了,所以当position为static时,Z-index起不到任何改变堆叠的作用。</strong></p>
 <ul>
 <li>position: relative/absolute/fixed;</li>
@@ -114,14 +114,14 @@
 <p><strong>总结: 只有position的值为relative/absolute/fixed中的一个,Z-index才会生效。</strong></p>
 <h2 id="z-index值越大元素越靠前对吗">z-index值越大元素越靠前，对吗？</h2>
 <p>我们现在div(A)和div(B)中再分别创建一个小的div(c)和div(d)</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-8330fa3e640fe19e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这一张图就是一个特例"></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-8330fa3e640fe19e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这一张图就是一个特例"></figure>
 <p>我们观察到,div(a)的Z-index为20 可是为什么还会被Z-index仅仅为10的div(B)遮挡住呢?<br>
 难道是因为Z-index继承给他的子元素了吗?不Z-index可是不继承给它的子元素的。<br>
 我们试试把biv(A)的Z-index设置成auto</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e92ccbadb3ad1561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-e92ccbadb3ad1561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>div(a)成功的遮挡住了Z-index比他小的元素。</p>
 <p>再试试只把div(a)设置为auto</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e4724db7e354c034.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></p>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-e4724db7e354c034.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"></figure>
 <h2 id="总结">总结:</h2>
 <ol>
 <li>当Z-index的值设置为auto时,不建立新的堆叠上下文,当前堆叠上下文中生成的div的堆叠级别与其父项的框相同。</li>
@@ -135,7 +135,7 @@
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/CSS">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/CSS">
             <span class="flex-auto">CSS</span>
           </a>
         
@@ -144,7 +144,7 @@
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/clear-float">
+              <a href="https://brownhu.site/post/clear-float">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                   CSS清除浮动的三种方法
@@ -155,7 +155,7 @@
 
           
             <div class="next-post">
-              <a href="https://hubingliang.github.io/post/event-commision">
+              <a href="https://brownhu.site/post/event-commision">
                 <h3 class="post-title">
                   使用原生 JS 实现事件委托
                   <i class="remixicon-arrow-right-line"></i>

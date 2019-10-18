@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -80,7 +80,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -88,10 +88,10 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">如何在你的项目中引入emoji😀</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-09-17 / 1 min read
+          2017-09-17 / 3 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/emoji.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/emoji.jpeg" alt="">
         
         <div class="post-content yue">
           <p>最近在做我们学校的<a href="https://hubingliang.github.io/Confession-wall/dist/">表白墙网站</a>，在做到评论功能的时候自然而然就想到了emoji-😏。<br>
@@ -115,39 +115,39 @@
 <pre><code>&gt; npm install emojione
 </code></pre>
 <h2 id="生成emoji选择界面">生成emoji选择界面</h2>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ef3ae78893a558c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-ef3ae78893a558c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>首先我们需要这些emoji的图片，随即我就去<a href="https://www.emojione.com/developers/download">emojione</a>官网下载了32×32px的PNG图片，可是之后我发现图片太多不可能让我一个一个引入吧！</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-21d1a6f7e13a2288.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-21d1a6f7e13a2288.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>转变思路，去看emojione的<a href="https://github.com/emojione/emojione">文档</a>，发现了一个提供API演示功能的[emojione实验室](https://demos.emojione.com/latest/index.html## extras)。</p>
 <p>实验室中有一个API可以把HTML中的unicode 转换为图片：<a href="https://demos.emojione.com/latest/jsunicodetoimage.html">.unicodeToImage(str)</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-baca09028eec4ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-baca09028eec4ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>于是我用JS Bin 做了一个小<a href="http://js.jirengu.com/vupel/2/edit">demo</a>测试了一下,发现没有什么问题。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2650383b4132fa9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-2650383b4132fa9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>OK，那么我们就可以通过这个API批量生成emoji的图片了，可是emoji的Unicode码去哪找呢？<br>
 官方提供了一个Unicode复制粘贴的网站：<a href="https://www.emojicopy.com/">emojiCOPY</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-a391a9796b5010fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-a391a9796b5010fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>选中想要的emoji，之后点击COPY就可以复制下来，然后再粘贴到刚才的JS Bin之中就可以批量生成图片了：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-9f47be5f280a88f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="6"><img src="http://upload-images.jianshu.io/upload_images/4337988-9f47be5f280a88f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>之后把这些图片的HTML直接复制到我们的项目之中：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-45fb81e4f83df1d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="7"><img src="http://upload-images.jianshu.io/upload_images/4337988-45fb81e4f83df1d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>让人惊喜的是这些生成的img的alt是Unicode，这让input显示和用户点击同步也变得简单了。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-19fd42f9cf8aa49b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="8"><img src="http://upload-images.jianshu.io/upload_images/4337988-19fd42f9cf8aa49b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>接下来只需要写很简单的JS就可以实现了：</p>
 <pre><code class="language-js">$('.emoji').children().click((emoji)=&gt; {
     comment = comment + ' ' + emoji.target.alt　+　' '
 })
 </code></pre>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-c0ae294af0d711b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-64fbd4090a322e38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="9"><img src="http://upload-images.jianshu.io/upload_images/4337988-c0ae294af0d711b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
+<figure data-type="image" tabindex="10"><img src="http://upload-images.jianshu.io/upload_images/4337988-64fbd4090a322e38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/Front-end">
             <span class="flex-auto">Front-end</span>
           </a>
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Library">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/Library">
             <span class="flex-auto">Library</span>
           </a>
         
@@ -156,7 +156,7 @@
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/47css-trick">
+              <a href="https://brownhu.site/post/47css-trick">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                   2周时间掌握47个CSS技巧
@@ -167,7 +167,7 @@
 
           
             <div class="next-post">
-              <a href="https://hubingliang.github.io/post/securi">
+              <a href="https://brownhu.site/post/securi">
                 <h3 class="post-title">
                   认识HTTP----Web安全与攻击手段
                   <i class="remixicon-arrow-right-line"></i>

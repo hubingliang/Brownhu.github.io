@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -86,7 +86,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -94,10 +94,10 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">使用原生 JS 实现事件委托</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-04-17 / 1 min read
+          2017-04-17 / 5 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/event-commision.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/event-commision.jpeg" alt="">
         
         <div class="post-content yue">
           <h2 id="什么是事件委托">什么是事件委托?</h2>
@@ -136,20 +136,20 @@
 <img src="http://upload-images.jianshu.io/upload_images/4337988-8561b9f82d4e7ba2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只触发了绿色div和红色div的事件"></li>
 <li>所以我们可以总结,事件冒泡的规则就是事件从最深的节点开始，然后逐步向上传播事件。同时这也是事件委托，委托它们父级代为执行事件。</li>
 </ol>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-ef026ce54d376fb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-ef026ce54d376fb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <h2 id="如何实现委托">如何实现委托?</h2>
 <p>既然是委托,那么直接给li的父级ul绑定事件就可以了啊。但是这里存在一个BUG!<br>
 我们换个例子：<br>
 ul下有4个li,并且给ul绑定事件,为了方便演示给ul和li加一个border<br>
 <img src="http://upload-images.jianshu.io/upload_images/4337988-241d910a7679af62.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p><strong>BUG就是当我们点击红色和绿色之间的时候也会触发事件!!!</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-fe134b3f88648ae4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-fe134b3f88648ae4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>那么这个BUG如何处理呢?<br>
 <strong>如果在用户点击的时候判断一下是不是点击了li，如果是就触发，如果不是就不触发，是不是就解决了?</strong></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-b1b6387fe832c2bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="加一步判断"><br>
 这样看似成功了,只有点击了li才会触发事件.<br>
 <strong>但是并不完美,因为当li有子元素的时候就会失效!!!</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-fd45f15459ce67ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这个时候点击选项1的时候并不触发事件"></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-fd45f15459ce67ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="这个时候点击选项1的时候并不触发事件"></figure>
 <p>那么我们该如何继续优化呢?<br>
 当我们发现被点击的元素不是li的时候,那么我们就找被点击元素的父元素,判断它是不是li,如果不是就继续找.......以此类推,当我们找到li那么就触发事件,如果没找到,就不触发。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-826d7b2b9b2ad110.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="触发成功"><br>
@@ -173,11 +173,11 @@ ul.addEventListener('click', function (e) {
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/JavaScript">
             <span class="flex-auto">JavaScript</span>
           </a>
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/Front-end">
             <span class="flex-auto">Front-end</span>
           </a>
         
@@ -186,7 +186,7 @@ ul.addEventListener('click', function (e) {
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/z-index">
+              <a href="https://brownhu.site/post/z-index">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                    搞懂Z-index的所有细节

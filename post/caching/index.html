@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -146,7 +146,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -154,16 +154,16 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">认识HTTP----缓存篇</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-06-18 / 4 min read
+          2017-06-18 / 20 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/caching.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/caching.jpeg" alt="">
         
         <div class="post-content yue">
           <p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
 <h2 id="认识代理服务器">认识代理服务器</h2>
 <p>所以讲缓存为什么要先扯代理服务器？别急，让我们看一下一个请求的简单示意图。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2f83dd324ca06c63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-2f83dd324ca06c63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>我们看到客户端(用户)发送了一个请求并不是直接发给源服务器的而是经过了代理服务器，然后经由代理服务器再发送给源服务器，响应也同样遵循这个顺序。<br>
 那么代理服务器在这中间担任了什么角色？</p>
 <h3 id="代理服务器的分类">代理服务器的分类</h3>
@@ -174,12 +174,12 @@
 <li>透明代理（本文不做细致讨论）<br>
 转发请求或响应时，不对报文做任何加工的代理类型被称为透明代理（Transparent Proxy）。反之，对报文内容进行加工的代理被称为非透明代理。</li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d11ea257f3348fb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器、代理、服务器三者关系"></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-d11ea257f3348fb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器、代理、服务器三者关系"></figure>
 <h2 id="保存资源的缓存">保存资源的缓存</h2>
 <p>缓存是指代理服务器或客户端本地磁盘内保存的资源副本。利用缓存可减少对源服务器的访问，因此也就节省了通信流量和通信时间。<br>
 缓存服务器是代理服务器的一种，并归类在缓存代理类型中。换句话说，当代理转发从服务器返回的响应时，代理服务器将会保存一份资源的副本。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f0b2c6574f5d4670.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d469c7564bf7dc8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-f0b2c6574f5d4670.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-d469c7564bf7dc8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>缓存服务器的优势在于利用缓存可避免多次从源服务器转发资源。因此客户端可就近从缓存服务器上获取资源，而源服务器也不必多次处理相同的请求了。</p>
 <h3 id="缓存的有效期限">缓存的有效期限</h3>
 <p>即便缓存服务器和客户端内有缓存，也不能每次都给我返回缓存吧，如果是这样，源服务器更新了我也不知道，因为我每次都是看缓存的资源。<br>
@@ -198,20 +198,20 @@
 规范定义的形式唯一，如下所示。</p>
 <p><code>Pragma: no-cache</code></p>
 <p>该首部字段属于通用首部字段，但只用在客户端发送的请求中。客户端会要求所有的中间服务器不返回缓存的资源。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b7cfed33d7dd97aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-b7cfed33d7dd97aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>所有的中间服务器如果都能以HTTP/1.1 为基准， 那直接采用Cache-Control: no-cache 指定缓存的处理方式是最为理想的。但要整体掌握全部中间服务器使用的HTTP 协议版本却是不现实的。因此，发送的请求会同时含有下面两个首部字段。</p>
 <pre><code>Cache-Control: no-cache
 Pragma: no-cache
 </code></pre>
 <h4 id="expires">Expires</h4>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-8898bb96dfca4ab5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="6"><img src="http://upload-images.jianshu.io/upload_images/4337988-8898bb96dfca4ab5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>Expires: Wed, 04 Jul 2012 08:26:05 GMT</code></p>
 <p>首部字段Expires 会将资源失效的日期告知客户端。缓存服务器在接收到含有首部字段Expires 的响应后，会以缓存来应答请求，在Expires 字段值指定的时间之前，响应的副本会一直被保存。当超过指定的时间后，缓存服务器在请求发送过来时，会转向源服务器请求资源。</p>
 <p>源服务器不希望缓存服务器对资源缓存时，最好在Expires 字段内写入与首部字段Date 相同的时间值。<br>
 但是，当首部字段Cache-Control 有指定max-age 指令时，比起首部字段Expires，会优先处理max-age 指令。</p>
 <h3 id="cache-control">Cache-Control</h3>
 <p>通过指定首部字段Cache-Control 的指令，就能操作缓存的工作机制。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-c3b31fc74a5d48df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="首部字段Cache-Control 能够控制缓存的行为"></p>
+<figure data-type="image" tabindex="7"><img src="http://upload-images.jianshu.io/upload_images/4337988-c3b31fc74a5d48df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="首部字段Cache-Control 能够控制缓存的行为"></figure>
 <p>指令的参数是可选的，多个指令之间通过“,”分隔。首部字段Cache-Control 的指令在请求和响应下都适用。</p>
 <p><code>Cache-Control: private, max-age=0, no-cache</code></p>
 <h4 id="cache-control指令一览">Cache-Control指令一览：</h4>
@@ -361,14 +361,14 @@ Pragma: no-cache
 <p>s-maxage 指令的功能和max-age 指令的功能相同， 它们的不同点是s-maxage 指令只适用于供多位用户使用的公共缓存服务器(这里指代理服务器)。也就是说，对于向同一用户重复返回响应的服务器来说，这个指令没有任何作用。<br>
 另外，当使用s-maxage 指令后，则直接忽略对Expires 首部字段及max-age 指令的处理。</p>
 <p><strong>max-age指令</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bebb1dd149fa52cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="8"><img src="http://upload-images.jianshu.io/upload_images/4337988-bebb1dd149fa52cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>Cache-Control: max-age=604800 //（单位：秒）</code></p>
 <p>当客户端发送的请求中包含max-age 指令时，如果判定缓存资源的缓存时间数值比指定时间的数值更小，那么客户端就接收缓存的资源。<br>
 另外，当指定max-age 值为0，那么缓存服务器通常需要将请求转发给源服务器。<br>
 当服务器返回的响应中包含max-age 指令时，缓存服务器将不对资源的有效性再作确认，而max-age 数值代表资源保存为缓存的最长时间。<br>
 应用HTTP/1.1 版本的缓存服务器遇到同时存在Expires 首部字段的情况时，会优先处理max-age 指令，而忽略掉Expires 首部字段。而HTTP/1.0 版本的缓存服务器的情况却相反，max-age 指令会被忽略掉。</p>
 <p><strong>min-fresh指令</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-206127d6c4935c12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="9"><img src="http://upload-images.jianshu.io/upload_images/4337988-206127d6c4935c12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>Cache-Control: min-fresh=60 //（单位：秒）</code></p>
 <p>min-fresh 指令要求缓存服务器返回至少还未过指定时间的缓存资源。<br>
 比如，当指定min-fresh 为60 秒后，过了60 秒的资源都无法作为响应返回了。</p>
@@ -396,14 +396,14 @@ Pragma: no-cache
 <p>通过 cache-extension 标记（token），可以扩展Cache-Control 首部字段内的指令。<br>
 如上例，Cache-Control 首部字段本身没有community 这个指令。借助extension tokens 实现了该指令的添加。如果缓存服务器不能理community 这个新指令，就会直接忽略。因此，extension tokens 仅对能理解它的缓存服务器来说是有意义的。</p>
 <h3 id="last-modified">Last-Modified</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-d614e0b635ec075b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="10"><img src="http://upload-images.jianshu.io/upload_images/4337988-d614e0b635ec075b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>Last-Modified: Wed, 23 May 2012 09:59:55 GMT</code></p>
 <p>服务器将资源传递给客户端时，会将资源最后更改的时间以“Last-Modified: GMT”的形式加在实体首部上一起返回给客户端。<br>
 当客户端对同样的资源发起同样的请求时，会把该信息附带在请求报文中一并带给服务器去做检查。</p>
 <h4 id="if-modified-since">If-Modified-Since</h4>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-f6990c041841cfc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="11"><img src="http://upload-images.jianshu.io/upload_images/4337988-f6990c041841cfc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>如果在If-Modified-Since 字段指定的日期时间后，资源发生了更新，服务器会接受请求</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-64e1bbb040444dce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="12"><img src="http://upload-images.jianshu.io/upload_images/4337988-64e1bbb040444dce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>If-Modified-Since: Thu, 15 Apr 2004 00:00:00 GMT</code></p>
 <p>首部字段If-Modified-Since，属附带条件之一，它会告知服务器若If-Modified-Since 字段值早于资源的更新时间，则希望能处理该请求。而在指定If-Modified-Since 字段值的日期时间之后，如果请求的资源都没有过更新，则返回状态码304 Not Modified 的响应。<br>
 If-Modified-Since 用于确认代理或客户端拥有的本地资源的有效性。获取资源的更新日期时间，可通过确认首部字段Last-Modified 来确定。</p>
@@ -412,11 +412,11 @@ If-Modified-Since 用于确认代理或客户端拥有的本地资源的有效�
 <p>首部字段If-Unmodified-Since 和首部字段If-Modified-Since 的作用相反。它的作用的是告知服务器，指定的请求资源只有在字段值内指定的日期时间之后，未发生更新的情况下，才能处理请求。如果在指定日期时间后发生了更新，则以状态码412 Precondition Failed 作为响应返回。</p>
 <p><strong>ps:Last-Modified 存在一定问题，如果在服务器上，一个资源被修改了，但其实际内容根本没发生改变，会因为Last-Modified时间匹配不上而返回了整个实体给客户端（即使客户端缓存里有个一模一样的资源）。</strong></p>
 <h3 id="etag">ETag</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-e8e4f1208281051b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="13"><img src="http://upload-images.jianshu.io/upload_images/4337988-e8e4f1208281051b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p><code>ETag: &quot;82e22293907ce725faf67773957acd12&quot;</code></p>
 <p>首部字段ETag 能告知客户端实体标识。它是一种可将资源以字符串形式做唯一性标识的方式。服务器会为每份资源分配对应的ETag 值。<br>
 另外，当资源更新时，ETag 值也需要更新。生成ETag 值时，并没有统一的算法规则，而仅仅是由服务器来分配。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-39c25b16f7370efa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="14"><img src="http://upload-images.jianshu.io/upload_images/4337988-39c25b16f7370efa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>资源被缓存时，就会被分配唯一性标识。<br>
 例如，当使用中文版的浏览器访问 http : //www.google.com/ 时，就会返回中文版对应的资源，而使用英文版的浏览器访问时，则会返回英文版对应的资源。<br>
 两者的URI是相同的，所以仅凭URI 指定缓存的资源是相当困难的。若在下载过程中出现连接中断、再连接的情况，都会依照ETag 值来指定资源。</p>
@@ -437,8 +437,8 @@ If-Modified-Since 用于确认代理或客户端拥有的本地资源的有效�
 <h4 id="42-if-match">4.2 If-Match</h4>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-b0b9688c6da2da41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="附带条件请求"><br>
 形如If-xxx 这种样式的请求首部字段，都可称为条件请求。服务器接收到附带条件的请求后，只有判断指定条件为真时，才会执行请求。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-7992f2746e34989e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-20519a333fc1b1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有当If-Match 的字段值跟ETag 值匹配一致时，服务器才会接受请求"></p>
+<figure data-type="image" tabindex="15"><img src="http://upload-images.jianshu.io/upload_images/4337988-7992f2746e34989e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
+<figure data-type="image" tabindex="16"><img src="http://upload-images.jianshu.io/upload_images/4337988-20519a333fc1b1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有当If-Match 的字段值跟ETag 值匹配一致时，服务器才会接受请求"></figure>
 <p><code>If-Match: &quot;123456&quot;</code></p>
 <p>首部字段If-Match，属附带条件之一，它会告知服务器匹配资源所用的实体标记（ETag）值。这时的服务器无法使用弱ETag 值。<br>
 服务器会比对If-Match 的字段值和资源的ETag 值，仅当两者一致时，才会执行请求。反之，则返回状态码412 Precondition Failed 的响应。<br>
@@ -446,7 +446,7 @@ If-Modified-Since 用于确认代理或客户端拥有的本地资源的有效�
 <h4 id="if-none-match">If-None-Match</h4>
 <p>只有在If-None-Match 的字段值与ETag 值不一致时， 可处理该请求。<br>
 与If-Match 首部字段的作用相反</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-2119483682c70515.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="17"><img src="http://upload-images.jianshu.io/upload_images/4337988-2119483682c70515.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>首部字段If-None-Match 属于附带条件之一。它和首部字段If-Match 作用相反。用于指定If-None-Match 字段值的实体标记（ETag）值与请求资源的ETag 不一致时，它就告知服务器处理该请求。<br>
 在GET 或HEAD 方法中使用首部字段If-None-Match 可获取最新的资源。因此，这与使用首部字段If-Modified-Since 时有些类似。</p>
 <h3 id="用户刷新访问行为">用户刷新/访问行为</h3>
@@ -483,7 +483,7 @@ http://img1.gtimg.com/ninja/2/2016/04/ninja145972803357449.jpg
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/HTTP">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/HTTP">
             <span class="flex-auto">HTTP</span>
           </a>
         
@@ -492,7 +492,7 @@ http://img1.gtimg.com/ninja/2/2016/04/ninja145972803357449.jpg
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/cookie-session">
+              <a href="https://brownhu.site/post/cookie-session">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                   认识HTTP----Cookie和Session篇
@@ -503,7 +503,7 @@ http://img1.gtimg.com/ninja/2/2016/04/ninja145972803357449.jpg
 
           
             <div class="next-post">
-              <a href="https://hubingliang.github.io/post/event-model">
+              <a href="https://brownhu.site/post/event-model">
                 <h3 class="post-title">
                   JavaScript的三种事件模型
                   <i class="remixicon-arrow-right-line"></i>

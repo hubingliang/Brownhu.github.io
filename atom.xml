@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://hubingliang.github.io</id>
+    <id>https://brownhu.site</id>
     <title>Brown Hu</title>
-    <updated>2019-09-23T16:51:19.789Z</updated>
+    <updated>2019-10-18T12:04:05.616Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://hubingliang.github.io"/>
-    <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
+    <link rel="alternate" href="https://brownhu.site"/>
+    <link rel="self" href="https://brownhu.site/atom.xml"/>
     <subtitle>Better late then never</subtitle>
-    <logo>https://hubingliang.github.io/images/avatar.png</logo>
-    <icon>https://hubingliang.github.io/favicon.ico</icon>
+    <logo>https://brownhu.site/images/avatar.png</logo>
+    <icon>https://brownhu.site/favicon.ico</icon>
     <rights>All rights reserved 2019, Brown Hu</rights>
     <entry>
         <title type="html"><![CDATA[缓存淘汰策略的三个代表]]></title>
-        <id>https://hubingliang.github.io/post/cache-strategy</id>
-        <link href="https://hubingliang.github.io/post/cache-strategy">
+        <id>https://brownhu.site/post/cache-strategy</id>
+        <link href="https://brownhu.site/post/cache-strategy">
         </link>
         <updated>2019-09-23T16:16:29.000Z</updated>
         <content type="html"><![CDATA[<p>缓存是有空间的限制的，不同的情况下会采取不同的<strong>缓存淘汰策略</strong>应对缓存满载。常见的<strong>缓存淘汰策略</strong>有三种：</p>
@@ -68,19 +68,19 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[如何打造一款自己的 VSCode 主题？]]></title>
-        <id>https://hubingliang.github.io/post/vscode-theme</id>
-        <link href="https://hubingliang.github.io/post/vscode-theme">
+        <id>https://brownhu.site/post/vscode-theme</id>
+        <link href="https://brownhu.site/post/vscode-theme">
         </link>
         <updated>2019-04-18T09:21:54.000Z</updated>
         <content type="html"><![CDATA[<blockquote>
 <p>本文首发于个人博客</p>
 </blockquote>
 <p>我之前一直用 <strong>One Dark Pro</strong> 后来又转到 <strong>Material Theme Palenight</strong> 再到后来的 <strong>Dracula</strong> 。总觉得有些配色很奇怪（工作太闲），于是写了一个 VSCode 深色主题：<a href="https://github.com/hubingliang/Duang">Duang</a>，之所以叫Duang是因为它很黑，很亮，很柔....</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30374038ac5db?w=446&amp;h=315&amp;f=jpeg&amp;s=36465" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30374038ac5db?w=446&amp;h=315&amp;f=jpeg&amp;s=36465" alt=""></figure>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=Brownhu.duang">大家可以在这下载体验</a></p>
 <p><a href="https://github.com/hubingliang/Duang">github 在这里</a></p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a303c83daf3bb6?w=1514&amp;h=450&amp;f=png&amp;s=107690" alt=""></p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3062d5015d575?w=1920&amp;h=1057&amp;f=png&amp;s=327708" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a303c83daf3bb6?w=1514&amp;h=450&amp;f=png&amp;s=107690" alt=""></figure>
+<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3062d5015d575?w=1920&amp;h=1057&amp;f=png&amp;s=327708" alt=""></figure>
 <p>如果你也对编辑器有自己独特风格的偏好，但是在成千上万款主题中又没有一款主题完全符合你的口味，那么跟着下面的流程我们自己动手做一个完全符合自己风格的主题吧。</p>
 <hr>
 <h2 id="注册你的开发者帐号和配置-token">注册你的开发者帐号和配置 token</h2>
@@ -91,14 +91,14 @@
 </code></pre>
 <p>之后你需要去注册一个账号，网址在这：<a href="https://azure.microsoft.com/zh-cn/services/devops/">Azure DevOps Services | Microsoft Azure</a></p>
 <p>登陆之后，首先新建一个 <strong>public</strong> 项目:</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc45a7e1f7c1?w=627&amp;h=550&amp;f=png&amp;s=40656" alt=""></p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fbc998050c96?w=1492&amp;h=925&amp;f=png&amp;s=207120" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc45a7e1f7c1?w=627&amp;h=550&amp;f=png&amp;s=40656" alt=""></figure>
+<figure data-type="image" tabindex="5"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fbc998050c96?w=1492&amp;h=925&amp;f=png&amp;s=207120" alt=""></figure>
 <p>然后获取你的 <strong>Personal access tokens</strong> ，点击右上角的头像，点击 <strong>Security</strong>。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc9eafaf6678?w=233&amp;h=279&amp;f=png&amp;s=13476" alt=""></p>
+<figure data-type="image" tabindex="6"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc9eafaf6678?w=233&amp;h=279&amp;f=png&amp;s=13476" alt=""></figure>
 <p>为你的 <strong>token</strong> 指定一个名称，时间的话最长到期可以设置为一年。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fcf53e722c4a?w=1509&amp;h=1004&amp;f=png&amp;s=192787" alt=""></p>
+<figure data-type="image" tabindex="7"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fcf53e722c4a?w=1509&amp;h=1004&amp;f=png&amp;s=192787" alt=""></figure>
 <p>点击查看所有的配置项，找到 <strong>Marketplace</strong> 并选择 <strong>Acquire</strong> and <strong>Manage</strong>：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fd0406d2c348?w=1510&amp;h=1005&amp;f=png&amp;s=192921" alt=""></p>
+<figure data-type="image" tabindex="8"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fd0406d2c348?w=1510&amp;h=1005&amp;f=png&amp;s=192921" alt=""></figure>
 <p>点击 <strong>Create</strong> ，复制生成的 <strong>token</strong>，之后就要用到我们刚才安装的 <strong>vsce</strong> 来创建新的发布者（publisher）</p>
 <pre><code>vsce create-publisher (发布者的名字)
 </code></pre>
@@ -120,9 +120,9 @@
 <p>然后运行下面的命令👇，它可以在任何目录中生成一套基本的插件代码：</p>
 <pre><code>yo code
 </code></pre>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe0fab9fb691?w=1060&amp;h=916&amp;f=png&amp;s=258431" alt=""></p>
+<figure data-type="image" tabindex="9"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe0fab9fb691?w=1060&amp;h=916&amp;f=png&amp;s=258431" alt=""></figure>
 <p>我们要开发一个主题，所以选中 <strong>New Color Theme</strong>，之后会继续询问你是否新建主题还是从现有主题导入，我们这里选创建一个全新的。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe3e4302080e?w=2022&amp;h=184&amp;f=png&amp;s=116013" alt=""></p>
+<figure data-type="image" tabindex="10"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe3e4302080e?w=2022&amp;h=184&amp;f=png&amp;s=116013" alt=""></figure>
 <p>之后还会问你一些问题：</p>
 <ul>
 <li>插件名字</li>
@@ -139,17 +139,17 @@
 <p>很多我以为会很好看的颜色，改进去却like a shit....</p>
 <p>em.....扯远了</p>
 <p>首先用 VSCode 打开生成的目录，我们看到结构如下：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3009f1663e799?w=4096&amp;h=3072&amp;f=jpeg&amp;s=654365" alt="221555584047_.pic_hd.jpg"></p>
+<figure data-type="image" tabindex="11"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3009f1663e799?w=4096&amp;h=3072&amp;f=jpeg&amp;s=654365" alt="221555584047_.pic_hd.jpg"></figure>
 <p>之后我们的工作都会在 <strong>themes</strong> 下的 <strong>json</strong> 文件展开，不要害怕，我们其实不需要看完这几百上千行 json 文件的意思。</p>
 <p>首先我们先进去调试模式，看看脚本自动生成的主题是什么样子的：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a300dbfbd72558?w=2048&amp;h=1536&amp;f=png&amp;s=366435" alt=""></p>
+<figure data-type="image" tabindex="12"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a300dbfbd72558?w=2048&amp;h=1536&amp;f=png&amp;s=366435" alt=""></figure>
 <p>点击调试，会自动打开一个新的 VSCode 窗口展示预设的主题。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a301018c9aec7d?w=2772&amp;h=1754&amp;f=png&amp;s=633003" alt=""></p>
+<figure data-type="image" tabindex="13"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a301018c9aec7d?w=2772&amp;h=1754&amp;f=png&amp;s=633003" alt=""></figure>
 <p>接下来 <strong>Command + Shift + P</strong> 输入 <strong>Developer: Inspect TM Scopes</strong></p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30132c4f482c7?w=1190&amp;h=1094&amp;f=png&amp;s=165318" alt=""></p>
+<figure data-type="image" tabindex="14"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30132c4f482c7?w=1190&amp;h=1094&amp;f=png&amp;s=165318" alt=""></figure>
 <p>现在你可以看文件中每一个字符的颜色配置在哪了，只需要在 json 文件里搜对应的配置就好了。</p>
 <p>如果你觉得不习惯，你甚至可以打开和 <strong>Chrome</strong> 一样的开发者工具，快捷键是 <strong>option + command + i</strong></p>
-<p><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3015c6f12955f?w=3840&amp;h=2114&amp;f=png&amp;s=2290633" alt=""></p>
+<figure data-type="image" tabindex="15"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3015c6f12955f?w=3840&amp;h=2114&amp;f=png&amp;s=2290633" alt=""></figure>
 <p>不过我还是建议你用第一种方法，因为开发者工具有时候搜到颜色，但是你找不到配置项。</p>
 <hr>
 <h2 id="配色方案">配色方案</h2>
@@ -176,8 +176,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[可能是最全的 Javascript 类型检查方案]]></title>
-        <id>https://hubingliang.github.io/post/type</id>
-        <link href="https://hubingliang.github.io/post/type">
+        <id>https://brownhu.site/post/type</id>
+        <link href="https://brownhu.site/post/type">
         </link>
         <updated>2019-01-02T10:58:11.000Z</updated>
         <content type="html"><![CDATA[<blockquote>
@@ -265,9 +265,9 @@ obj1 instanceof Object // false
 obj2 instanceof Object // true
 </code></pre>
 <p>通过这个例子你能很明确的想明白 instanceof 的原理，因为 obj1 是通过<code>Object.create(null)</code>来创建的，它原型链上什么都没有：</p>
-<p><img src="https://i.loli.net/2019/01/02/5c2c8b9a13878.png" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/01/02/5c2c8b9a13878.png" alt=""></figure>
 <p>而直接通过<code>{}</code>赋值生成的对象它的<code>_proto_</code>是指向 Object 的：</p>
-<p><img src="https://i.loli.net/2019/01/02/5c2c8bc36b1f2.png" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/01/02/5c2c8bc36b1f2.png" alt=""></figure>
 <p>所以判断结果就会有不同，</p>
 <h2 id="objectprototypetostringcall">Object.prototype.toString.call()</h2>
 <p>这个方法可以说是目前比较全面的类型判断方法了，还是看看例子：</p>
@@ -293,8 +293,8 @@ Object.prototype.toString.call(new WeakMap()) // &quot;[object WeakMap]&quot;,/'
     </entry>
     <entry>
         <title type="html"><![CDATA[浅拷贝没那么简单]]></title>
-        <id>https://hubingliang.github.io/post/shallow-copy</id>
-        <link href="https://hubingliang.github.io/post/shallow-copy">
+        <id>https://brownhu.site/post/shallow-copy</id>
+        <link href="https://brownhu.site/post/shallow-copy">
         </link>
         <updated>2018-07-20T09:45:16.000Z</updated>
         <content type="html"><![CDATA[<h2 id="拷贝的分类">拷贝的分类</h2>
@@ -407,11 +407,11 @@ obj2 //{a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), f: &quot;
     </entry>
     <entry>
         <title type="html"><![CDATA[跨域方法整理]]></title>
-        <id>https://hubingliang.github.io/post/cors</id>
-        <link href="https://hubingliang.github.io/post/cors">
+        <id>https://brownhu.site/post/cors</id>
+        <link href="https://brownhu.site/post/cors">
         </link>
         <updated>2018-06-03T09:55:34.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt=""></p>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt=""></figure>
 <h2 id="什么是同源">什么是同源</h2>
 <p>为了防止网站被 XSS、CSRF 攻击，Netscape 公司在 1995 年引入同源策略/SOP(Same origin policy),它是指“协议+域名+端口”三者相同。</p>
 <h2 id="什么是跨域">什么是跨域</h2>
@@ -489,11 +489,11 @@ json({
     </entry>
     <entry>
         <title type="html"><![CDATA[使用requestAnimationFrame来提升动画性能]]></title>
-        <id>https://hubingliang.github.io/post/requestanimationframe</id>
-        <link href="https://hubingliang.github.io/post/requestanimationframe">
+        <id>https://brownhu.site/post/requestanimationframe</id>
+        <link href="https://brownhu.site/post/requestanimationframe">
         </link>
         <updated>2018-05-20T09:42:21.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://user-gold-cdn.xitu.io/2018/5/20/1637ddf84e9110d6?w=550&amp;h=365&amp;f=jpeg&amp;s=59063" alt=""></p>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/5/20/1637ddf84e9110d6?w=550&amp;h=365&amp;f=jpeg&amp;s=59063" alt=""></figure>
 <h2 id="传统动画的弊端">传统动画的弊端</h2>
 <p>在实际项目中我们经常会遇到生成动画的需求，传统方法是通过使用setTimeout和setInterval进行实现，但是定时器动画有两个弊端：</p>
 <ul>
@@ -606,8 +606,8 @@ requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[排序算法-N个正整数排序]]></title>
-        <id>https://hubingliang.github.io/post/sort</id>
-        <link href="https://hubingliang.github.io/post/sort">
+        <id>https://brownhu.site/post/sort</id>
+        <link href="https://brownhu.site/post/sort">
         </link>
         <updated>2018-05-09T09:46:49.000Z</updated>
         <content type="html"><![CDATA[<h2 id="算法">算法</h2>
@@ -622,7 +622,7 @@ requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
 </ol>
 </blockquote>
 <p><strong>如果想详细研究算法推荐《数据结构与算法分析》</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析"></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析"></figure>
 <h2 id="定义问题">定义问题</h2>
 <p>数组array含有N个正整数<br>
 输入量为array<br>
@@ -901,14 +901,14 @@ function merge(left, right) {
     </entry>
     <entry>
         <title type="html"><![CDATA[Hexo已经看腻了，来试试VuePress搭建个人博客]]></title>
-        <id>https://hubingliang.github.io/post/vuepress</id>
-        <link href="https://hubingliang.github.io/post/vuepress">
+        <id>https://brownhu.site/post/vuepress</id>
+        <link href="https://brownhu.site/post/vuepress">
         </link>
         <updated>2018-04-23T09:17:23.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e09d9fd3?w=600&amp;h=600&amp;f=png&amp;s=160672" alt=""></p>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e09d9fd3?w=600&amp;h=600&amp;f=png&amp;s=160672" alt=""></figure>
 <h2 id="vuepress">VuePress</h2>
 <p>先简单介绍一下VuePress，这是尤大在2018年4月份发布的一个新轮子。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21add3603e86?w=751&amp;h=418&amp;f=png&amp;s=63447" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21add3603e86?w=751&amp;h=418&amp;f=png&amp;s=63447" alt=""></figure>
 <p>一个基于 Vue SSR 的静态站生成器，本来的目的是爽爽的写文档，但是我发现用来撸一个人博客也非常不错。</p>
 <p><strong><a href="https://vuepress.vuejs.org/">这是VuePress的官方文档</a></strong><br>
 <strong><a href="https://vuepress.docschina.org/">这是VuePress的中文文档</a></strong></p>
@@ -1046,8 +1046,8 @@ $codeBgColor = #282c34 // 代码背景颜色
     </entry>
     <entry>
         <title type="html"><![CDATA[学会了ES6，就不会写出那样的代码]]></title>
-        <id>https://hubingliang.github.io/post/es6</id>
-        <link href="https://hubingliang.github.io/post/es6">
+        <id>https://brownhu.site/post/es6</id>
+        <link href="https://brownhu.site/post/es6">
         </link>
         <updated>2018-04-09T09:41:02.000Z</updated>
         <content type="html"><![CDATA[<h2 id="声明变量的新姿势">声明变量的新姿势</h2>
@@ -1359,8 +1359,8 @@ export default Person ;
     </entry>
     <entry>
         <title type="html"><![CDATA[使用ColorfulImg获取图片主题色！]]></title>
-        <id>https://hubingliang.github.io/post/colorfulimg</id>
-        <link href="https://hubingliang.github.io/post/colorfulimg">
+        <id>https://brownhu.site/post/colorfulimg</id>
+        <link href="https://brownhu.site/post/colorfulimg">
         </link>
         <updated>2018-03-29T13:23:02.000Z</updated>
         <content type="html"><![CDATA[<h2 id="取色网站">取色网站</h2>
@@ -1406,14 +1406,14 @@ let width = canvas.width = imgEl.width
 let data = context.getImageData(0, 0, width, height).data
 </code></pre>
 <p>在我第一次测试的时候遇到了跨域的问题：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt=""></figure>
 <p>图片如果不同源的话必须要加<code>crossorigin=&quot;anonymous&quot;</code>的属性，并且服务器存储那边也要开放相应的权限才行。<br>
 <code>&lt;img id=&quot;img&quot; crossorigin=&quot;anonymous&quot;&gt;</code></p>
 <h3 id="处理获取的颜色数据">处理获取的颜色数据</h3>
 <p>我们先log一下拿到的数据是什么吧：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt=""></figure>
 <p>是一个有着一堆数据的数组，这些数据是什么呢？我们先看一下MDN：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt=""></figure>
 <p>也就是说按顺序来看前四位组成一个以RGBA顺序的数据：<br>
 <strong>rgba(red, green, blue, alpha)</strong></p>
 <p>对于获取的图片数据透明度（alpha）都是255也就是不透明的所以我们不对透明度做处理，之后我们只需要把rgb的其他三个值分别求和再取均值就可以得到图片的主题色了！</p>

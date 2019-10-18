@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1569257442742">
+<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400235915">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://hubingliang.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1569257442742" alt="">
+        <a href="https://brownhu.site">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400235915" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -109,7 +109,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -117,43 +117,43 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">认识HTTP----状态码</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2017-10-28 / 1 min read
+          2017-10-28 / 6 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/status-code.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/status-code.jpeg" alt="">
         
         <div class="post-content yue">
           <p><strong>本文内容大多参考<a href="https://book.douban.com/subject/25863515/">《图解HTTP》一书</a></strong></p>
 <h2 id="什么是状态码">什么是状态码？</h2>
 <p>当我们向服务端发送请求的时候，为了让用户更好的理解返回结果，通常要借助状态码来通知用户服务器端是正常处理了请求，还是出现了偏差。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-58f1c4215d05ea95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="响应的状态码可描述请求的处理结果"></p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-58f1c4215d05ea95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="响应的状态码可描述请求的处理结果"></figure>
 <p><strong>状态码如200 OK，以3 位数字和原因短语组成。</strong><br>
 <strong>数字中的第一位指定了响应类别，后两位无分类。响应类别有以下5 种。</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-bf822bc144edc3e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-bf822bc144edc3e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>状态码数量繁多，实际经常使用只有14多种，下面只介绍一下具有代表性的14 个状态码。</p>
 <h2 id="2xx-成功">2XX 成功</h2>
 <p>2XX 的响应结果表明请求被正常处理了。</p>
 <h3 id="200-ok">200 OK</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-61676b0654a08ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-61676b0654a08ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>表示从客户端发来的请求在服务器端被正常处理了。</p>
 <h3 id="204-no-content">204 No Content</h3>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-f9d6fbcced90d307.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>
 该状态码代表服务器接收的请求已成功处理，但在返回的响应报文中不含实体的主体部分。另外，也不允许返回任何实体的主体。比如，当从浏览器发出请求处理后，返回204 响应，那么浏览器显示的页面不发生更新。<br>
 一般在只需要从客户端往服务器发送信息，而对客户端不需要发送新信息内容的情况下使用。</p>
 <h3 id="206-partial-content">206 Partial Content</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-3026ffedffa36572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-3026ffedffa36572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>该状态码表示客户端进行了范围请求，而服务器成功执行了这部分的GET 请求。响应报文中包含由Content-Range 指定范围的实体内容。</p>
 <h2 id="3xx重定向">3XX重定向</h2>
 <p>3XX 响应结果表明浏览器需要执行某些特殊的处理以正确处理请求。</p>
 <h3 id="301-moved-permanently">301 Moved Permanently</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-b1345d016e324c54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-b1345d016e324c54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>永久性重定向。该状态码表示请求的资源已被分配了新的URI，以后应使用资源现在所指的URI。</p>
 <h3 id="302-found">302 Found</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-da317dbc465ef206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="6"><img src="http://upload-images.jianshu.io/upload_images/4337988-da317dbc465ef206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>临时性重定向。该状态码表示请求的资源已被分配了新的URI，希望用户（本次）能使用新的URI 访问。<br>
 和301 Moved Permanently 状态码相似，但302 状态码代表的资源不是被永久移动，只是临时性质的。换句话说，已移动的资源对应的URI 将来还有可能发生改变。</p>
 <h3 id="303-see-other">303 See Other</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-42dfb7ef295639d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="7"><img src="http://upload-images.jianshu.io/upload_images/4337988-42dfb7ef295639d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>该状态码表示由于请求对应的资源存在着另一个URI，应使用GET方法定向获取请求的资源。<br>
 303 状态码和302 Found 状态码有着相同的功能，但303 状态码明确表示客户端应当采用GET 方法获取资源，这点与302 状态码有区别。<br>
 比如，当使用POST 方法访问CGI 程序，其执行后的处理结果是希望客户端能以GET 方法重定向到另一个URI 上去时，返回303 状态码。虽然302 Found 状态码也可以实现相同的功能，但这里使用303 状态码是最理想的。</p>
@@ -177,12 +177,12 @@
 该状态码表明对请求资源的访问被服务器拒绝了。服务器端没有必要给出拒绝的详细理由，但如果想作说明的话，可以在实体的主体部分对原因进行描述，这样就能让用户看到了。<br>
 未获得文件系统的访问授权，访问权限出现某些问题（从未授权的发送源IP 地址试图访问）等列举的情况都可能是发生403 的原因。</p>
 <h3 id="404-not-found">404 Not Found</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-1802cc9939aae6c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="8"><img src="http://upload-images.jianshu.io/upload_images/4337988-1802cc9939aae6c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>该状态码表明服务器上无法找到请求的资源。除此之外，也可以在服务器端拒绝请求且不想说明理由时使用。</p>
 <h2 id="5xx服务器错误">5XX服务器错误</h2>
 <p>5XX 的响应结果表明服务器本身发生错误。</p>
 <h3 id="500-internal-server-error">500 Internal Server Error</h3>
-<p><img src="http://upload-images.jianshu.io/upload_images/4337988-beb418dab1c3dbba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure data-type="image" tabindex="9"><img src="http://upload-images.jianshu.io/upload_images/4337988-beb418dab1c3dbba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
 <p>该状态码表明服务器端在执行请求时发生了错误。也有可能是Web应用存在的bug 或某些临时的故障。</p>
 <h3 id="503-service-unavailable">503 Service Unavailable</h3>
 <p><img src="http://upload-images.jianshu.io/upload_images/4337988-46134e7be9df6947.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>
@@ -191,11 +191,11 @@
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/Front-end">
             <span class="flex-auto">Front-end</span>
           </a>
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/HTTP">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/HTTP">
             <span class="flex-auto">HTTP</span>
           </a>
         
@@ -204,7 +204,7 @@
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://hubingliang.github.io/post/this">
+              <a href="https://brownhu.site/post/this">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                    this到底指向哪里？
@@ -215,7 +215,7 @@
 
           
             <div class="next-post">
-              <a href="https://hubingliang.github.io/post/browser">
+              <a href="https://brownhu.site/post/browser">
                 <h3 class="post-title">
                   浏览器渲染引擎到底做了什么
                   <i class="remixicon-arrow-right-line"></i>
