@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brown Hu</title>
 <meta name="description" content="Better late then never" />
-<link rel="shortcut icon" href="https://brownhu.site/favicon.ico?v=1571400333031">
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1584427221632">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="https://brownhu.site/styles/main.css">
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="https://brownhu.site">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://brownhu.site/images/avatar.png?v=1571400333031" alt="">
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1584427221632" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
       </div>
@@ -82,7 +82,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">C'est la vie</div>
-    <a class="rss" href="https://brownhu.site/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -93,18 +93,18 @@
           2017-05-22 / 2 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://brownhu.site/post-images/clear-float.jpeg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://hubingliang.github.io/post-images/clear-float.jpeg" alt="">
         
         <div class="post-content yue">
           <h2 id="先上一个简单的例子">先上一个简单的例子</h2>
-<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-6a161d22dcba3ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="简单的例子"></figure>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-6a161d22dcba3ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="简单的例子" loading="lazy"></figure>
 <p><strong>如图所示,图片被添加了float:left属性,实现了文字环绕效果.但是再给div加了border之后,我们发现图片并没有被包起来,也就是图片浮上来了一层,那么怎么解决这种情况,包住图片呢?</strong></p>
 <p>下面将介绍三种清除浮动的方法：</p>
 <p><a href="http://js.jirengu.com/rino/4/edit?html,output">跟着试一试?</a></p>
 <h2 id="给空div加clear">给空div加clear</h2>
 <p>在div元素的最后,加一个空div,并且加上clear属性,和绿色border(border大法好!).<br>
 <code>&lt;div style=&quot;clear: left; border: 4px solid green&quot;&gt;&lt;/div&gt;</code></p>
-<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-f792d7ba9501d188.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="空div"></figure>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4337988-f792d7ba9501d188.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="空div" loading="lazy"></figure>
 <p>我们发现绿色的空div把红色div的下边压到了图片以下,达到了我们清除浮动的效果.<br>
 clear: left在这里的意思是:有此样式的元素盒的左边不可以有浮动的元素.</p>
 <p>[clear元素不明白点这里](http://www.ayqy.net/doc/css2-1/visuren.html## propdef-clear)</p>
@@ -120,19 +120,19 @@ clear: left在这里的意思是:有此样式的元素盒的左边不可以有�
   }
 </code></pre>
 <p>然后在最外层div上加上clearfix类就可以实现了</p>
-<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-5cf4dd72227ec268.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="伪类实现"></figure>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4337988-5cf4dd72227ec268.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="伪类实现" loading="lazy"></figure>
 <h2 id="overflow-hidden清除浮动">overflow: hidden清除浮动</h2>
 <p>给父元素加上overflow: hidden属性.</p>
-<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-94db81bb9b3333ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="overflow: hidden"></figure>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4337988-94db81bb9b3333ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="overflow: hidden" loading="lazy"></figure>
 <p>overflow: hidden 的意思是超出的部分要裁切隐藏掉,那么为什么会有清除浮动的效果呢?因为父元素没有声明高度,所以要把父元素中所有的元素高度计算出来,才能根据所计算的高度,超出高度的将被裁掉.<br>
 我们试试给父元素加一个100px的高度:</p>
-<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-978a6893d3ea0615.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片就被剪裁了"></figure>
+<figure data-type="image" tabindex="5"><img src="http://upload-images.jianshu.io/upload_images/4337988-978a6893d3ea0615.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片就被剪裁了" loading="lazy"></figure>
 <p><strong>所以此方法是有适用范围的,父元素的高度必须是auto,否则将不生效!</strong></p>
 
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://brownhu.site/tag/CSS">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/CSS/">
             <span class="flex-auto">CSS</span>
           </a>
         
@@ -141,7 +141,7 @@ clear: left在这里的意思是:有此样式的元素盒的左边不可以有�
         <div class="flex justify-between py-8">
           
             <div class="prev-post">
-              <a href="https://brownhu.site/post/event-model">
+              <a href="https://hubingliang.github.io/post/event-model/">
                 <h3 class="post-title">
                   <i class="remixicon-arrow-left-line"></i>
                   JavaScript的三种事件模型
@@ -152,7 +152,7 @@ clear: left在这里的意思是:有此样式的元素盒的左边不可以有�
 
           
             <div class="next-post">
-              <a href="https://brownhu.site/post/z-index">
+              <a href="https://hubingliang.github.io/post/z-index/">
                 <h3 class="post-title">
                    搞懂Z-index的所有细节
                   <i class="remixicon-arrow-right-line"></i>

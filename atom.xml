@@ -1,19 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://brownhu.site</id>
+    <id>https://hubingliang.github.io</id>
     <title>Brown Hu</title>
-    <updated>2019-10-18T12:05:36.503Z</updated>
+    <updated>2020-03-17T07:05:20.296Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://brownhu.site"/>
-    <link rel="self" href="https://brownhu.site/atom.xml"/>
+    <link rel="alternate" href="https://hubingliang.github.io"/>
+    <link rel="self" href="https://hubingliang.github.io/atom.xml"/>
     <subtitle>Better late then never</subtitle>
-    <logo>https://brownhu.site/images/avatar.png</logo>
-    <icon>https://brownhu.site/favicon.ico</icon>
-    <rights>All rights reserved 2019, Brown Hu</rights>
+    <logo>https://hubingliang.github.io/images/avatar.png</logo>
+    <icon>https://hubingliang.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, Brown Hu</rights>
+    <entry>
+        <title type="html"><![CDATA[上手 Vue 3 + TS 应该用 Oprions API 还是 Composition API ?]]></title>
+        <id>https://hubingliang.github.io/post/shang-shou-vue-3-ts-ying-gai-yong-oprions-api-huan-shi-composition-api/</id>
+        <link href="https://hubingliang.github.io/post/shang-shou-vue-3-ts-ying-gai-yong-oprions-api-huan-shi-composition-api/">
+        </link>
+        <updated>2020-03-16T09:24:30.000Z</updated>
+        <content type="html"><![CDATA[<p>在这篇文章中，我会同时用常规 JavaScript 和 options API 以及 TypeScript 和 Composition API 写出两种不同风格的 Vue 3 组件，我们会从中看到两者的差异以及一些可能被忽视的优点。</p>
+<p><a href="https://gist.github.com/lmiller1990/f12b847fc23592f25ab70b17074fe946">你可以在这找到本文提及到的源码</a></p>
+<h1 id="the-component">The Component</h1>
+<p>我将会重构一个显示新闻的组件，它是通过 render 函数编写的。但因为 Vue Test Utils 和 Jest 还没有支持 Vue3 组件。对于那些不熟悉 render 函数的人，我附上了生成好的 HTML。由于源代码很长，组件的基本思想是生成此标记：</p>
+<pre><code class="language-html">&lt;div&gt;
+  &lt;h1&gt;Posts from {{ selectedFilter }}&lt;/h1&gt;
+  &lt;Filter 
+    v-for=&quot;filter in filters&quot; 
+    @select=&quot;filter =&gt; selectedFilter = filter&quot;
+    :filter=&quot;filter&quot;
+  /&gt;
+  &lt;NewsPost v-for=&quot;post in filteredPosts&quot; :post=&quot;post&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>&lt;NewsPost /&gt;</code> 负责展示渲染一些新闻帖子，用户可以通过设置<code>&lt;Filter /&gt;</code>组件来配置他们想看哪个时间段的新闻，这个组件基本上只需要渲染“今天”，“最近一周”等类似的按钮。</p>
+<p>在重构的过程中，我会介绍每个组件的源代码。至于用户如何与组件交互，下面是测试👇</p>
+<pre><code class="language-js">describe('FilterPosts', () =&gt; {
+  it('renders today posts by default', async () =&gt; {
+    const wrapper = mount(FilterPosts)
+
+    expect(wrapper.find('.post').text()).toBe('In the news today...')
+    expect(wrapper.findAll('.post')).toHaveLength(1)
+  })
+
+  it('toggles the filter', async () =&gt; {
+    const wrapper = mount(FilterPosts)
+
+    wrapper.findAll('button')[1].trigger('click')
+    await nextTick()
+
+    expect(wrapper.findAll('.post')).toHaveLength(2)
+    expect(wrapper.find('h1').text()).toBe('Posts from this week')
+    expect(wrapper.findAll('.post')[0].text()).toBe('In the news today...')
+    expect(wrapper.findAll('.post')[1].text()).toBe('In the news this week...')
+  })
+})`
+</code></pre>
+<p>我们需要关注的改动：</p>
+<ul>
+<li>使用 composition API 的 <code>ref</code> 和 <code>computed</code> 代替 <code>data</code> 和 <code>computed</code></li>
+<li>使用 TypeScript 来强化类型声明</li>
+<li>最重要的是，哪种 API 风格更加友好，以及JS和TS使用的利弊</li>
+</ul>
+<h1 id="typing-the-filter-type-and-refactoring-filter">Typing the <code>filter</code> type and Refactoring <code>Filter</code></h1>
+<p>从最简单的组件开始是最容易理解的，筛选组件如下所示：</p>
+<pre><code class="language-js">const filters = ['today', 'this week']
+
+export const Filter = defineComponent({
+  props: {
+    filter: {
+      type: String,
+      required: true
+    }
+  },
+
+  render() {
+    // &lt;button @click=&quot;$emit('select', filter)&gt;{{ filter }}/&lt;button&gt;
+    return h('button', { onClick: () =&gt; this.$emit('select', this.filter) }, this.filter)
+  }
+})
+</code></pre>
+<p>我们主要修改的是要给传入的  <code>filter</code> prop 定义类型，我们可以新定义一种类型（也可以使用<code>enum</code>）来做到这一点。</p>
+<pre><code class="language-js">type FilterPeriod = 'today' | 'this week'
+const filters: FilterPeriod[] = ['today', 'this week']
+
+export const Filter = defineComponent({
+  props: {
+    filter: {
+      type: String as () =&gt; FilterPeriod,
+      required: true
+    }
+  },
+  // ...
+)
+</code></pre>
+<p>你可能注意到在声明类型的时候用到了很奇怪的 <code>String as () =&gt; FilterPeriod</code>  语法，我不太确定为什么，可能是Vue <code>props</code>系统的一些限制。</p>
+<p>这已经是一个很大的改动了，使用者不需要考虑哪种字符串才是有效的，而且有可能会打错字，但是现在他们可以通过IDE查找，甚至可以在执行测试用例的时候或者启动app时提前发现问题。</p>
+<p>我们还可以将 <code>render</code> 函数移动到 <code>setup</code> 函数中，这样做就可以在 <code>this.filter</code> 和 <code>this.$emit</code> 中获得更好的类型判断。</p>
+<pre><code class="language-js">setup(props, ctx) { 
+  return () =&gt; h('button', { onClick: () =&gt; ctx.emit('select', props.filter) }, props.filter)
+}
+</code></pre>
+<p>给出更好的类型判断的主要原因是，定义类型对于 <code>props</code> 和 <code>context</code> 比定义高动态的 js 更容易。</p>
+<p>但其实当 Vetur 为 Vue3更新时，你实际上会在 <code>&lt;template&gt;</code> 中获得判断，这无疑是激动人心的。</p>
+<p>此时的测试用例依然可以通过，让我们继续重构<code>NewsPost</code>组件。</p>
+<h1 id="typing-the-post-type-and-newspost">Typing the <code>post</code> type and <code>NewsPost</code></h1>
+<p>NewsPost 组件看起来像这样：</p>
+<pre><code class="language-js">export const NewsPost = defineComponent({
+  props: {
+    post: {
+      type: Object,
+      required: true
+    }
+  },
+
+  render() {
+    return h('div', { className: 'post' }, this.post.title)
+  }
+})
+</code></pre>
+<p>另一个非常简单的组件，你会注意到<code>this.post.title</code>是没有被定义的，如果你在 VSCode 中打开这个组件，它会显示 <code>this.post</code> 是 <code>any</code> ，这是因为在JavaScript中很难定义 <code>this</code> ，与此同时 <code>type: Object</code> 实际上并没有什么用，因为他不能定义对象中的字段，让我们用 <code>Post</code> interface 来解决这个定义：</p>
+<pre><code class="language-js">interface Post {                         
+  id: number                         
+  title: string                         
+  created: Moment                       
+}
+</code></pre>
+<p>我们把 <code>render</code> 移动到 <code>setup</code>：</p>
+<pre><code class="language-js">export const NewsPost = defineComponent({
+  props: {
+    post: {
+      type: Object as () =&gt; Post,
+      required: true
+    },
+  },
+
+  setup(props) {
+    return () =&gt; h('div', { className: 'post' }, props.post.title)
+  }
+})
+</code></pre>
+<p>如果你在 VSCode 中打开这个组件，则会注意到 <code>props.post.title</code> 已经有了正确的类型定义。</p>
+<h1 id="updating-filterposts">Updating <code>FilterPosts</code></h1>
+<p>现在只剩下一个组件了 — <code>FilterPosts</code> 它看起来像这样：</p>
+<pre><code class="language-js">export const FilterPosts = defineComponent({
+  data() {
+    return {
+      selectedFilter: 'today'
+    }
+  },
+
+  computed: {
+    filteredPosts() {
+      return posts.filter(post =&gt; {
+        if (this.selectedFilter === 'today') {
+          return post.created.isSameOrBefore(moment().add(0, 'days'))
+        }
+
+        if (this.selectedFilter === 'this week') {
+          return post.created.isSameOrBefore(moment().add(1, 'week'))
+        }
+
+        return post
+      })
+    }
+  },
+
+  // &lt;h1&gt;Posts from {{ selectedFilter }}&lt;/h1&gt;
+  // &lt;Filter 
+  //   v-for=&quot;filter in filters&quot; 
+  //   @select=&quot;filter =&gt; selectedFilter = filter
+  //   :filter=&quot;filter&quot;
+  // /&gt;
+  // &lt;NewsPost v-for=&quot;post in posts&quot; :post=&quot;post&quot; /&gt;
+  render() {
+    return (
+      h('div',
+        [
+          h('h1', `Posts from ${this.selectedFilter}`),
+          filters.map(filter =&gt; h(Filter, { filter, onSelect: filter =&gt; this.selectedFilter = filter })),
+          this.filteredPosts.map(post =&gt; h(NewsPost, { post }))
+        ],
+      )
+    )
+  }
+})
+</code></pre>
+<p>我们从删除 <code>data</code> 函数开始，然后在<code>setup</code>中定义<code>selectedFilter</code>为<code>ref</code>，<code>ref</code>是一个泛型，因此我可以使用<code>&lt;&gt;</code>来将其传给其他类型，现在<code>ref</code>知道哪些值可以被分给<code>selectedFilter</code>。</p>
+<pre><code class="language-js">setup() {
+  const selectedFilter = ref&lt;FilterPeriod&gt;('today')
+
+  return {
+    selectedFilter
+  }
+}
+</code></pre>
+<p>测试用例仍然可以通过，所以让我们把<code>computed</code>和<code>filteredPosts</code>移动到<code>setup</code>。</p>
+<pre><code class="language-js">const filteredPosts = computed(() =&gt; {
+  return posts.filter(post =&gt; {
+    if (selectedFilter.value === 'today') {
+      return post.created.isSameOrBefore(moment().add(0, 'days'))
+    }
+
+    if (selectedFilter.value === 'this week') {
+      return post.created.isSameOrBefore(moment().add(1, 'week'))
+    }
+
+    return post
+  })
+})
+</code></pre>
+<p>唯一改变的就是取代了<code>this.selectedFilter</code>我们使用了<code>selectedFilter.value</code>，<code>.value</code>在访问<code>selectedFilter</code> 的时候是必须的，因为你引用的是 <code>Proxy</code> 它是ES6的新特性，Vue3使用它来实现响应式。如果你在VSCode打开它，你会注意到<code>selectedFilter.value === 'this year'</code> 这将会出现编译错误，我们类型声明<code>FilterPeriod</code>所以编译器可以捕获该错误。</p>
+<p>最后的改动是把<code>render</code>函数移动到<code>setup</code></p>
+<pre><code class="language-js">return () =&gt; 
+  h('div',
+    [
+      h('h1', `Posts from ${selectedFilter.value}`),
+      filters.map(filter =&gt; h(Filter, { filter, onSelect: filter =&gt; selectedFilter.value = filter })),
+      filteredPosts.value.map(post =&gt; h(NewsPost, { post }))
+    ],
+  )
+</code></pre>
+<p>现在我们在<code>setup</code>中返回一个函数，所以我们不再需要返回<code>selectedFilter</code>和<code>filteredPosts</code> 我们可以在返回的函数中直接引用它，因为他们是在同一作用域中声明的。</p>
+<p>所有的测试都通过了，因此重构结束。</p>
+<h1 id="discussion">Discussion</h1>
+<p>一个重要的事情是，我们不需要为重构改变测试用例。这是因为测试着重于组件的行为，而不是实现细节。</p>
+<p>尽管这种重构并不有趣，而且并不能带来什么业务增长，但它确实提出一些有趣的观点，以供开发人员讨论。</p>
+<ul>
+<li>我们应该用 Composition API 还是 Options API?</li>
+<li>我们应该用 JS还是 TS?</li>
+</ul>
+<h1 id="composition-api-vs-options-api">Composition API vs Options API</h1>
+<p>这其实是Vue2到Vue3的最大变化，尽管你可以在Vue3使用 Options API，那是因为两者都存在。但是自然会引出一个问题，哪一个是解决问题的最好方法？或者哪一个适合我的项目？</p>
+<p>我不认为他们之中的一个要优于一个，就我个人而言，我发现 Options API 更容易理解，因为它很直观。了解 <code>ref</code> 和 <code>reactive</code> 以及<code>.value</code>需要了解的前置知识很多。至少 Options API 会迫使你才用 <code>computed``methods``data</code>的结构。</p>
+<p>但是话虽这么说，但是在使用 Options API 的时候很难充分利用 TypeScript 的全部功能，这是引用 Composition API 的原因之一。这是我要讨论的第二点。</p>
+<h1 id="typescript-vs-javascript">Typescript vs JavaScript</h1>
+<p>一开始我发现 TypeScript 的学习曲线并不友好，但是我真的很喜欢使用 TypeScript 来编写应用程序。它帮助我捕获很多错误，并且使事情更容易推断，如果你不知道一个对象有什么属性或者它们是否为空，只知道传入的 <code>prop</code> 是 <code>Object</code> 是没什么帮助的。</p>
+<p>另一方面，当我学习一个新概念，构建一个原型或者尝试一个新库时，我仍然更喜欢 JavaScript ，因为它不需要构建直接可以在浏览器运行，而当我尝试某些操作时，我也不需要关心特定的类型和泛型。这就是我最初学习 Composition API 的方式 仅仅用脚本标签构建一些例子。</p>
+<p>当你对某些库或者设计模式有信心，并且对要解决的问题充分了解之后，我更喜欢用 TypeScript ，考虑到 TypeScript 的普及程度，与其他强类型语言的相似性以及它带来的好处，用 JavaScript 来编写大型且复杂的应用会造成不必要的疏忽。TypeScript 的好处太吸引人了，特别是对于定义复杂的业务逻辑或与团队一起扩展代码库而言。</p>
+<p>另外一种我更偏爱 JavaScript 的地方是在构建以设计为中心的组件或应用时，大部分只需要使用 CSS 动画，SVG 进行操作，并且仅使用 Vue 诸如 Transition 基本的数据绑定 动画钩子之类的事情，这种情况我觉得 JavaScript 更为合适，只有在业务逻辑复杂的时候才会考虑 TypeScript。</p>
+<p>总而言之，我非常喜欢 TypeScript 和 Composition api，不是因为我因为它比 Options API 更直观或更简洁，而是因为它可以使我更有效地去利用 TypeScript。我认为 Options API 和 Composition API 都是构建 Vue.js 组件的适当方法。</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>我演示并且讨论了：</p>
+<ul>
+<li>循序渐进的向常规 JavaScript 编写的组件添加类型</li>
+<li>好的测试用例只关注行为表现而不关注代码的实现细节</li>
+<li>TypeScript 的优点</li>
+<li>Options API 和 Composition API 的比较</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[缓存淘汰策略的三个代表]]></title>
-        <id>https://brownhu.site/post/cache-strategy</id>
-        <link href="https://brownhu.site/post/cache-strategy">
+        <id>https://hubingliang.github.io/post/cache-strategy/</id>
+        <link href="https://hubingliang.github.io/post/cache-strategy/">
         </link>
         <updated>2019-09-23T16:16:29.000Z</updated>
         <content type="html"><![CDATA[<p>缓存是有空间的限制的，不同的情况下会采取不同的<strong>缓存淘汰策略</strong>应对缓存满载。常见的<strong>缓存淘汰策略</strong>有三种：</p>
@@ -68,19 +305,19 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[如何打造一款自己的 VSCode 主题？]]></title>
-        <id>https://brownhu.site/post/vscode-theme</id>
-        <link href="https://brownhu.site/post/vscode-theme">
+        <id>https://hubingliang.github.io/post/vscode-theme/</id>
+        <link href="https://hubingliang.github.io/post/vscode-theme/">
         </link>
         <updated>2019-04-18T09:21:54.000Z</updated>
         <content type="html"><![CDATA[<blockquote>
 <p>本文首发于个人博客</p>
 </blockquote>
 <p>我之前一直用 <strong>One Dark Pro</strong> 后来又转到 <strong>Material Theme Palenight</strong> 再到后来的 <strong>Dracula</strong> 。总觉得有些配色很奇怪（工作太闲），于是写了一个 VSCode 深色主题：<a href="https://github.com/hubingliang/Duang">Duang</a>，之所以叫Duang是因为它很黑，很亮，很柔....</p>
-<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30374038ac5db?w=446&amp;h=315&amp;f=jpeg&amp;s=36465" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30374038ac5db?w=446&amp;h=315&amp;f=jpeg&amp;s=36465" alt="" loading="lazy"></figure>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=Brownhu.duang">大家可以在这下载体验</a></p>
 <p><a href="https://github.com/hubingliang/Duang">github 在这里</a></p>
-<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a303c83daf3bb6?w=1514&amp;h=450&amp;f=png&amp;s=107690" alt=""></figure>
-<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3062d5015d575?w=1920&amp;h=1057&amp;f=png&amp;s=327708" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a303c83daf3bb6?w=1514&amp;h=450&amp;f=png&amp;s=107690" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3062d5015d575?w=1920&amp;h=1057&amp;f=png&amp;s=327708" alt="" loading="lazy"></figure>
 <p>如果你也对编辑器有自己独特风格的偏好，但是在成千上万款主题中又没有一款主题完全符合你的口味，那么跟着下面的流程我们自己动手做一个完全符合自己风格的主题吧。</p>
 <hr>
 <h2 id="注册你的开发者帐号和配置-token">注册你的开发者帐号和配置 token</h2>
@@ -91,14 +328,14 @@
 </code></pre>
 <p>之后你需要去注册一个账号，网址在这：<a href="https://azure.microsoft.com/zh-cn/services/devops/">Azure DevOps Services | Microsoft Azure</a></p>
 <p>登陆之后，首先新建一个 <strong>public</strong> 项目:</p>
-<figure data-type="image" tabindex="4"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc45a7e1f7c1?w=627&amp;h=550&amp;f=png&amp;s=40656" alt=""></figure>
-<figure data-type="image" tabindex="5"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fbc998050c96?w=1492&amp;h=925&amp;f=png&amp;s=207120" alt=""></figure>
+<figure data-type="image" tabindex="4"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc45a7e1f7c1?w=627&amp;h=550&amp;f=png&amp;s=40656" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fbc998050c96?w=1492&amp;h=925&amp;f=png&amp;s=207120" alt="" loading="lazy"></figure>
 <p>然后获取你的 <strong>Personal access tokens</strong> ，点击右上角的头像，点击 <strong>Security</strong>。</p>
-<figure data-type="image" tabindex="6"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc9eafaf6678?w=233&amp;h=279&amp;f=png&amp;s=13476" alt=""></figure>
+<figure data-type="image" tabindex="6"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fc9eafaf6678?w=233&amp;h=279&amp;f=png&amp;s=13476" alt="" loading="lazy"></figure>
 <p>为你的 <strong>token</strong> 指定一个名称，时间的话最长到期可以设置为一年。</p>
-<figure data-type="image" tabindex="7"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fcf53e722c4a?w=1509&amp;h=1004&amp;f=png&amp;s=192787" alt=""></figure>
+<figure data-type="image" tabindex="7"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fcf53e722c4a?w=1509&amp;h=1004&amp;f=png&amp;s=192787" alt="" loading="lazy"></figure>
 <p>点击查看所有的配置项，找到 <strong>Marketplace</strong> 并选择 <strong>Acquire</strong> and <strong>Manage</strong>：</p>
-<figure data-type="image" tabindex="8"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fd0406d2c348?w=1510&amp;h=1005&amp;f=png&amp;s=192921" alt=""></figure>
+<figure data-type="image" tabindex="8"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fd0406d2c348?w=1510&amp;h=1005&amp;f=png&amp;s=192921" alt="" loading="lazy"></figure>
 <p>点击 <strong>Create</strong> ，复制生成的 <strong>token</strong>，之后就要用到我们刚才安装的 <strong>vsce</strong> 来创建新的发布者（publisher）</p>
 <pre><code>vsce create-publisher (发布者的名字)
 </code></pre>
@@ -120,9 +357,9 @@
 <p>然后运行下面的命令👇，它可以在任何目录中生成一套基本的插件代码：</p>
 <pre><code>yo code
 </code></pre>
-<figure data-type="image" tabindex="9"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe0fab9fb691?w=1060&amp;h=916&amp;f=png&amp;s=258431" alt=""></figure>
+<figure data-type="image" tabindex="9"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe0fab9fb691?w=1060&amp;h=916&amp;f=png&amp;s=258431" alt="" loading="lazy"></figure>
 <p>我们要开发一个主题，所以选中 <strong>New Color Theme</strong>，之后会继续询问你是否新建主题还是从现有主题导入，我们这里选创建一个全新的。</p>
-<figure data-type="image" tabindex="10"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe3e4302080e?w=2022&amp;h=184&amp;f=png&amp;s=116013" alt=""></figure>
+<figure data-type="image" tabindex="10"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a2fe3e4302080e?w=2022&amp;h=184&amp;f=png&amp;s=116013" alt="" loading="lazy"></figure>
 <p>之后还会问你一些问题：</p>
 <ul>
 <li>插件名字</li>
@@ -139,17 +376,17 @@
 <p>很多我以为会很好看的颜色，改进去却like a shit....</p>
 <p>em.....扯远了</p>
 <p>首先用 VSCode 打开生成的目录，我们看到结构如下：</p>
-<figure data-type="image" tabindex="11"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3009f1663e799?w=4096&amp;h=3072&amp;f=jpeg&amp;s=654365" alt="221555584047_.pic_hd.jpg"></figure>
+<figure data-type="image" tabindex="11"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3009f1663e799?w=4096&amp;h=3072&amp;f=jpeg&amp;s=654365" alt="221555584047_.pic_hd.jpg" loading="lazy"></figure>
 <p>之后我们的工作都会在 <strong>themes</strong> 下的 <strong>json</strong> 文件展开，不要害怕，我们其实不需要看完这几百上千行 json 文件的意思。</p>
 <p>首先我们先进去调试模式，看看脚本自动生成的主题是什么样子的：</p>
-<figure data-type="image" tabindex="12"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a300dbfbd72558?w=2048&amp;h=1536&amp;f=png&amp;s=366435" alt=""></figure>
+<figure data-type="image" tabindex="12"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a300dbfbd72558?w=2048&amp;h=1536&amp;f=png&amp;s=366435" alt="" loading="lazy"></figure>
 <p>点击调试，会自动打开一个新的 VSCode 窗口展示预设的主题。</p>
-<figure data-type="image" tabindex="13"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a301018c9aec7d?w=2772&amp;h=1754&amp;f=png&amp;s=633003" alt=""></figure>
+<figure data-type="image" tabindex="13"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a301018c9aec7d?w=2772&amp;h=1754&amp;f=png&amp;s=633003" alt="" loading="lazy"></figure>
 <p>接下来 <strong>Command + Shift + P</strong> 输入 <strong>Developer: Inspect TM Scopes</strong></p>
-<figure data-type="image" tabindex="14"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30132c4f482c7?w=1190&amp;h=1094&amp;f=png&amp;s=165318" alt=""></figure>
+<figure data-type="image" tabindex="14"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a30132c4f482c7?w=1190&amp;h=1094&amp;f=png&amp;s=165318" alt="" loading="lazy"></figure>
 <p>现在你可以看文件中每一个字符的颜色配置在哪了，只需要在 json 文件里搜对应的配置就好了。</p>
 <p>如果你觉得不习惯，你甚至可以打开和 <strong>Chrome</strong> 一样的开发者工具，快捷键是 <strong>option + command + i</strong></p>
-<figure data-type="image" tabindex="15"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3015c6f12955f?w=3840&amp;h=2114&amp;f=png&amp;s=2290633" alt=""></figure>
+<figure data-type="image" tabindex="15"><img src="https://user-gold-cdn.xitu.io/2019/4/18/16a3015c6f12955f?w=3840&amp;h=2114&amp;f=png&amp;s=2290633" alt="" loading="lazy"></figure>
 <p>不过我还是建议你用第一种方法，因为开发者工具有时候搜到颜色，但是你找不到配置项。</p>
 <hr>
 <h2 id="配色方案">配色方案</h2>
@@ -175,126 +412,9 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[可能是最全的 Javascript 类型检查方案]]></title>
-        <id>https://brownhu.site/post/type</id>
-        <link href="https://brownhu.site/post/type">
-        </link>
-        <updated>2019-01-02T10:58:11.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>本文首发于我的个人博客 ：<a href="http://brownhu.site/">brownhu.site</a></p>
-</blockquote>
-<h2 id="前言">前言</h2>
-<p>类型检查在各种强类型语言（Typescript、Flow.js）出现之前一直是我们手动检查的，检查的方式也是多种多样。本文尽量总结出所有类型最优的检查方式，和解释所有方式的原理，如果有错误请各位大佬指正，除此之外对于类型检查当然拥抱强类型我觉得才是未来。</p>
-<p>es6 之后新加入了 Symbol 类型，目前为止 JavaScript 一共有 7 种类型，但其中还有分类（set WeakSet Map WeakMap），我们就基于这些类型来探索：</p>
-<ul>
-<li>null</li>
-<li>undefined</li>
-<li>boolean</li>
-<li>number</li>
-<li>string</li>
-<li>object (set WeakSet Map WeakMap)</li>
-<li>symbol(ES6 中新增)</li>
-</ul>
-<h2 id="typeof">Typeof</h2>
-<p>首先是 Typeof，Typeof 可能是最多人所熟知的判断类型的方法，但是它并不完美，在有些情况下它的判断是有偏差的，我们来看看几个例子：</p>
-<pre><code class="language-js">// 首先判断基本类型
-typeof 1 // number
-typeof 'Hellow world !' // string
-typeof true // boolean
-typeof null // object
-typeof undefined // undefined
-
-let s = Symbol()
-typeof s // symbol
-</code></pre>
-<p>可以看到 null 的判断出了错误，这个大家看面试题也或多或少知道这个坑。<br>
-然后我们再来看看引用类型：</p>
-<pre><code class="language-js">const obj = Object.create(null) // 之所以这样创建是因为编程习惯...
-function foo() {}
-const arr = []
-const s = new Set()
-const ws = new WeakSet()
-const m = new Map()
-const wm = new WeakMap()
-
-typeof obj // object
-typeof foo // function
-typeof arr // object
-typeof s // object
-typeof ws // object
-typeof m // object
-typeof wm // object
-</code></pre>
-<p>我们发现 typeof 在判断引用类型的时候并不能区分除了 function 以外其他类型的区别。至于为什么会出现这样的情况，就要看看 typeof 的原理。</p>
-<h3 id="typeof-原理">typeof 原理</h3>
-<p>在说原理之前需要先知道，js 是怎么储存数据类型的？</p>
-<p>JavaScript 在底层储存变量时出于性能考虑会把数据的类型用前三位表示，typeof 就是通过前三位来判断类型：</p>
-<ul>
-<li>000: 对象</li>
-<li>001: 整数</li>
-<li>010: 浮点数</li>
-<li>100: 字符串</li>
-<li>110: 布尔</li>
-</ul>
-<p>两个特殊类型：</p>
-<ul>
-<li>undefined: -2^30</li>
-<li>null: 全是 0</li>
-</ul>
-<p>因为 null 的机器码是全 0，它的类型标签自然就是 000，所以 typeof null 返回&quot;object&quot;。</p>
-<h2 id="instanceof">instanceof</h2>
-<p>instanceof 是有局限性的，它要求判断的目标必须是一个对象，与此同时 instanceof 的原理是判断只要右边的 prototype 出现在左边的原型链上就返回 true。所以说 instanceof 是判断一个实例是否是其父类型或者祖先类型的实例更为恰当。</p>
-<p>代码的基本实现：</p>
-<pre><code class="language-js">function instance_of(L, R) {    // L 表示左表达式，R 表示右表达式
- var O = R.prototype;           // 取 R 的显示原型
- L = L.__proto__;               // 取 L 的隐式原型
- while (true) { 
-   if (L === null) 
-     return false; 
-   if (O === L)                 // 当 O 严格等于 L 时，返回 true 
-     return true; 
-   L = L.__proto__; 
- } 
-}
-</code></pre>
-<p>还是看例子比较直接：</p>
-<pre><code class="language-js">const obj1 = Object.create(null)
-const obj2 = {}
-
-obj1 instanceof Object // false
-obj2 instanceof Object // true
-</code></pre>
-<p>通过这个例子你能很明确的想明白 instanceof 的原理，因为 obj1 是通过<code>Object.create(null)</code>来创建的，它原型链上什么都没有：</p>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/01/02/5c2c8b9a13878.png" alt=""></figure>
-<p>而直接通过<code>{}</code>赋值生成的对象它的<code>_proto_</code>是指向 Object 的：</p>
-<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/01/02/5c2c8bc36b1f2.png" alt=""></figure>
-<p>所以判断结果就会有不同，</p>
-<h2 id="objectprototypetostringcall">Object.prototype.toString.call()</h2>
-<p>这个方法可以说是目前比较全面的类型判断方法了，还是看看例子：</p>
-<pre><code class="language-js">Object.prototype.toString.call(null) // &quot;[object Null]&quot;
-Object.prototype.toString.call(undefined) // &quot;[object Undefined]&quot;
-Object.prototype.toString.call(123) // &quot;[object Number]&quot;
-Object.prototype.toString.call(true) // &quot;[object Boolean]&quot;
-Object.prototype.toString.call('Hellow world !') // &quot;[object String]&quot;
-Object.prototype.toString.call({ a: 123 }) // &quot;[object Object]&quot;
-Object.prototype.toString.call(Symbol()) // &quot;[object Symbol]&quot;
-Object.prototype.toString.call([1, 2, 3]) // &quot;[object Array]&quot;
-Object.prototype.toString.call(function a() {}) // &quot;[object Function]&quot;
-Object.prototype.toString.call(new Date()) // &quot;[object Date]&quot;
-Object.prototype.toString.call(Math) // &quot;[object Math]&quot;
-Object.prototype.toString.call(new Set()) // &quot;[object Set]&quot;
-Object.prototype.toString.call(new WeakSet()) // &quot;[object WeakSet]&quot;
-Object.prototype.toString.call(new Map()) // &quot;[object Map]&quot;
-Object.prototype.toString.call(new WeakMap()) // &quot;[object WeakMap]&quot;,/'.lk
-</code></pre>
-<p>可以说<code>Object.prototype.toString.call()</code>在大部分类型的考验下都不落下风，可以说是比较完美的类型检查了。<br>
-至于原理大家可以移步至<a href="https://segmentfault.com/a/1190000009407558">谈谈 Object.prototype.toString</a></p>
-]]></content>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[浅拷贝没那么简单]]></title>
-        <id>https://brownhu.site/post/shallow-copy</id>
-        <link href="https://brownhu.site/post/shallow-copy">
+        <id>https://hubingliang.github.io/post/shallow-copy/</id>
+        <link href="https://hubingliang.github.io/post/shallow-copy/">
         </link>
         <updated>2018-07-20T09:45:16.000Z</updated>
         <content type="html"><![CDATA[<h2 id="拷贝的分类">拷贝的分类</h2>
@@ -407,11 +527,11 @@ obj2 //{a: 1, b: &quot;hellow world&quot;, c: true, d: Symbol(symbol), f: &quot;
     </entry>
     <entry>
         <title type="html"><![CDATA[跨域方法整理]]></title>
-        <id>https://brownhu.site/post/cors</id>
-        <link href="https://brownhu.site/post/cors">
+        <id>https://hubingliang.github.io/post/cors/</id>
+        <link href="https://hubingliang.github.io/post/cors/">
         </link>
         <updated>2018-06-03T09:55:34.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt=""></figure>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://images.unsplash.com/photo-1547489026-3228fbcb1664?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1200&amp;h=500&amp;fit=crop&amp;ixid=eyJhcHBfaWQiOjF9" alt="" loading="lazy"></figure>
 <h2 id="什么是同源">什么是同源</h2>
 <p>为了防止网站被 XSS、CSRF 攻击，Netscape 公司在 1995 年引入同源策略/SOP(Same origin policy),它是指“协议+域名+端口”三者相同。</p>
 <h2 id="什么是跨域">什么是跨域</h2>
@@ -489,11 +609,11 @@ json({
     </entry>
     <entry>
         <title type="html"><![CDATA[使用requestAnimationFrame来提升动画性能]]></title>
-        <id>https://brownhu.site/post/requestanimationframe</id>
-        <link href="https://brownhu.site/post/requestanimationframe">
+        <id>https://hubingliang.github.io/post/requestanimationframe/</id>
+        <link href="https://hubingliang.github.io/post/requestanimationframe/">
         </link>
         <updated>2018-05-20T09:42:21.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/5/20/1637ddf84e9110d6?w=550&amp;h=365&amp;f=jpeg&amp;s=59063" alt=""></figure>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/5/20/1637ddf84e9110d6?w=550&amp;h=365&amp;f=jpeg&amp;s=59063" alt="" loading="lazy"></figure>
 <h2 id="传统动画的弊端">传统动画的弊端</h2>
 <p>在实际项目中我们经常会遇到生成动画的需求，传统方法是通过使用setTimeout和setInterval进行实现，但是定时器动画有两个弊端：</p>
 <ul>
@@ -571,7 +691,7 @@ window.requestAnimationFrame(small);
 </code></pre>
 <h2 id="浏览器兼容情况">浏览器兼容情况</h2>
 <p>我们来看一下[Can I Use](https://caniuse.com/## search=requestAnimationFrame)上的兼容情况：<br>
-<img src="https://user-gold-cdn.xitu.io/2018/5/20/1637d6be4df448ce?w=1718&amp;h=781&amp;f=png&amp;s=80112" alt=""><br>
+<img src="https://user-gold-cdn.xitu.io/2018/5/20/1637d6be4df448ce?w=1718&amp;h=781&amp;f=png&amp;s=80112" alt="" loading="lazy"><br>
 requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
 <p>如果非要兼容IE的话可以用定时器来做一下兼容：</p>
 <pre><code class="language-js">(function () {
@@ -606,8 +726,8 @@ requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[排序算法-N个正整数排序]]></title>
-        <id>https://brownhu.site/post/sort</id>
-        <link href="https://brownhu.site/post/sort">
+        <id>https://hubingliang.github.io/post/sort/</id>
+        <link href="https://hubingliang.github.io/post/sort/">
         </link>
         <updated>2018-05-09T09:46:49.000Z</updated>
         <content type="html"><![CDATA[<h2 id="算法">算法</h2>
@@ -622,7 +742,7 @@ requestAnimationFrame的兼容情况还是不错的（看不见IE）</p>
 </ol>
 </blockquote>
 <p><strong>如果想详细研究算法推荐《数据结构与算法分析》</strong></p>
-<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析"></figure>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4337988-706bb05d7f8e293f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数据结构与算法分析" loading="lazy"></figure>
 <h2 id="定义问题">定义问题</h2>
 <p>数组array含有N个正整数<br>
 输入量为array<br>
@@ -647,17 +767,17 @@ sort(array) === [2,4,5,6,8]
 <p>流程如下:</p>
 <ol>
 <li>我们拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-51788201338ecebb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-51788201338ecebb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>开始从前两个开始比较,发现44&gt;3,所以不用交换<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-27cf4ee44274aebd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-27cf4ee44274aebd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较" loading="lazy"></li>
 <li>接着往后比较,发现38&lt;44,所以交换他们两个的位置<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b106c8ea4d1e64a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b106c8ea4d1e64a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较" loading="lazy"></li>
 <li>以此类推直到第一轮结束,我们得到了最大的那一个----<strong>50</strong>(冒的第一个泡)<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-05228b4f061ec01b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第一轮结束"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-05228b4f061ec01b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第一轮结束" loading="lazy"></li>
 <li>接着下一轮,又从头开始两个两个地比较,重复第一轮,我们就得到了第二个最大的------<strong>48</strong><br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b3a220becd934a11.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮结束"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b3a220becd934a11.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮结束" loading="lazy"></li>
 <li>如此进行多轮比较我们会得到一个从小到大的数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-f60c295026eac0f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-f60c295026eac0f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大" loading="lazy"></li>
 <li>代码实现：</li>
 </ol>
 <pre><code class="language-js">function bubbleSort(array) {
@@ -677,17 +797,17 @@ sort(array) === [2,4,5,6,8]
 流程如下:</p>
 <ol>
 <li>拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-62f83dc193f1978c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-62f83dc193f1978c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>我们要选出这个数组中最小的元素然后把它和第一个数交换(放到最前面),所以我们先认为3为最小,然后和后面的数依次进行比较.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b44dc333bdadd03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="和最小值比较"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b44dc333bdadd03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="和最小值比较" loading="lazy"></li>
 <li>当比到2的时候,我们发现3&gt;2,所以我们就认为2为最小值,后面的数应该都和2进行比较.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-47bda740993e028c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="改变最小值的元素"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-47bda740993e028c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="改变最小值的元素" loading="lazy"></li>
 <li>当比较完所有的元素,确定2为最小值的时候,把最小值也就是2与第一个元素的位置互换.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-549ba8d1e5375edd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-549ba8d1e5375edd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换位置" loading="lazy"></li>
 <li>然后从第二个元素开始新一轮的比较,过程和第一轮一样.把44看做最小值和后面的元素进行比较.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-93ae5c6008503d42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-93ae5c6008503d42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="第二轮" loading="lazy"></li>
 <li>经过多轮比较得到从小到大的数组.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-10b714a8ceceb65f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-10b714a8ceceb65f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大" loading="lazy"></li>
 <li>代码实现</li>
 </ol>
 <pre><code class="language-js">function selectSort(arr) {
@@ -711,15 +831,15 @@ sort(array) === [2,4,5,6,8]
 流程如下:</p>
 <ol>
 <li>拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-0fe1ff7bc8912789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-0fe1ff7bc8912789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>把第一个元素看做一个新数组,然后把第二个元素依次和新数组的元素进行比较(虽然只有一个...),然后插入到适当的位置.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-0b049542a383e8dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="与新数组的元素进行比较"><br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b08f38982e74bf87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入到适当的位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-0b049542a383e8dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="与新数组的元素进行比较" loading="lazy"><br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b08f38982e74bf87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入到适当的位置" loading="lazy"></li>
 <li>然后以此类推,把前两个元素看做是一个新数组,然后把第三个元素依次与新数组进行比较,然后插入到适当的位置.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-25293f6061257350.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较"><br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-435373ab53226a01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入适当的位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-25293f6061257350.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较" loading="lazy"><br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-435373ab53226a01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="插入适当的位置" loading="lazy"></li>
 <li>把剩下的元素依次插入,最后得到从小到大排列的数组.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-eb5c7cdc2dbe51e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-eb5c7cdc2dbe51e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从小到大" loading="lazy"></li>
 <li>代码实现</li>
 </ol>
 <pre><code class="language-js">function insertionSort(array) {
@@ -740,21 +860,21 @@ sort(array) === [2,4,5,6,8]
 流程如下:</p>
 <ol>
 <li>拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>我们把数组平均分成左右两部分,得到两个新数组,然后再把每个数组平均分成两部分,一直分到每个数组只有两个元素,然后比较第一组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-f1f922e5fdac37ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较第一组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-f1f922e5fdac37ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较第一组" loading="lazy"></li>
 <li>因为3&lt;44所以位置不变然后比较第二组,因为38&gt;5所以调换位置.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-82e45b17bd304d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-82e45b17bd304d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"></li>
 <li>重点来了,这个时候先不着急比较第三组而是把排好序的一二两组放在一起排序.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-a45b23e96799adbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-a45b23e96799adbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"></li>
 <li>之后就是比较第三组和第四组,然后同样把他们放在一起排好序.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-ada3c8eb5b769b9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-ada3c8eb5b769b9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"></li>
 <li>然后并不是比较第五组和第六组,而是把第一组和第二组产生的新数组和,第三组和第四组产生的新数组放在一起排序成为新数组.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-7df965288165ac01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-7df965288165ac01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"></li>
 <li>同样把剩下的按以上步骤重来一遍.我们得到两个排好序的数组.然后给这两个数组排序就完成了.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-3e92a52343a0d8c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"><br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-3e92a52343a0d8c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"><br>
 排序后:<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-78eebc9c38d1ba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-78eebc9c38d1ba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片.png" loading="lazy"></li>
 <li>代码实现</li>
 </ol>
 <pre><code class="language-js">function mergeSort(arr) {
@@ -792,18 +912,18 @@ function merge(left, right) {
 流程如下:</p>
 <ol>
 <li>拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>拿第一个元素和后面的元素进行比较,找出所有比第一个元素小的元素,放在第一个元素的右边然后把第一个元素与这些比他小的元素的最后一个互换.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-ce0718ea693d000a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有2比3小"><br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-e7742e9a14f46e1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-ce0718ea693d000a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="只有2比3小" loading="lazy"><br>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-e7742e9a14f46e1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="互换" loading="lazy"></li>
 <li>前两个元素的位置已经没错了,然后以第三个元素为标准,和后面的元素进行比较.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-e51bf6b6f28eccf0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较之后"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-e51bf6b6f28eccf0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="比较之后" loading="lazy"></li>
 <li>把比他小的元素放在他的右边(绿色),然后让它和绿色的最后一个交换位置.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-9635a1d9604436b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-9635a1d9604436b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置" loading="lazy"></li>
 <li>然后从左边没有确定位置的元素(非橙色)开始以上步骤----也就是19<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b3888a1ab15ac163.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从19开始"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b3888a1ab15ac163.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="从19开始" loading="lazy"></li>
 <li>一直到所有元素的位置都正确.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-782962d8fbda2a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="都有了正确的位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-782962d8fbda2a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="都有了正确的位置" loading="lazy"></li>
 <li>代码实现</li>
 </ol>
 <pre><code class="language-js">function quickSort(array) {
@@ -849,15 +969,15 @@ function merge(left, right) {
 流程如下:</p>
 <ol>
 <li>拿到一个数组<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-b7dd0bc29bf1f856.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数组" loading="lazy"></li>
 <li>随机选择一个元素.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-068de5de14fbba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="随机选择到了44"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-068de5de14fbba31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="随机选择到了44" loading="lazy"></li>
 <li>并且把比他小的放在他的右边<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-903e43f47d9288a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="把比他小的先放在他的右边"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-903e43f47d9288a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="把比他小的先放在他的右边" loading="lazy"></li>
 <li>然后把他和比他小的最右边的元素交换位置<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-9716186d31f495f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-9716186d31f495f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="交换位置" loading="lazy"></li>
 <li>然后在随机选一个元素,重复步骤,知道所有元素都是在正确的位置上.<br>
-<img src="http://upload-images.jianshu.io/upload_images/4337988-5eed2e2fa3aaf364.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="所有元素都在正确的位置上"></li>
+<img src="http://upload-images.jianshu.io/upload_images/4337988-5eed2e2fa3aaf364.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="所有元素都在正确的位置上" loading="lazy"></li>
 <li>代码实现</li>
 </ol>
 <pre><code class="language-js">function quickSort(array) {
@@ -901,14 +1021,14 @@ function merge(left, right) {
     </entry>
     <entry>
         <title type="html"><![CDATA[Hexo已经看腻了，来试试VuePress搭建个人博客]]></title>
-        <id>https://brownhu.site/post/vuepress</id>
-        <link href="https://brownhu.site/post/vuepress">
+        <id>https://hubingliang.github.io/post/vuepress/</id>
+        <link href="https://hubingliang.github.io/post/vuepress/">
         </link>
         <updated>2018-04-23T09:17:23.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e09d9fd3?w=600&amp;h=600&amp;f=png&amp;s=160672" alt=""></figure>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e09d9fd3?w=600&amp;h=600&amp;f=png&amp;s=160672" alt="" loading="lazy"></figure>
 <h2 id="vuepress">VuePress</h2>
 <p>先简单介绍一下VuePress，这是尤大在2018年4月份发布的一个新轮子。</p>
-<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21add3603e86?w=751&amp;h=418&amp;f=png&amp;s=63447" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21add3603e86?w=751&amp;h=418&amp;f=png&amp;s=63447" alt="" loading="lazy"></figure>
 <p>一个基于 Vue SSR 的静态站生成器，本来的目的是爽爽的写文档，但是我发现用来撸一个人博客也非常不错。</p>
 <p><strong><a href="https://vuepress.vuejs.org/">这是VuePress的官方文档</a></strong><br>
 <strong><a href="https://vuepress.docschina.org/">这是VuePress的中文文档</a></strong></p>
@@ -936,7 +1056,7 @@ vuepress dev
 </code></pre>
 <p>下面我们打开<a href="http://localhost:8080/">http://localhost:8080/</a><br>
 发现真的打开了vuepress文档：<br>
-<img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e0944215?w=1240&amp;h=520&amp;f=png&amp;s=69295" alt=""></p>
+<img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e0944215?w=1240&amp;h=520&amp;f=png&amp;s=69295" alt="" loading="lazy"></p>
 <p>下面的工作就是数据的替换了，但我们应该先看一下docs的目录结构：</p>
 <pre><code>├─.vuepress
 │  ├─components
@@ -999,7 +1119,7 @@ $borderColor = #eaecef // 边框颜色
 $codeBgColor = #282c34 // 代码背景颜色
 </code></pre>
 <p>我把它改成了这样：<br>
-<img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e07ec947?w=1240&amp;h=698&amp;f=png&amp;s=138334" alt=""></p>
+<img src="https://user-gold-cdn.xitu.io/2018/4/23/162f21a0e07ec947?w=1240&amp;h=698&amp;f=png&amp;s=138334" alt="" loading="lazy"></p>
 <h2 id="侧边栏的实现">侧边栏的实现</h2>
 <p>由于评论区里问的人较多，所以在这里更新一下，其实我就算在这里写的再详细也不如大家去看官方文档。<br>
 侧边栏的配置也在<code>.vuepress/config.js</code>中：</p>
@@ -1046,8 +1166,8 @@ $codeBgColor = #282c34 // 代码背景颜色
     </entry>
     <entry>
         <title type="html"><![CDATA[学会了ES6，就不会写出那样的代码]]></title>
-        <id>https://brownhu.site/post/es6</id>
-        <link href="https://brownhu.site/post/es6">
+        <id>https://hubingliang.github.io/post/es6/</id>
+        <link href="https://hubingliang.github.io/post/es6/">
         </link>
         <updated>2018-04-09T09:41:02.000Z</updated>
         <content type="html"><![CDATA[<h2 id="声明变量的新姿势">声明变量的新姿势</h2>
@@ -1359,12 +1479,12 @@ export default Person ;
     </entry>
     <entry>
         <title type="html"><![CDATA[使用ColorfulImg获取图片主题色！]]></title>
-        <id>https://brownhu.site/post/colorfulimg</id>
-        <link href="https://brownhu.site/post/colorfulimg">
+        <id>https://hubingliang.github.io/post/colorfulimg/</id>
+        <link href="https://hubingliang.github.io/post/colorfulimg/">
         </link>
         <updated>2018-03-29T13:23:02.000Z</updated>
         <content type="html"><![CDATA[<h2 id="取色网站">取色网站</h2>
-<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72a38dae?w=1240&amp;h=739&amp;f=png&amp;s=555321" alt=""><br>
+<p><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72a38dae?w=1240&amp;h=739&amp;f=png&amp;s=555321" alt="" loading="lazy"><br>
 前几天遇到了获取图片主题色的需求，于是去找了一些相关的博客，发现实现起来相当简单，于是自己开发了一个获取图片主题色的网站---<a href="https://hubingliang.github.io/colorfulImg/dist/">ColorfulImg</a><br>
 大家可以通过上传/拖拽图片的方式获取图片主题色。</p>
 <p>欢迎Star~</p>
@@ -1406,14 +1526,14 @@ let width = canvas.width = imgEl.width
 let data = context.getImageData(0, 0, width, height).data
 </code></pre>
 <p>在我第一次测试的时候遇到了跨域的问题：</p>
-<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72b06536?w=631&amp;h=171&amp;f=png&amp;s=9973" alt="" loading="lazy"></figure>
 <p>图片如果不同源的话必须要加<code>crossorigin=&quot;anonymous&quot;</code>的属性，并且服务器存储那边也要开放相应的权限才行。<br>
 <code>&lt;img id=&quot;img&quot; crossorigin=&quot;anonymous&quot;&gt;</code></p>
 <h3 id="处理获取的颜色数据">处理获取的颜色数据</h3>
 <p>我们先log一下拿到的数据是什么吧：</p>
-<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72cc7c75?w=631&amp;h=295&amp;f=png&amp;s=9846" alt="" loading="lazy"></figure>
 <p>是一个有着一堆数据的数组，这些数据是什么呢？我们先看一下MDN：</p>
-<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt=""></figure>
+<figure data-type="image" tabindex="3"><img src="https://user-gold-cdn.xitu.io/2018/9/12/165c960c72e4542f?w=773&amp;h=120&amp;f=png&amp;s=15815" alt="" loading="lazy"></figure>
 <p>也就是说按顺序来看前四位组成一个以RGBA顺序的数据：<br>
 <strong>rgba(red, green, blue, alpha)</strong></p>
 <p>对于获取的图片数据透明度（alpha）都是255也就是不透明的所以我们不对透明度做处理，之后我们只需要把rgb的其他三个值分别求和再取均值就可以得到图片的主题色了！</p>

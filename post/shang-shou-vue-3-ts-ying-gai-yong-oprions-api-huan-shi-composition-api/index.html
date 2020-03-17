@@ -1,0 +1,460 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brown Hu</title>
+<meta name="description" content="Better late then never" />
+<link rel="shortcut icon" href="https://hubingliang.github.io/favicon.ico?v=1584427221632">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hubingliang.github.io/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hubingliang.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hubingliang.github.io/images/avatar.png?v=1584427221632" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Brown Hu</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li><a href="#the-component">The Component</a></li>
+<li><a href="#typing-the-filter-type-and-refactoring-filter">Typing the <code>filter</code> type and Refactoring <code>Filter</code></a></li>
+<li><a href="#typing-the-post-type-and-newspost">Typing the <code>post</code> type and <code>NewsPost</code></a></li>
+<li><a href="#updating-filterposts">Updating <code>FilterPosts</code></a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#composition-api-vs-options-api">Composition API vs Options API</a></li>
+<li><a href="#typescript-vs-javascript">Typescript vs JavaScript</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">C'est la vie</div>
+    <a class="rss" href="https://hubingliang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">上手 Vue 3 + TS 应该用 Oprions API 还是 Composition API ?</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-03-16 / 10 min read
+        </div>
+        
+        <div class="post-content yue">
+          <p>在这篇文章中，我会同时用常规 JavaScript 和 options API 以及 TypeScript 和 Composition API 写出两种不同风格的 Vue 3 组件，我们会从中看到两者的差异以及一些可能被忽视的优点。</p>
+<p><a href="https://gist.github.com/lmiller1990/f12b847fc23592f25ab70b17074fe946">你可以在这找到本文提及到的源码</a></p>
+<h1 id="the-component">The Component</h1>
+<p>我将会重构一个显示新闻的组件，它是通过 render 函数编写的。但因为 Vue Test Utils 和 Jest 还没有支持 Vue3 组件。对于那些不熟悉 render 函数的人，我附上了生成好的 HTML。由于源代码很长，组件的基本思想是生成此标记：</p>
+<pre><code class="language-html">&lt;div&gt;
+  &lt;h1&gt;Posts from {{ selectedFilter }}&lt;/h1&gt;
+  &lt;Filter 
+    v-for=&quot;filter in filters&quot; 
+    @select=&quot;filter =&gt; selectedFilter = filter&quot;
+    :filter=&quot;filter&quot;
+  /&gt;
+  &lt;NewsPost v-for=&quot;post in filteredPosts&quot; :post=&quot;post&quot; /&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>&lt;NewsPost /&gt;</code> 负责展示渲染一些新闻帖子，用户可以通过设置<code>&lt;Filter /&gt;</code>组件来配置他们想看哪个时间段的新闻，这个组件基本上只需要渲染“今天”，“最近一周”等类似的按钮。</p>
+<p>在重构的过程中，我会介绍每个组件的源代码。至于用户如何与组件交互，下面是测试👇</p>
+<pre><code class="language-js">describe('FilterPosts', () =&gt; {
+  it('renders today posts by default', async () =&gt; {
+    const wrapper = mount(FilterPosts)
+
+    expect(wrapper.find('.post').text()).toBe('In the news today...')
+    expect(wrapper.findAll('.post')).toHaveLength(1)
+  })
+
+  it('toggles the filter', async () =&gt; {
+    const wrapper = mount(FilterPosts)
+
+    wrapper.findAll('button')[1].trigger('click')
+    await nextTick()
+
+    expect(wrapper.findAll('.post')).toHaveLength(2)
+    expect(wrapper.find('h1').text()).toBe('Posts from this week')
+    expect(wrapper.findAll('.post')[0].text()).toBe('In the news today...')
+    expect(wrapper.findAll('.post')[1].text()).toBe('In the news this week...')
+  })
+})`
+</code></pre>
+<p>我们需要关注的改动：</p>
+<ul>
+<li>使用 composition API 的 <code>ref</code> 和 <code>computed</code> 代替 <code>data</code> 和 <code>computed</code></li>
+<li>使用 TypeScript 来强化类型声明</li>
+<li>最重要的是，哪种 API 风格更加友好，以及JS和TS使用的利弊</li>
+</ul>
+<h1 id="typing-the-filter-type-and-refactoring-filter">Typing the <code>filter</code> type and Refactoring <code>Filter</code></h1>
+<p>从最简单的组件开始是最容易理解的，筛选组件如下所示：</p>
+<pre><code class="language-js">const filters = ['today', 'this week']
+
+export const Filter = defineComponent({
+  props: {
+    filter: {
+      type: String,
+      required: true
+    }
+  },
+
+  render() {
+    // &lt;button @click=&quot;$emit('select', filter)&gt;{{ filter }}/&lt;button&gt;
+    return h('button', { onClick: () =&gt; this.$emit('select', this.filter) }, this.filter)
+  }
+})
+</code></pre>
+<p>我们主要修改的是要给传入的  <code>filter</code> prop 定义类型，我们可以新定义一种类型（也可以使用<code>enum</code>）来做到这一点。</p>
+<pre><code class="language-js">type FilterPeriod = 'today' | 'this week'
+const filters: FilterPeriod[] = ['today', 'this week']
+
+export const Filter = defineComponent({
+  props: {
+    filter: {
+      type: String as () =&gt; FilterPeriod,
+      required: true
+    }
+  },
+  // ...
+)
+</code></pre>
+<p>你可能注意到在声明类型的时候用到了很奇怪的 <code>String as () =&gt; FilterPeriod</code>  语法，我不太确定为什么，可能是Vue <code>props</code>系统的一些限制。</p>
+<p>这已经是一个很大的改动了，使用者不需要考虑哪种字符串才是有效的，而且有可能会打错字，但是现在他们可以通过IDE查找，甚至可以在执行测试用例的时候或者启动app时提前发现问题。</p>
+<p>我们还可以将 <code>render</code> 函数移动到 <code>setup</code> 函数中，这样做就可以在 <code>this.filter</code> 和 <code>this.$emit</code> 中获得更好的类型判断。</p>
+<pre><code class="language-js">setup(props, ctx) { 
+  return () =&gt; h('button', { onClick: () =&gt; ctx.emit('select', props.filter) }, props.filter)
+}
+</code></pre>
+<p>给出更好的类型判断的主要原因是，定义类型对于 <code>props</code> 和 <code>context</code> 比定义高动态的 js 更容易。</p>
+<p>但其实当 Vetur 为 Vue3更新时，你实际上会在 <code>&lt;template&gt;</code> 中获得判断，这无疑是激动人心的。</p>
+<p>此时的测试用例依然可以通过，让我们继续重构<code>NewsPost</code>组件。</p>
+<h1 id="typing-the-post-type-and-newspost">Typing the <code>post</code> type and <code>NewsPost</code></h1>
+<p>NewsPost 组件看起来像这样：</p>
+<pre><code class="language-js">export const NewsPost = defineComponent({
+  props: {
+    post: {
+      type: Object,
+      required: true
+    }
+  },
+
+  render() {
+    return h('div', { className: 'post' }, this.post.title)
+  }
+})
+</code></pre>
+<p>另一个非常简单的组件，你会注意到<code>this.post.title</code>是没有被定义的，如果你在 VSCode 中打开这个组件，它会显示 <code>this.post</code> 是 <code>any</code> ，这是因为在JavaScript中很难定义 <code>this</code> ，与此同时 <code>type: Object</code> 实际上并没有什么用，因为他不能定义对象中的字段，让我们用 <code>Post</code> interface 来解决这个定义：</p>
+<pre><code class="language-js">interface Post {                         
+  id: number                         
+  title: string                         
+  created: Moment                       
+}
+</code></pre>
+<p>我们把 <code>render</code> 移动到 <code>setup</code>：</p>
+<pre><code class="language-js">export const NewsPost = defineComponent({
+  props: {
+    post: {
+      type: Object as () =&gt; Post,
+      required: true
+    },
+  },
+
+  setup(props) {
+    return () =&gt; h('div', { className: 'post' }, props.post.title)
+  }
+})
+</code></pre>
+<p>如果你在 VSCode 中打开这个组件，则会注意到 <code>props.post.title</code> 已经有了正确的类型定义。</p>
+<h1 id="updating-filterposts">Updating <code>FilterPosts</code></h1>
+<p>现在只剩下一个组件了 — <code>FilterPosts</code> 它看起来像这样：</p>
+<pre><code class="language-js">export const FilterPosts = defineComponent({
+  data() {
+    return {
+      selectedFilter: 'today'
+    }
+  },
+
+  computed: {
+    filteredPosts() {
+      return posts.filter(post =&gt; {
+        if (this.selectedFilter === 'today') {
+          return post.created.isSameOrBefore(moment().add(0, 'days'))
+        }
+
+        if (this.selectedFilter === 'this week') {
+          return post.created.isSameOrBefore(moment().add(1, 'week'))
+        }
+
+        return post
+      })
+    }
+  },
+
+  // &lt;h1&gt;Posts from {{ selectedFilter }}&lt;/h1&gt;
+  // &lt;Filter 
+  //   v-for=&quot;filter in filters&quot; 
+  //   @select=&quot;filter =&gt; selectedFilter = filter
+  //   :filter=&quot;filter&quot;
+  // /&gt;
+  // &lt;NewsPost v-for=&quot;post in posts&quot; :post=&quot;post&quot; /&gt;
+  render() {
+    return (
+      h('div',
+        [
+          h('h1', `Posts from ${this.selectedFilter}`),
+          filters.map(filter =&gt; h(Filter, { filter, onSelect: filter =&gt; this.selectedFilter = filter })),
+          this.filteredPosts.map(post =&gt; h(NewsPost, { post }))
+        ],
+      )
+    )
+  }
+})
+</code></pre>
+<p>我们从删除 <code>data</code> 函数开始，然后在<code>setup</code>中定义<code>selectedFilter</code>为<code>ref</code>，<code>ref</code>是一个泛型，因此我可以使用<code>&lt;&gt;</code>来将其传给其他类型，现在<code>ref</code>知道哪些值可以被分给<code>selectedFilter</code>。</p>
+<pre><code class="language-js">setup() {
+  const selectedFilter = ref&lt;FilterPeriod&gt;('today')
+
+  return {
+    selectedFilter
+  }
+}
+</code></pre>
+<p>测试用例仍然可以通过，所以让我们把<code>computed</code>和<code>filteredPosts</code>移动到<code>setup</code>。</p>
+<pre><code class="language-js">const filteredPosts = computed(() =&gt; {
+  return posts.filter(post =&gt; {
+    if (selectedFilter.value === 'today') {
+      return post.created.isSameOrBefore(moment().add(0, 'days'))
+    }
+
+    if (selectedFilter.value === 'this week') {
+      return post.created.isSameOrBefore(moment().add(1, 'week'))
+    }
+
+    return post
+  })
+})
+</code></pre>
+<p>唯一改变的就是取代了<code>this.selectedFilter</code>我们使用了<code>selectedFilter.value</code>，<code>.value</code>在访问<code>selectedFilter</code> 的时候是必须的，因为你引用的是 <code>Proxy</code> 它是ES6的新特性，Vue3使用它来实现响应式。如果你在VSCode打开它，你会注意到<code>selectedFilter.value === 'this year'</code> 这将会出现编译错误，我们类型声明<code>FilterPeriod</code>所以编译器可以捕获该错误。</p>
+<p>最后的改动是把<code>render</code>函数移动到<code>setup</code></p>
+<pre><code class="language-js">return () =&gt; 
+  h('div',
+    [
+      h('h1', `Posts from ${selectedFilter.value}`),
+      filters.map(filter =&gt; h(Filter, { filter, onSelect: filter =&gt; selectedFilter.value = filter })),
+      filteredPosts.value.map(post =&gt; h(NewsPost, { post }))
+    ],
+  )
+</code></pre>
+<p>现在我们在<code>setup</code>中返回一个函数，所以我们不再需要返回<code>selectedFilter</code>和<code>filteredPosts</code> 我们可以在返回的函数中直接引用它，因为他们是在同一作用域中声明的。</p>
+<p>所有的测试都通过了，因此重构结束。</p>
+<h1 id="discussion">Discussion</h1>
+<p>一个重要的事情是，我们不需要为重构改变测试用例。这是因为测试着重于组件的行为，而不是实现细节。</p>
+<p>尽管这种重构并不有趣，而且并不能带来什么业务增长，但它确实提出一些有趣的观点，以供开发人员讨论。</p>
+<ul>
+<li>我们应该用 Composition API 还是 Options API?</li>
+<li>我们应该用 JS还是 TS?</li>
+</ul>
+<h1 id="composition-api-vs-options-api">Composition API vs Options API</h1>
+<p>这其实是Vue2到Vue3的最大变化，尽管你可以在Vue3使用 Options API，那是因为两者都存在。但是自然会引出一个问题，哪一个是解决问题的最好方法？或者哪一个适合我的项目？</p>
+<p>我不认为他们之中的一个要优于一个，就我个人而言，我发现 Options API 更容易理解，因为它很直观。了解 <code>ref</code> 和 <code>reactive</code> 以及<code>.value</code>需要了解的前置知识很多。至少 Options API 会迫使你才用 <code>computed``methods``data</code>的结构。</p>
+<p>但是话虽这么说，但是在使用 Options API 的时候很难充分利用 TypeScript 的全部功能，这是引用 Composition API 的原因之一。这是我要讨论的第二点。</p>
+<h1 id="typescript-vs-javascript">Typescript vs JavaScript</h1>
+<p>一开始我发现 TypeScript 的学习曲线并不友好，但是我真的很喜欢使用 TypeScript 来编写应用程序。它帮助我捕获很多错误，并且使事情更容易推断，如果你不知道一个对象有什么属性或者它们是否为空，只知道传入的 <code>prop</code> 是 <code>Object</code> 是没什么帮助的。</p>
+<p>另一方面，当我学习一个新概念，构建一个原型或者尝试一个新库时，我仍然更喜欢 JavaScript ，因为它不需要构建直接可以在浏览器运行，而当我尝试某些操作时，我也不需要关心特定的类型和泛型。这就是我最初学习 Composition API 的方式 仅仅用脚本标签构建一些例子。</p>
+<p>当你对某些库或者设计模式有信心，并且对要解决的问题充分了解之后，我更喜欢用 TypeScript ，考虑到 TypeScript 的普及程度，与其他强类型语言的相似性以及它带来的好处，用 JavaScript 来编写大型且复杂的应用会造成不必要的疏忽。TypeScript 的好处太吸引人了，特别是对于定义复杂的业务逻辑或与团队一起扩展代码库而言。</p>
+<p>另外一种我更偏爱 JavaScript 的地方是在构建以设计为中心的组件或应用时，大部分只需要使用 CSS 动画，SVG 进行操作，并且仅使用 Vue 诸如 Transition 基本的数据绑定 动画钩子之类的事情，这种情况我觉得 JavaScript 更为合适，只有在业务逻辑复杂的时候才会考虑 TypeScript。</p>
+<p>总而言之，我非常喜欢 TypeScript 和 Composition api，不是因为我因为它比 Options API 更直观或更简洁，而是因为它可以使我更有效地去利用 TypeScript。我认为 Options API 和 Composition API 都是构建 Vue.js 组件的适当方法。</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>我演示并且讨论了：</p>
+<ul>
+<li>循序渐进的向常规 JavaScript 编写的组件添加类型</li>
+<li>好的测试用例只关注行为表现而不关注代码的实现细节</li>
+<li>TypeScript 的优点</li>
+<li>Options API 和 Composition API 的比较</li>
+</ul>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/JavaScript/">
+            <span class="flex-auto">JavaScript</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hubingliang.github.io/tag/Front-end/">
+            <span class="flex-auto">Front-end</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://hubingliang.github.io/post/cache-strategy/">
+                <h3 class="post-title">
+                  缓存淘汰策略的三个代表
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
